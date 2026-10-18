@@ -1,0 +1,18 @@
+# Lab Activity: Part C \- Semester Project Scoping and GitHub Setup
+
+## Step C2 \- Complete the Project Scoping Template (10 minutes)
+
+| Project Name | SkillAlign-RAG  |
+| :---- | :---- |
+| Domain | Higher Education / Curriculum Quality Assurance |
+| Problem Statement | Course lecturers struggle to manually verify whether specific industry skills are taught and assessed across dozens of scattered lecture slides and course PDFs. AI engineering makes it possible to build a document-grounded RAG assistant that retrieves course evidence and verifies skill coverage with exact page/slide citations. |
+| Evidence of the Problem | Course learning outcomes (CLOs), weekly teaching materials, and assessments are distributed across separate, heterogeneous university files (PDFs and PPTXs). Supported by Malaysia’s National AI Action Plan 2026–2030 (AI Nation 2030\) (Enabler E2, p. 62), which explicitly calls for *"leveraging AI tools to review curriculum quality and skills coverage."* |
+| Initial Related Work (at least 3\) | 1\. Manual curriculum mapping: accurate and contextual, but slow and tedious across dozens of lecture slides. 2\. Keyword search (Ctrl+F) across course files: fast, but fails due to semantic mismatch between academic terms and industry skill phrasing. 3\. General-purpose LLMs / Basic single-pass RAG:  flexible, but suffers from context dilution and often hallucinates citations or confuses missing files with absent skills. |
+| Engineering Gap / Limitation | Existing approaches struggle with semantic mismatch across different document types (slides vs. syllabi) and fail to reliably verify whether retrieved passages actually support a claimed industry skill. |
+| Initial Project Objectives (2-3) | **O1:** To design a document-ingestion and hybrid RAG pipeline that indexes UTM AI course documents (PDFs/PPTXs) with page and slide provenance. **O2:** To develop the retrieval solution with a citation-verification guardrail (span-matching / NLI) to classify skill coverage (Supported vs. Insufficient Evidence). **O3:** To evaluate the solution in terms of retrieval accuracy (Precision/Recall/F1), citation faithfulness (groundedness), and query latency. |
+| Target Users | University course lecturers and programme coordinators, specifically teaching core courses in the UTM SAIAH programme. |
+| Data Sources (at least 2\) | **Source 1:** SAIAH CI PDFs containing official CLOs, weekly schedules, and assessment breakdowns. **Source 2:** Weekly lecture slides & assessment rubrics from 3 core SAIAH courses. **Source 3:** Industry skill benchmark containing curated list of 12–15 Malaysian AI industry skill tasks. |
+| Similar to EduAdvisor | Both operate in Higher Education, ingest scattered university documents, and use retrieval-grounded AI (RAG) with guardrails to provide cited, trustworthy answers. |
+| Different from EduAdvisor | Targets lecturers auditing course content rather than students seeking advising; outputs structured skill-coverage judgements (CLO, Taught, Assessed) across slides and rubrics rather than open-ended Q\&A chat responses. |
+| Responsible AI Risks (at least 2\) | **Risk 1 — Hallucinated citations:** Model fabricates slide numbers or misinterprets vague text as skill coverage → lecturer gets a false sense of curriculum readiness. **Risk 2 — Epistemic overconfidence:** Model conflates missing course files (insufficient evidence) with a skill not being taught → unfair evaluation of a lecturer's course. **Risk 3 — Data privacy:** Internal university teaching slides and exam rubrics are uploaded to external APIs → breach of faculty intellectual property. |
+
