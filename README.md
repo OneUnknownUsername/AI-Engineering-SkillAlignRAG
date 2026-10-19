@@ -1,44 +1,73 @@
 # SkillAlign-RAG
 
-> A document-grounded AI assistant that helps UTM lecturers and programme coordinators verify industry skill coverage across course materials with page and slide citations.
+> A document-grounded AI engineering system that helps UTM lecturers and programme coordinators verify whether industry skills are intended, taught, and assessed across course materials, with exact page and slide citations.
 
 ## Problem Statement
 
-Course lecturers struggle to manually verify whether specific industry skills are taught and assessed across dozens of scattered lecture slides, course information PDFs, and assessment rubrics. In the UTM SAIAH programme, this requires connecting course learning outcomes (CLOs), weekly teaching materials, and assessments across heterogeneous files. AI engineering offers a way to combine semantic retrieval, document provenance, and citation verification to produce evidence-backed skill-coverage judgements for CLOs, teaching, and assessment.
+Course lecturers struggle to manually verify whether specific industry skills are covered across scattered course information PDFs, lecture slides, and assessment rubrics. In the UTM SAIAH programme, learning outcomes, weekly teaching materials, and assessments are distributed across heterogeneous files with different levels of detail.
+
+SkillAlign-RAG addresses this gap with source-routed retrieval for three evidence levels:
+
+- **CLO:** whether a skill is intended in the course learning outcomes.
+- **Taught:** whether a skill is covered in weekly teaching materials.
+- **Assessed:** whether a skill is evaluated in assessments or rubrics.
+
+The system is designed to distinguish **Supported** evidence from **Not Found / Insufficient Evidence**. Missing documentation is not treated as proof that a skill is absent.
 
 ## Evidence of the Problem
 
-- Curriculum alignment matters: Carnegie Mellon University's Eberly Center explains that misalignment between learning objectives, instruction, and assessment can undermine student motivation and learning. This supports the need to check whether stated skills are actually taught and assessed. [Source: Eberly Center, course alignment guidance](https://www.cmu.edu/teaching/assessment/basics/alignment.html).
-- Malaysia's National AI Action Plan 2026-2030 identifies gaps in advanced AI talent and prioritises a talent pipeline from foundational AI literacy to specialist expertise. This provides national context for the project's focus on reviewing AI curriculum skills coverage. [Source: AI Nation 2030, Strategic Context and Foundational Enablers](https://ai.gov.my/aiactionplan2030/).
+- Course learning outcomes, teaching activities, and assessments are distributed across separate university files, making curriculum alignment difficult to review consistently. [Source: Eberly Center, course alignment guidance](https://www.cmu.edu/teaching/assessment/basics/alignment.html)
+- Malaysia's National AI Action Plan 2026–2030 identifies curriculum quality and AI skills coverage as part of the national talent-development context. [Source: AI Nation 2030, Strategic Context and Foundational Enablers](https://ai.gov.my/aiactionplan2030/)
 
-## Initial Related Work / Existing Approaches
+## Engineering Gap
 
-The limitations below describe how each approach applies to the SkillAlign-RAG scope.
+Existing approaches are useful but incomplete for this task:
 
-- **Manual curriculum mapping:** Lecturers compare learning objectives, teaching activities, and assessments to check alignment. **Key limitation:** Applying this process manually across dozens of PDFs and slide decks requires repeated document review. [Source: Eberly Center, course alignment guidance](https://www.cmu.edu/teaching/assessment/basics/alignment.html).
-- **Keyword search (Ctrl+F):** Exact-term search helps locate explicit skill mentions. **Key limitation:** Different wording for the same concept can reduce recall, so academic terminology may not match an industry skill query. [Source: Manning, Raghavan, and Schutze, Introduction to Information Retrieval, Chapter 9](https://nlp.stanford.edu/IR-book/html/htmledition/relevance-feedback-and-query-expansion-1.html).
-- **General-purpose LLMs / basic RAG:** Lewis et al. (2020) combine a generative model with retrieved passages to improve knowledge-intensive responses. **Key limitation for this project:** The original Wikipedia-based approach does not provide the course-specific page/slide tracking and explicit citation-verification workflow needed for skill-coverage auditing. [Source: Lewis et al., Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks](https://arxiv.org/abs/2005.11401).
+- **Manual curriculum alignment reviews** are contextual and thorough, but slow and difficult to scale across granular documents.
+- **Conventional single-pass RAG** can suffer from semantic mismatch and context dilution when searching mixed course files, and may conflate missing files with confirmed skill absence.
+- **Probabilistic LLM chatbots** can provide flexible answers, but may generate unsupported claims or unverified citations.
+
+SkillAlign-RAG focuses on source-routed multi-level retrieval and deterministic citation verification to address these limitations.
 
 ## Project Objectives
 
-- O1: To design a document-ingestion and hybrid RAG pipeline that indexes UTM AI course documents (PDFs/PPTXs) with page and slide provenance.
-- O2: To develop a retrieval solution with a citation-verification guardrail, using span matching and/or natural language inference (NLI), to classify skill coverage as **Supported** or **Insufficient Evidence** across CLOs, teaching materials, and assessments, without treating missing files as proof that a skill is absent.
-- O3: To evaluate retrieval accuracy using Precision, Recall, and F1, citation faithfulness (groundedness), and query latency.
+- **O1:** Construct a standardized curriculum evidence schema and ground-truth dataset from 3–5 core SAIAH courses using PDFs and PPTXs while preserving page and slide provenance.
+- **O2:** Develop a source-routed RAG pipeline for CLO, Taught, and Assessed evidence, paired with deterministic span matching and NLI-based citation verification, to classify skill coverage as **Supported** or **Not Found / Insufficient Evidence**.
+- **O3:** Evaluate the system against a single-pass RAG baseline using per-level Precision, Recall, and F1; citation faithfulness; unsupported-claim rate; runtime; and token usage.
 
 ## Target Users
 
-University course lecturers and programme coordinators, specifically those teaching or overseeing core courses in the UTM SAIAH programme, who need to audit industry skill coverage across course content.
+University course lecturers and programme coordinators teaching or overseeing core courses in the UTM SAIAH programme.
 
 ## Data Sources
 
-The following sources are planned in `week1_project_scope.md`. Specific document URLs were not supplied and will be added when the course materials and benchmark are selected.
+- **SAIAH course documents:** Materials from 3–5 core courses, including course information PDFs for CLO evidence, lecture PPTXs for Taught evidence, and assessment rubrics for Assessed evidence.
+- **Industry Skill Benchmark:** A bounded set of 12–15 Malaysian AI industry skill tasks derived from published competency frameworks and curated job descriptions.
 
-- **Source 1: SAIAH course information (CI) PDFs** containing official CLOs, weekly schedules, and assessment breakdowns - URL: pending provision by the course team.
-- **Source 2: Weekly lecture slides and assessment rubrics from three core SAIAH courses** providing evidence of skills taught and assessed - URL: pending provision by the course team.
-- **Source 3: Industry skill benchmark** containing a curated list of 12-15 Malaysian AI industry skill tasks - URL: pending benchmark curation and source selection.
+Specific document URLs and the final benchmark sources will be recorded when the course materials and benchmark are selected.
+
+## System Direction
+
+The planned workflow is:
+
+1. Ingest and normalize PDFs and PPTXs into a common evidence schema.
+2. Preserve page, slide, course, document-type, and evidence-level provenance.
+3. Route each skill query to the relevant CLO, Taught, or Assessed evidence collection.
+4. Retrieve candidate passages and verify citations with exact span matching and NLI entailment checks.
+5. Present per-skill coverage judgements, supporting evidence, and uncertainty in a tabular review dashboard.
+
+## Responsible AI Risks
+
+- **Hallucination and unverified citations:** Mitigated through deterministic text-span matching and NLI entailment verification.
+- **Epistemic uncertainty:** Missing documentation must remain insufficient evidence rather than being interpreted as confirmed skill absence.
+- **Data privacy and confidentiality:** Confidential course documents should not be exposed unnecessarily to external APIs; local open-weight model inference is preferred where practical.
+
+## Similarity and Differentiation
+
+Like EduAdvisor, SkillAlign-RAG operates in higher education, ingests scattered university documents, and uses retrieval-grounded AI with guardrails. It differs by targeting academic staff rather than students, using source-routed multi-level retrieval and a non-prompt NLI citation verifier, and presenting results in a curriculum review dashboard rather than a student Q&A chatbot.
 
 ## Weekly Progress
 
 | Week | Focus | Deliverable | Status |
 |------|-------|-------------|--------|
-| W1 | System map + project scope | README + docs | ✅ |
+| W1 | System map and project scope | README and project-scoping documentation | Complete |
