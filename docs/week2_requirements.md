@@ -38,3 +38,40 @@
 | **A14** | Faculty of Artificial Intelligence, Universiti Teknologi Malaysia (UTM). *Bachelor of Artificial Intelligence with Honours (SAIAH)*. | [https\://fai.utm.my/bachelor-in-artificial-intelligence-with-honours/](https://fai.utm.my/bachelor-in-artificial-intelligence-with-honours/) |
 | **A15** | Manning, C. D., Raghavan, P., & Schütze, H. (2008). *Introduction to Information Retrieval* (Chapter 9: Relevance Feedback & Query Expansion). | [https\://nlp.stanford.edu/IR-book/html/htmledition/relevance-feedback-and-query-expansion-1.html](https://nlp.stanford.edu/IR-book/html/htmledition/relevance-feedback-and-query-expansion-1.html) |
 
+---
+
+# Requirements Specification
+
+Version: 1.0
+
+## Section 1 — Functional Requirements (FR)
+
+| \# | Requirement — The system SHALL | Scope Boundary — SHALL NOT (where relevant) |
+| :---- | :---- | :---- |
+| **FR1** | Ingest and index course documents from three distinct pedagogical evidence categories—Course Information PDFs (**CLO**), weekly lecture slide decks (**Taught**), and assessment rubrics (**Assessed**)—while preserving document provenance metadata (`course_code`, `evidence_level`, `doc_id`, and `page_or_slide_no`). | Ingest unverified external web content, student submissions, or course files lacking identifiable course and evidence-level metadata. |
+| **FR2** | Evaluate a queried industry AI skill task against a selected SAIAH course separately across **CLO**, **Taught**, and **Assessed** evidence levels and classify coverage at each level as **Supported**, **Not Found** (documents available, no qualifying evidence identified), or **Insufficient Evidence** (required document category unavailable). | Conflate a missing document category (**Insufficient Evidence**) with confirmed skill absence (**Not Found**), or infer skill coverage from general parametric knowledge outside the uploaded course corpus. |
+| **FR3** | Provide at least one verbatim supporting text span (`text_span`) together with its exact source document identifier and page or slide reference (`doc_id`, `page_or_slide_no`) for every evidence level classified as **Supported**. | Present fabricated, unverified, or non-verbatim quotes as source evidence, or cite evidence from one pedagogical level (e.g., lecture slides) to substantiate another level (e.g., assessment rubrics). |
+| **FR4** | Decline queries that fall outside the defined SAIAH curriculum skill-alignment scope and return a clear scope-boundary notification redirecting the user to supported curriculum-audit tasks. | Automatically approve, rewrite, or submit official accreditation documents (`MQA-01`/`MQA-02`) or Senate curriculum papers, grade student work, evaluate individual lecturer performance, or provide general student advising. |
+| **FR5** | Present skill-coverage audit results in a structured, side-by-side tabular summary across **CLO**, **Taught**, and **Assessed** levels formatted for curriculum review and Continual Quality Improvement (CQI) inspection by UTM lecturers and programme coordinators. | \- |
+
+---
+
+## Section 2 — Non-Functional Requirements (NFR)
+
+| \# | Quality Attribute | Requirement | Measurement Method | Metric | Threshold |
+| :---- | :---- | :---- | :---- | :---- | :---- |
+| **NFR1** | Performance | The system shall keep end-to-end response latency for skill-coverage queries within an interactive target suitable for academic review. | Measure end-to-end execution time (routed retrieval \+ span/NLI verification \+ response formatting) across the evaluation benchmark workload on the target Colab/local environment. | p90 latency | \< 3,000 ms per evidence-level query (\< 9,000 ms per full 3-level course audit) |
+| **NFR2** | Correctness | Multi-level skill-coverage classifications (**Supported**, **Not Found**, **Insufficient Evidence**) across **CLO**, **Taught**, and **Assessed** levels shall accurately match the annotated ground-truth dataset and improve upon the single-pass RAG baseline. | Evaluate system predictions and single-pass RAG baseline predictions against the curated ground-truth benchmark (3–5 SAIAH courses × 12–15 industry AI skill tasks). | Per-level Macro-F1 score (from Precision and Recall); F1 delta vs. baseline | Macro-F1 ≥ 0.80; positive F1 gain (\> 0.00) over single-pass RAG baseline |
+| **NFR3** | Cost | Model inference and API token expenditure shall remain within the student project budget constraint. | Log prompt and completion token counts and calculate total inference cost across the evaluation benchmark workload. | Inference cost per 100 skill-audit queries | \< US\$0.50 per 100 skill-audit queries |
+| **NFR4** | Maintainability | Course document additions or updates in one pedagogical evidence category (**CLO**, **Taught**, or **Assessed**) shall be incorporated without rebuilding unrelated evidence stores or pipeline components. | Run a controlled document-update test by replacing or adding a single course PDF/PPTX file and measuring incremental re-indexing time. | Incremental index update time | \< 5 min per course package update |
+
+---
+
+## Section 3 — Responsible AI Requirements (RAI)
+
+| \# | Responsible AI Risk | Requirement | Measurement Method | Metric | Threshold |
+| :---- | :---- | :---- | :---- | :---- | :---- |
+| **RAI1** | Transparency / Grounding (Hallucinated or Unverified Citations) | The system shall provide a verifiable verbatim text span and exact source reference (`doc_id`, `page_or_slide_no`) for every **Supported** skill-coverage claim, validated via deterministic substring matching and NLI entailment verification. | Audit all **Supported** responses across the evaluation benchmark using automated substring checks, NLI entailment scoring, and manual verification against source PDFs/PPTXs. | Citation presence rate; citation faithfulness rate; unsupported-claim rate | 100% citation & verbatim-span presence; ≥ 95% citation faithfulness; ≤ 5% unsupported-claim rate |
+| **RAI2** | Epistemic Uncertainty & Scope Safety (Unfair Course Evaluation / Out-of-Scope Use) | The system shall explicitly distinguish **Insufficient Evidence** (required course document category missing) from **Not Found** (documents available, no qualifying evidence found) and shall refuse out-of-scope queries (e.g., student grading, lecturer evaluation, or automated MQA/Senate approval). | Run (1) controlled missing-file test cases where specific `CLO`, `Taught`, or `Assessed` documents are omitted, and (2) a safety/scope test set of at least 20 out-of-scope governance or grading queries. | Missing-document abstention accuracy; out-of-scope refusal-and-redirect success rate | 100% missing-document abstention accuracy; ≥ 95% out-of-scope refusal rate |
+| **RAI3** | Privacy / Confidentiality (Exposure of UTM Course Files & PII) | The system shall not transmit unpublished exam keys or staff/student personal data (PII) to unauthorized external model APIs. | Run privacy and confidentiality test cases containing synthetic staff/student PII and restricted assessment markers while inspecting outgoing network/API payloads and logs. | Number of detected unauthorized PII or restricted-document transmissions | 0 unauthorized transmissions |
+
