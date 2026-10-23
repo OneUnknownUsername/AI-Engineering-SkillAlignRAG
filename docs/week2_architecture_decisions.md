@@ -2,7 +2,7 @@
 
 **Save in:** `docs/week2_architecture_decisions.md`
 
-## 1\. Architecture Needs Derived from Requirements (Step C2)
+## 1\. Architecture Needs Derived from Requirements 
 
 | Requirement ID | What does the requirement need? | Architecture Response (V1 Capability Component) |
 | :---- | :---- | :---- |
@@ -14,7 +14,7 @@
 
 ---
 
-## 2\. Architecture Decision Record (ADR) (Step C4)
+## 2\. Architecture Decision Record (ADR) 
 
 | Decision | Requirement / Constraint | Alternatives Considered | Selected Option | Trade-off Accepted |
 | :---- | :---- | :---- | :---- | :---- |
@@ -25,7 +25,7 @@
 
 ---
 
-## 3\. Initial Requirements Traceability Matrix (Step C4)
+## 3\. Initial Requirements Traceability Matrix
 
 | Objective | Requirement | Evaluation Criterion | Architecture Element | Later Evidence |
 | :---- | :---- | :---- | :---- | :---- |
@@ -37,7 +37,7 @@
 
 ---
 
-## 4\. Final V1 Architecture Review Checklist (Step C4)
+## 4\. Final V1 Architecture Review Checklist 
 
 - [x] **Does each major component support a requirement or evaluation need?** Yes—every component beyond the base flow maps directly to `FR1–FR5`, `NFR1–NFR4`, or `RAI1–RAI3` (verified in Section 1 and Section 3 above).  
 - [x] **Is any important data source, safety control, or evaluation point missing?** No—all three routed course knowledge sources (`CLO`, `Taught`, `Assessed`), both RAI controls (`Scope, Abstention & Privacy Control` and `Citation & Span Verification Control`), and the `Evaluation Point` are explicitly represented.  
