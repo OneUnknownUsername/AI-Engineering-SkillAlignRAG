@@ -1,0 +1,152 @@
+[
+  {
+    "skill_id": "S01",
+    "skill_name": "Data Cleaning & Preprocessing",
+    "bucket": "Bucket A: Data Wrangling, Quality & Visualisation",
+    "sfia_codes": ["DATS", "DENG"],
+    "expected_primary_courses": ["SAIA2143"],
+    "retrieval_query": "Collect, clean, structure, and preprocess raw or messy data from multiple sources, handling missing values, duplicates, and formatting inconsistencies to prepare data for analysis.",
+    "nli_hypothesis_template": "The course material explicitly teaches, intends, or assesses methods and steps for collecting, cleaning, structuring, and preprocessing messy or raw data for analysis.",
+    "indsf_provenance": [
+      {"doc_id": "IndSF_Data_Science_2023.pdf", "role_title": "Data Analyst / Data Scientist", "pdf_page_no": 5, "matched_source_excerpt": "Collect, clean and preprocess data from various sources, implement data processing workflows and ensure that data is suitable for analysis."},
+      {"doc_id": "IndSF_Artificial_Intelligence.pdf", "role_title": "AI Application Developer", "pdf_page_no": 27, "matched_source_excerpt": "Collecting the raw data; Process the data for analysis; Data gathering; Data preparation"}
+    ]
+  },
+  {
+    "skill_id": "S02",
+    "skill_name": "Data Quality Checks, Validation & Remediation",
+    "bucket": "Bucket A: Data Wrangling, Quality & Visualisation",
+    "sfia_codes": ["QUAS", "QUMG", "DATM"],
+    "expected_primary_courses": ["SAIA2143"],
+    "retrieval_query": "Carry out data quality checking, validation rules, error detection, outlier handling, and data remediation to maintain data integrity and consistency across datasets and pipelines.",
+    "nli_hypothesis_template": "The course material explicitly teaches, intends, or assesses techniques for checking data quality, validating data consistency, and remediating data errors or anomalies.",
+    "indsf_provenance": [
+      {"doc_id": "IndSF_Artificial_Intelligence.pdf", "role_title": "AI/ML Engineer", "pdf_page_no": 5, "matched_source_excerpt": "Carries out routine data quality checks and remediation."},
+      {"doc_id": "IndSF_Data_Science_2023.pdf", "role_title": "Data Engineer", "pdf_page_no": 11, "matched_source_excerpt": "Ensure data quality in the organisation by utilising appropriate tools and techniques."}
+    ]
+  },
+  {
+    "skill_id": "S03",
+    "skill_name": "Exploratory Data Analysis & Data Visualisation",
+    "bucket": "Bucket A: Data Wrangling, Quality & Visualisation",
+    "sfia_codes": ["VISL", "DATS"],
+    "expected_primary_courses": ["SAIA2143"],
+    "retrieval_query": "Perform exploratory data analysis using statistical methods to identify trends and patterns, and design data visualisations and charts to communicate insights to technical and non-technical audiences.",
+    "nli_hypothesis_template": "The course material explicitly teaches, intends, or assesses exploratory data analysis, pattern identification, or designing data visualisations to communicate data insights.",
+    "indsf_provenance": [
+      {"doc_id": "IndSF_Data_Science_2023.pdf", "role_title": "Data Analyst", "pdf_page_no": 5, "matched_source_excerpt": "Utilise mathematical and statistical methods to identify trends, patterns and insights. Create and present data insights in creative ways to facilitate the understanding of data across a range of technical and non-technical audiences."},
+      {"doc_id": "IndSF_Artificial_Intelligence.pdf", "role_title": "Associate AI/ML Engineer", "pdf_page_no": 3, "matched_source_excerpt": "Uses a visualization product, as guided, to design and create data visuals. Engages with the target user to prototype and refine specified visualizations."}
+    ]
+  },
+  {
+    "skill_id": "S04",
+    "skill_name": "ML Problem Framing & Feature Engineering",
+    "bucket": "Bucket B: Core Machine Learning & Statistical Modelling",
+    "sfia_codes": ["REQM", "DATS"],
+    "expected_primary_courses": ["SAIA2113", "SAIA2143"],
+    "retrieval_query": "Frame machine learning or data science problems, select relevant data sources, and perform feature engineering including feature selection, feature extraction, and feature creation for model training.",
+    "nli_hypothesis_template": "The course material explicitly teaches, intends, or assesses how to frame machine learning problems and prepare or engineer relevant features for model training.",
+    "indsf_provenance": [
+      {"doc_id": "IndSF_Artificial_Intelligence.pdf", "role_title": "AI Application Developer / AI/ML Engineer", "pdf_page_no": 27, "matched_source_excerpt": "Frame the problem... Selects from existing data sources and prepares data to be used by data science models."}
+    ]
+  },
+  {
+    "skill_id": "S05",
+    "skill_name": "Supervised & Unsupervised ML Modelling",
+    "bucket": "Bucket B: Core Machine Learning & Statistical Modelling",
+    "sfia_codes": ["MLNG"],
+    "expected_primary_courses": ["SAIA2113"],
+    "retrieval_query": "Apply supervised and unsupervised machine learning algorithms—including classification, regression, and clustering techniques—to train predictive or pattern-recognition models on labelled and unlabelled datasets.",
+    "nli_hypothesis_template": "The course material explicitly teaches, intends, or assesses the principles and application of supervised or unsupervised machine learning algorithms for classification, regression, or clustering.",
+    "indsf_provenance": [
+      {"doc_id": "IndSF_Artificial_Intelligence.pdf", "role_title": "Associate AI/ML Engineer / AI/ML Engineer", "pdf_page_no": 3, "matched_source_excerpt": "Applies given machine learning techniques to data, under the guidance of technical leadership."},
+      {"doc_id": "IndSF_Data_Science_2023.pdf", "role_title": "Data Scientist", "pdf_page_no": 8, "matched_source_excerpt": "Utilise advanced data science techniques to develop models using specialised programming languages and tools."}
+    ]
+  },
+  {
+    "skill_id": "S06",
+    "skill_name": "Model Evaluation & Performance Metric Analysis",
+    "bucket": "Bucket B: Core Machine Learning & Statistical Modelling",
+    "sfia_codes": ["MLNG", "DATS"],
+    "expected_primary_courses": ["SAIA2113"],
+    "retrieval_query": "Evaluate the outcomes and predictive performance of machine learning models using quantitative evaluation metrics, validation splits, and error analysis to identify model weaknesses.",
+    "nli_hypothesis_template": "The course material explicitly teaches, intends, or assesses how to quantitatively evaluate machine learning model performance, analyze prediction errors, and validate model outcomes.",
+    "indsf_provenance": [
+      {"doc_id": "IndSF_Artificial_Intelligence.pdf", "role_title": "AI/ML Engineer", "pdf_page_no": 5, "matched_source_excerpt": "Evaluates the outcomes and performance of machine learning systems. Identifies issues and recommends improvements to machine learning systems and the data they use."},
+      {"doc_id": "IndSF_Data_Science_2023.pdf", "role_title": "Data Scientist", "pdf_page_no": 8, "matched_source_excerpt": "To ensure developed models are regularly evaluated and updated to meet expected objectives."}
+    ]
+  },
+  {
+    "skill_id": "S07",
+    "skill_name": "Model Generalization, Regularization & Hyperparameter Tuning",
+    "bucket": "Bucket B: Core Machine Learning & Statistical Modelling",
+    "sfia_codes": ["MLNG"],
+    "expected_primary_courses": ["SAIA2113"],
+    "retrieval_query": "Diagnose overfitting and underfitting in machine learning models and apply model selection, regularization techniques, and hyperparameter tuning to optimize model generalization.",
+    "nli_hypothesis_template": "The course material explicitly teaches, intends, or assesses methods for addressing overfitting or underfitting through model selection, regularization, or hyperparameter tuning.",
+    "indsf_provenance": [
+      {"doc_id": "IndSF_Artificial_Intelligence.pdf", "role_title": "AI Application Developer", "pdf_page_no": 27, "matched_source_excerpt": "Model selection; Training Model evaluation; Hyperparameter; Tuning Prediction"}
+    ]
+  },
+  {
+    "skill_id": "S08",
+    "skill_name": "Algorithmic Fairness, Bias Mitigation & Explainability",
+    "bucket": "Bucket C: Responsible AI, Ethics & Data Governance",
+    "sfia_codes": ["ETHICS"],
+    "expected_primary_courses": ["SAIA1013"],
+    "retrieval_query": "Identify, analyze, and mitigate ethical issues in artificial intelligence systems including algorithmic bias, unfair discrimination, transparency, accountability, and explainability.",
+    "nli_hypothesis_template": "The course material explicitly teaches, intends, or assesses ethical principles and methods for addressing algorithmic bias, fairness, transparency, explainability, and accountability in AI systems.",
+    "indsf_provenance": [
+      {"doc_id": "IndSF_Artificial_Intelligence.pdf", "role_title": "AI Ethics Officer", "pdf_page_no": 18, "matched_source_excerpt": "Identifies current and future legal, regulatory and policy requirements as well as industry best practices and ambiguous ethical issues (e.g. fairness, bias, transparency, and explainability in ML systems), translating them into policy, standards and controls"}
+    ]
+  },
+  {
+    "skill_id": "S09",
+    "skill_name": "AI Ethical Risk & Impact Assessment",
+    "bucket": "Bucket C: Responsible AI, Ethics & Data Governance",
+    "sfia_codes": ["ETHICS"],
+    "expected_primary_courses": ["SAIA1013"],
+    "retrieval_query": "Conduct AI ethical risk and impact assessments to anticipate societal harms, safety risks, and unintended consequences during the design, development, and deployment of AI systems.",
+    "nli_hypothesis_template": "The course material explicitly teaches, intends, or assesses how to conduct ethical risk assessments, impact assessments, and harm-mitigation planning across the AI lifecycle.",
+    "indsf_provenance": [
+      {"doc_id": "IndSF_Artificial_Intelligence.pdf", "role_title": "AI Ethics Officer", "pdf_page_no": 18, "matched_source_excerpt": "Identifies and assesses potential risks and impacts in AI projects. Recommends appropriate mitigations, and prevents harm during the design and planning phase of AI systems... Coordinates efforts between Ethics team and stakeholders to run AI impact assessments"}
+    ]
+  },
+  {
+    "skill_id": "S10",
+    "skill_name": "Data Privacy, Security & AI Regulatory Governance",
+    "bucket": "Bucket C: Responsible AI, Ethics & Data Governance",
+    "sfia_codes": ["DATM", "ETHICS"],
+    "expected_primary_courses": ["SAIA1013"],
+    "retrieval_query": "Apply data governance, personal data protection, privacy-by-design, security safeguards, and national or international AI regulatory and compliance frameworks.",
+    "nli_hypothesis_template": "The course material explicitly teaches, intends, or assesses data privacy protection, security-by-design, informed consent, or compliance with AI governance and regulatory frameworks.",
+    "indsf_provenance": [
+      {"doc_id": "IndSF_Artificial_Intelligence.pdf", "role_title": "AI Ethics Officer / Associate AI/ML Engineer", "pdf_page_no": 19, "matched_source_excerpt": "Strong command of data and AI governance, privacy principles, strategies and frameworks, translating them into clear recommendations... Familiarity with relevant regulatory and certification frameworks"},
+      {"doc_id": "IndSF_Data_Science_2023.pdf", "role_title": "Data Engineer", "pdf_page_no": 11, "matched_source_excerpt": "Ensure data is appropriately stored and archived, in line with relevant legislation."}
+    ]
+  },
+  {
+    "skill_id": "S11",
+    "skill_name": "Model API Packaging & Software Service Integration",
+    "bucket": "Bucket D: Production AI Deployment & MLOps (Curriculum Gap Test)",
+    "sfia_codes": ["PROG"],
+    "expected_primary_courses": [],
+    "retrieval_query": "Convert trained machine learning or AI models into consumable REST APIs and software integration services so external applications and developers can invoke model predictions in production.",
+    "nli_hypothesis_template": "The course material explicitly teaches, intends, or assesses how to package trained AI/ML models into callable APIs or production software integration services.",
+    "indsf_provenance": [
+      {"doc_id": "IndSF_Artificial_Intelligence.pdf", "role_title": "AI Application Developer", "pdf_page_no": 27, "matched_source_excerpt": "Converts AI/ML models into APIs that other developers can use"}
+    ]
+  },
+  {
+    "skill_id": "S12",
+    "skill_name": "MLOps CI/CD Pipeline Orchestration & Container Deployment",
+    "bucket": "Bucket D: Production AI Deployment & MLOps (Curriculum Gap Test)",
+    "sfia_codes": ["MELT"],
+    "expected_primary_courses": [],
+    "retrieval_query": "Design and automate production MLOps and CI/CD pipelines using containerization, orchestration, model versioning, and continuous post-deployment monitoring.",
+    "nli_hypothesis_template": "The course material explicitly teaches, intends, or assesses building automated MLOps pipelines, CI/CD orchestration, containerization, or continuous production model monitoring.",
+    "indsf_provenance": [
+      {"doc_id": "IndSF_Artificial_Intelligence.pdf", "role_title": "AI DevOps / MLOps Engineer", "pdf_page_no": 24, "matched_source_excerpt": "Responsible for the MLOps pipelines creation and automation on cloud and on premise, CI/CD pipelines orchestration ML models deployment, testing and continuous maintenance"}
+    ]
+  }
+]

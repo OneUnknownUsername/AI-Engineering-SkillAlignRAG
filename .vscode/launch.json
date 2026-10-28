@@ -1,0 +1,10 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {"name": "1. Course ingestion", "type": "debugpy", "request": "launch", "module": "src.pipeline_a_course_ingestion", "cwd": "${workspaceFolder}", "console": "integratedTerminal"},
+    {"name": "2. IndSF extraction", "type": "debugpy", "request": "launch", "module": "src.pipeline_b_indsf_skills", "args": ["--extract-only"], "cwd": "${workspaceFolder}", "console": "integratedTerminal"},
+    {"name": "3. Compile locked benchmark", "type": "debugpy", "request": "launch", "module": "src.pipeline_b_indsf_skills", "args": ["--reuse-extraction"], "cwd": "${workspaceFolder}", "console": "integratedTerminal"},
+    {"name": "4. Build indexes", "type": "debugpy", "request": "launch", "module": "src.build_indexes", "cwd": "${workspaceFolder}", "console": "integratedTerminal"},
+    {"name": "5. Retrieval smoke test", "type": "debugpy", "request": "launch", "module": "src.run_retrieval_smoke_test", "cwd": "${workspaceFolder}", "console": "integratedTerminal"}
+  ]
+}
