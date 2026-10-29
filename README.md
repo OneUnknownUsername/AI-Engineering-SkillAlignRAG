@@ -1,4 +1,4 @@
-# SkillAlign-RAG
+# SkillAlign-RAG: A Retrieval-Augmented Generation System for Verifying Industry Skill Alignment Across Course Learning Outcomes, Teaching Materials, and Assessments
 
 > A document-grounded AI engineering system that helps UTM lecturers and programme coordinators verify whether industry skills are intended, taught, and assessed across course materials, with exact page and slide citations.
 
