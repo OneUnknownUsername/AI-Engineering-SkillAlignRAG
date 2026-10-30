@@ -7,6 +7,7 @@ from pathlib import Path
 
 import pymupdf as fitz
 
+from src.curriculum_scope import explicit_clo_statement, refresh_auxiliary_clo_pages
 from src.common import COURSES, LEVELS, base_parser, extraction_options, md, normalize, write_json
 from src.extraction import PDFExtractor, extractor_from_args
 from src.step0_normalize_formats import normalize_formats
@@ -21,17 +22,6 @@ CATALOG_FOOTER = re.compile(
     r"(?:faculty\s+of(?:\s+artificial\s+intelligence)?|artificial\s+intelligence|"
     r"universiti\s+teknologi\s+malaysia|UTM|\d{1,3})[.,\s]*", re.I,
 )
-
-
-def explicit_clo_statement(text: str) -> bool:
-    text = normalize(text)
-    if re.search(r"\bcourse\s+learning\s+outcomes?\b", text, re.I):
-        return True
-    return re.search(
-        r"\bC\s*L\s*O\s*[123]\b\s*(?:[:.)-]\s*[A-Za-z]|"
-        r"(?:recommend|explain|practi[sc]e|construct|apply|analy[sz]e|evaluate|design|"
-        r"develop|identify|demonstrate|implement|describe|understand|use|assess)\b)", text, re.I,
-    ) is not None
 
 
 def strip_catalog_footer(text: str) -> str:
@@ -179,15 +169,7 @@ def ingest(data_dir: Path, output_dir: Path, extractor, workers: int = 1) -> dic
                 else "available" if course["level_availability"][level]
                 else "processing_failed" if docs else "folder_empty_or_missing"
             )
-        course["auxiliary_clo_pages"] = []
-        if course["level_availability"]["CLO"]:
-            for chunk in chunks:
-                if chunk["course_code"] == code and chunk["evidence_level"] != "CLO" and explicit_clo_statement(chunk["verbatim_text_span"]):
-                    chunk["auxiliary_evidence_levels"] = ["CLO"]
-                    chunk["auxiliary_evidence_reason"] = "explicit_clo_definition_or_header"
-                    chunk.update(indexable=True, skip_reason=None)
-                    course["auxiliary_clo_pages"].append({"doc_id": chunk["doc_id"], "pdf_page_no": chunk["pdf_page_no"],
-                                                          "source_evidence_level": chunk["evidence_level"]})
+    refresh_auxiliary_clo_pages(chunks, catalog)
     if len(lookup) != len(chunks) or len({c["chunk_id"] for c in chunks}) != len(chunks):
         raise ValueError("Document IDs collided; refusing to overwrite provenance")
     write_json(output_dir / "course_catalog_manifest.json", catalog)
@@ -211,7 +193,7 @@ def ingest(data_dir: Path, output_dir: Path, extractor, workers: int = 1) -> dic
     for code, course in catalog["courses"].items():
         report.append("| " + " | ".join([code, *course["level_status"].values()]) + " |")
     report += ["", "## Auxiliary CLO memberships", "",
-               "Explicit CLO pages retain their source level and verbatim lookup key. They also enter the CLO route "
+               "Explicit CLO pages from lecture slides retain their source level and verbatim lookup key. They also enter the CLO route "
                "only when a usable CI/CLO document exists; the pooled corpus keeps each page once.", "",
                "| Course | Document | PDF page | Source level |", "| --- | --- | --- | --- |"]
     for code, course in catalog["courses"].items():

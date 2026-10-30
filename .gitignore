@@ -5,3 +5,9 @@ __pycache__/
 /data/
 outputs/
 
+hf_cache/
+.cache/
+outputs/models/
+outputs/extraction_cache/
+outputs/tools/
+outputs/verification-*/

@@ -1,0 +1,20 @@
+{
+  "status": "passed",
+  "course_pages": 1407,
+  "indexable_chunks": 1376,
+  "indsf_pages": 49,
+  "skills": 12,
+  "queries": 36,
+  "index_mode": "dense_bm25_hybrid",
+  "document_failures": [],
+  "source_fingerprint": "f255f08809e9f269dd461dfdbf5fc86337263de6addbb8fa346234bdf439163f",
+  "benchmark_fingerprint": "a5cf1dee3d7034a1ef4d40127de11b5f6b1e3621084416a401be8465c2a4e440",
+  "course_ocr_pages": 1205,
+  "redaction_events": 153,
+  "dropped_page_reasons": {
+    "activity_without_explanation": 30,
+    "divider": 1
+  },
+  "potential_dilution_queries": 34,
+  "auxiliary_clo_pages": 11
+}

@@ -1,0 +1,192 @@
+[
+  {
+    "pdf_page_no": 45,
+    "quote": "Reduce the constraints. (adjust the regularization hyperparameter).",
+    "gate_6a": "passed",
+    "gate_6b": "passed",
+    "final_classification": "Supported",
+    "verified_citation": {
+      "doc_id": "Week 1 - INTRODUCTION TO ML.pdf",
+      "pdf_page_no": 45,
+      "verbatim_quote": "Reduce the constraints. (adjust the regularization hyperparameter)."
+    },
+    "ellipsis_snapped": false,
+    "short_quote_expanded": false,
+    "nli_premise_provenance": "Course material:",
+    "nli_scores": {
+      "hypothesis": "The course material covers adjusting hyperparameters.",
+      "premise_variant": "title_and_quote",
+      "entailment": 0.99169921875,
+      "neutral": 0.007526397705078125,
+      "contradiction": 0.0006866455078125,
+      "non_contradiction_score": 0.9992256164550781
+    },
+    "atomic_nli_scores": [
+      {
+        "hypothesis": "The course material covers diagnosing overfitting.",
+        "premise_variant": "quote",
+        "entailment": 0.0010671615600585938,
+        "neutral": 0.055023193359375,
+        "contradiction": 0.94384765625,
+        "non_contradiction_score": 0.056090354919433594
+      },
+      {
+        "hypothesis": "The course material covers diagnosing overfitting.",
+        "premise_variant": "title_and_quote",
+        "entailment": 0.0013303756713867188,
+        "neutral": 0.0094757080078125,
+        "contradiction": 0.9892578125,
+        "non_contradiction_score": 0.010806083679199219
+      },
+      {
+        "hypothesis": "The course material covers diagnosing underfitting.",
+        "premise_variant": "quote",
+        "entailment": 0.0004036426544189453,
+        "neutral": 0.00582122802734375,
+        "contradiction": 0.99365234375,
+        "non_contradiction_score": 0.006224870681762695
+      },
+      {
+        "hypothesis": "The course material covers diagnosing underfitting.",
+        "premise_variant": "title_and_quote",
+        "entailment": 0.002956390380859375,
+        "neutral": 0.188232421875,
+        "contradiction": 0.80859375,
+        "non_contradiction_score": 0.19118881225585938
+      },
+      {
+        "hypothesis": "The course material covers applying regularization.",
+        "premise_variant": "quote",
+        "entailment": 0.9794921875,
+        "neutral": 0.019378662109375,
+        "contradiction": 0.0013303756713867188,
+        "non_contradiction_score": 0.998870849609375
+      },
+      {
+        "hypothesis": "The course material covers applying regularization.",
+        "premise_variant": "title_and_quote",
+        "entailment": 0.98974609375,
+        "neutral": 0.00907135009765625,
+        "contradiction": 0.0009555816650390625,
+        "non_contradiction_score": 0.9988174438476562
+      },
+      {
+        "hypothesis": "The course material covers adjusting hyperparameters.",
+        "premise_variant": "quote",
+        "entailment": 0.99072265625,
+        "neutral": 0.00853729248046875,
+        "contradiction": 0.0008258819580078125,
+        "non_contradiction_score": 0.9992599487304688
+      },
+      {
+        "hypothesis": "The course material covers adjusting hyperparameters.",
+        "premise_variant": "title_and_quote",
+        "entailment": 0.99169921875,
+        "neutral": 0.007526397705078125,
+        "contradiction": 0.0006866455078125,
+        "non_contradiction_score": 0.9992256164550781
+      }
+    ],
+    "max_entailment": 0.99169921875,
+    "shared_core_domain_terms": [
+      "hyperparameter",
+      "regularization"
+    ],
+    "nli_acceptance_rule": "entailment_0.40"
+  },
+  {
+    "pdf_page_no": 44,
+    "quote": "Overfitting the training data Classification Overfitting means the model performs well on the training data, but it does not generalize well.",
+    "gate_6a": "passed",
+    "gate_6b": "passed",
+    "final_classification": "Supported",
+    "verified_citation": {
+      "doc_id": "Week 1 - INTRODUCTION TO ML.pdf",
+      "pdf_page_no": 44,
+      "verbatim_quote": "Overfitting the training data Classification Overfitting means the model performs well on the training data, but it does not generalize well."
+    },
+    "ellipsis_snapped": false,
+    "short_quote_expanded": false,
+    "nli_premise_provenance": "Course material:",
+    "nli_scores": {
+      "hypothesis": "The course material covers diagnosing overfitting.",
+      "premise_variant": "title_and_quote",
+      "entailment": 0.36669921875,
+      "neutral": 0.626953125,
+      "contradiction": 0.00641632080078125,
+      "non_contradiction_score": 0.99365234375
+    },
+    "atomic_nli_scores": [
+      {
+        "hypothesis": "The course material covers diagnosing overfitting.",
+        "premise_variant": "quote",
+        "entailment": 0.1234130859375,
+        "neutral": 0.86865234375,
+        "contradiction": 0.0078277587890625,
+        "non_contradiction_score": 0.9920654296875
+      },
+      {
+        "hypothesis": "The course material covers diagnosing overfitting.",
+        "premise_variant": "title_and_quote",
+        "entailment": 0.36669921875,
+        "neutral": 0.626953125,
+        "contradiction": 0.00641632080078125,
+        "non_contradiction_score": 0.99365234375
+      },
+      {
+        "hypothesis": "The course material covers diagnosing underfitting.",
+        "premise_variant": "quote",
+        "entailment": 0.0002493858337402344,
+        "neutral": 0.00136566162109375,
+        "contradiction": 0.99853515625,
+        "non_contradiction_score": 0.0016150474548339844
+      },
+      {
+        "hypothesis": "The course material covers diagnosing underfitting.",
+        "premise_variant": "title_and_quote",
+        "entailment": 0.00034332275390625,
+        "neutral": 0.001903533935546875,
+        "contradiction": 0.99755859375,
+        "non_contradiction_score": 0.002246856689453125
+      },
+      {
+        "hypothesis": "The course material covers applying regularization.",
+        "premise_variant": "quote",
+        "entailment": 0.0003154277801513672,
+        "neutral": 0.006649017333984375,
+        "contradiction": 0.9931640625,
+        "non_contradiction_score": 0.006964445114135742
+      },
+      {
+        "hypothesis": "The course material covers applying regularization.",
+        "premise_variant": "title_and_quote",
+        "entailment": 0.0005612373352050781,
+        "neutral": 0.0308837890625,
+        "contradiction": 0.96875,
+        "non_contradiction_score": 0.03144502639770508
+      },
+      {
+        "hypothesis": "The course material covers adjusting hyperparameters.",
+        "premise_variant": "quote",
+        "entailment": 0.0012121200561523438,
+        "neutral": 0.9892578125,
+        "contradiction": 0.0093231201171875,
+        "non_contradiction_score": 0.9904699325561523
+      },
+      {
+        "hypothesis": "The course material covers adjusting hyperparameters.",
+        "premise_variant": "title_and_quote",
+        "entailment": 0.0019016265869140625,
+        "neutral": 0.97705078125,
+        "contradiction": 0.0208892822265625,
+        "non_contradiction_score": 0.9789524078369141
+      }
+    ],
+    "max_entailment": 0.36669921875,
+    "shared_core_domain_terms": [
+      "model",
+      "overfitting"
+    ],
+    "nli_acceptance_rule": "domain_aligned_0.20"
+  }
+]

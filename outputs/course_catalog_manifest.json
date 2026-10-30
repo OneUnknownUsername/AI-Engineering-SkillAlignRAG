@@ -1,0 +1,1652 @@
+{
+  "schema_version": 1,
+  "courses": {
+    "SAIA1013": {
+      "course_code": "SAIA1013",
+      "course_title": "Responsible AI and Ethics",
+      "course_folders": [
+        "SAIA1013_Responsible_AI_and_Ethics"
+      ],
+      "level_availability": {
+        "CLO": true,
+        "Taught": true,
+        "Assessed": true
+      },
+      "level_status": {
+        "CLO": "available",
+        "Taught": "available",
+        "Assessed": "available"
+      },
+      "documents": [
+        {
+          "source_path": "D:\\Hackathons\\AI-Engineering-SkillAlignRAG\\data\\courses\\SAIA1013_Responsible_AI_and_Ethics\\01_CI_CLO\\SAIA1013 Responsible AI and Ethics 2425-1.pdf",
+          "source_relative_path": "SAIA1013_Responsible_AI_and_Ethics/01_CI_CLO/SAIA1013 Responsible AI and Ethics 2425-1.pdf",
+          "original_format": "pdf",
+          "status": "ready",
+          "error": null,
+          "pdf_path": "D:\\Hackathons\\AI-Engineering-SkillAlignRAG\\data\\courses\\SAIA1013_Responsible_AI_and_Ethics\\01_CI_CLO\\SAIA1013 Responsible AI and Ethics 2425-1.pdf",
+          "doc_id": "SAIA1013 Responsible AI and Ethics 2425-1.pdf",
+          "evidence_level": "CLO",
+          "page_count": 3
+        },
+        {
+          "source_path": "D:\\Hackathons\\AI-Engineering-SkillAlignRAG\\data\\courses\\SAIA1013_Responsible_AI_and_Ethics\\02_Lecture_Slides_Taught\\Module 2 Additional Ethical Theories 11 Aug 2025.pdf",
+          "source_relative_path": "SAIA1013_Responsible_AI_and_Ethics/02_Lecture_Slides_Taught/Module 2 Additional Ethical Theories 11 Aug 2025.pdf",
+          "original_format": "pdf",
+          "status": "ready",
+          "error": null,
+          "pdf_path": "D:\\Hackathons\\AI-Engineering-SkillAlignRAG\\data\\courses\\SAIA1013_Responsible_AI_and_Ethics\\02_Lecture_Slides_Taught\\Module 2 Additional Ethical Theories 11 Aug 2025.pdf",
+          "doc_id": "Module 2 Additional Ethical Theories 11 Aug 2025.pdf",
+          "evidence_level": "Taught",
+          "page_count": 46
+        },
+        {
+          "source_path": "D:\\Hackathons\\AI-Engineering-SkillAlignRAG\\data\\courses\\SAIA1013_Responsible_AI_and_Ethics\\02_Lecture_Slides_Taught\\Module 4 AI Ethics Risk Assessment.pdf",
+          "source_relative_path": "SAIA1013_Responsible_AI_and_Ethics/02_Lecture_Slides_Taught/Module 4 AI Ethics Risk Assessment.pdf",
+          "original_format": "pdf",
+          "status": "ready",
+          "error": null,
+          "pdf_path": "D:\\Hackathons\\AI-Engineering-SkillAlignRAG\\data\\courses\\SAIA1013_Responsible_AI_and_Ethics\\02_Lecture_Slides_Taught\\Module 4 AI Ethics Risk Assessment.pdf",
+          "doc_id": "Module 4 AI Ethics Risk Assessment.pdf",
+          "evidence_level": "Taught",
+          "page_count": 54
+        },
+        {
+          "source_path": "D:\\Hackathons\\AI-Engineering-SkillAlignRAG\\data\\courses\\SAIA1013_Responsible_AI_and_Ethics\\02_Lecture_Slides_Taught\\Module 5  Ethics Centric in AI Design.pdf",
+          "source_relative_path": "SAIA1013_Responsible_AI_and_Ethics/02_Lecture_Slides_Taught/Module 5  Ethics Centric in AI Design.pdf",
+          "original_format": "pdf",
+          "status": "ready",
+          "error": null,
+          "pdf_path": "D:\\Hackathons\\AI-Engineering-SkillAlignRAG\\data\\courses\\SAIA1013_Responsible_AI_and_Ethics\\02_Lecture_Slides_Taught\\Module 5  Ethics Centric in AI Design.pdf",
+          "doc_id": "Module 5  Ethics Centric in AI Design.pdf",
+          "evidence_level": "Taught",
+          "page_count": 56
+        },
+        {
+          "source_path": "D:\\Hackathons\\AI-Engineering-SkillAlignRAG\\data\\courses\\SAIA1013_Responsible_AI_and_Ethics\\02_Lecture_Slides_Taught\\Module 6  AI Governance Sept.pdf",
+          "source_relative_path": "SAIA1013_Responsible_AI_and_Ethics/02_Lecture_Slides_Taught/Module 6  AI Governance Sept.pdf",
+          "original_format": "pdf",
+          "status": "ready",
+          "error": null,
+          "pdf_path": "D:\\Hackathons\\AI-Engineering-SkillAlignRAG\\data\\courses\\SAIA1013_Responsible_AI_and_Ethics\\02_Lecture_Slides_Taught\\Module 6  AI Governance Sept.pdf",
+          "doc_id": "Module 6  AI Governance Sept.pdf",
+          "evidence_level": "Taught",
+          "page_count": 37
+        },
+        {
+          "source_path": "D:\\Hackathons\\AI-Engineering-SkillAlignRAG\\data\\courses\\SAIA1013_Responsible_AI_and_Ethics\\02_Lecture_Slides_Taught\\Part 1 Module 3 Ethics From Religion Perspective.pdf",
+          "source_relative_path": "SAIA1013_Responsible_AI_and_Ethics/02_Lecture_Slides_Taught/Part 1 Module 3 Ethics From Religion Perspective.pdf",
+          "original_format": "pdf",
+          "status": "ready",
+          "error": null,
+          "pdf_path": "D:\\Hackathons\\AI-Engineering-SkillAlignRAG\\data\\courses\\SAIA1013_Responsible_AI_and_Ethics\\02_Lecture_Slides_Taught\\Part 1 Module 3 Ethics From Religion Perspective.pdf",
+          "doc_id": "Part 1 Module 3 Ethics From Religion Perspective.pdf",
+          "evidence_level": "Taught",
+          "page_count": 21
+        },
+        {
+          "source_path": "D:\\Hackathons\\AI-Engineering-SkillAlignRAG\\data\\courses\\SAIA1013_Responsible_AI_and_Ethics\\02_Lecture_Slides_Taught\\Part 2 Module 3 Ethics From Religion Perspective.pdf.pptx",
+          "source_relative_path": "SAIA1013_Responsible_AI_and_Ethics/02_Lecture_Slides_Taught/Part 2 Module 3 Ethics From Religion Perspective.pdf.pptx",
+          "original_format": "pptx",
+          "status": "ready",
+          "error": null,
+          "pdf_path": "D:\\Hackathons\\AI-Engineering-SkillAlignRAG\\outputs\\normalized_pdf\\SAIA1013_Responsible_AI_and_Ethics\\02_Lecture_Slides_Taught\\Part 2 Module 3 Ethics From Religion Perspective.pdf.pptx.pdf",
+          "doc_id": "Part 2 Module 3 Ethics From Religion Perspective.pdf.pdf",
+          "evidence_level": "Taught",
+          "page_count": 59
+        },
+        {
+          "source_path": "D:\\Hackathons\\AI-Engineering-SkillAlignRAG\\data\\courses\\SAIA1013_Responsible_AI_and_Ethics\\02_Lecture_Slides_Taught\\Week 1 Introduction to RAI and AI Ethics Class Notes.pdf",
+          "source_relative_path": "SAIA1013_Responsible_AI_and_Ethics/02_Lecture_Slides_Taught/Week 1 Introduction to RAI and AI Ethics Class Notes.pdf",
+          "original_format": "pdf",
+          "status": "ready",
+          "error": null,
+          "pdf_path": "D:\\Hackathons\\AI-Engineering-SkillAlignRAG\\data\\courses\\SAIA1013_Responsible_AI_and_Ethics\\02_Lecture_Slides_Taught\\Week 1 Introduction to RAI and AI Ethics Class Notes.pdf",
+          "doc_id": "Week 1 Introduction to RAI and AI Ethics Class Notes.pdf",
+          "evidence_level": "Taught",
+          "page_count": 53
+        },
+        {
+          "source_path": "D:\\Hackathons\\AI-Engineering-SkillAlignRAG\\data\\courses\\SAIA1013_Responsible_AI_and_Ethics\\03_Assessments_Assessed\\1-GROUP ASSIGNMENT SAIA 1013 RES AI ETHICS_3_24_25.docx",
+          "source_relative_path": "SAIA1013_Responsible_AI_and_Ethics/03_Assessments_Assessed/1-GROUP ASSIGNMENT SAIA 1013 RES AI ETHICS_3_24_25.docx",
+          "original_format": "docx",
+          "status": "ready",
+          "error": null,
+          "pdf_path": "D:\\Hackathons\\AI-Engineering-SkillAlignRAG\\outputs\\normalized_pdf\\SAIA1013_Responsible_AI_and_Ethics\\03_Assessments_Assessed\\1-GROUP ASSIGNMENT SAIA 1013 RES AI ETHICS_3_24_25.docx.pdf",
+          "doc_id": "1-GROUP ASSIGNMENT SAIA 1013 RES AI ETHICS_3_24_25.pdf",
+          "evidence_level": "Assessed",
+          "page_count": 4
+        },
+        {
+          "source_path": "D:\\Hackathons\\AI-Engineering-SkillAlignRAG\\data\\courses\\SAIA1013_Responsible_AI_and_Ethics\\03_Assessments_Assessed\\Assignment 3 (5%) Module 5.pdf",
+          "source_relative_path": "SAIA1013_Responsible_AI_and_Ethics/03_Assessments_Assessed/Assignment 3 (5%) Module 5.pdf",
+          "original_format": "pdf",
+          "status": "ready",
+          "error": null,
+          "pdf_path": "D:\\Hackathons\\AI-Engineering-SkillAlignRAG\\data\\courses\\SAIA1013_Responsible_AI_and_Ethics\\03_Assessments_Assessed\\Assignment 3 (5%) Module 5.pdf",
+          "doc_id": "Assignment 3 (5%) Module 5.pdf",
+          "evidence_level": "Assessed",
+          "page_count": 1
+        },
+        {
+          "source_path": "D:\\Hackathons\\AI-Engineering-SkillAlignRAG\\data\\courses\\SAIA1013_Responsible_AI_and_Ethics\\03_Assessments_Assessed\\SAIA 1013 Rubrics Assignment (5+5%).pdf",
+          "source_relative_path": "SAIA1013_Responsible_AI_and_Ethics/03_Assessments_Assessed/SAIA 1013 Rubrics Assignment (5+5%).pdf",
+          "original_format": "pdf",
+          "status": "ready",
+          "error": null,
+          "pdf_path": "D:\\Hackathons\\AI-Engineering-SkillAlignRAG\\data\\courses\\SAIA1013_Responsible_AI_and_Ethics\\03_Assessments_Assessed\\SAIA 1013 Rubrics Assignment (5+5%).pdf",
+          "doc_id": "SAIA 1013 Rubrics Assignment (5+5%).pdf",
+          "evidence_level": "Assessed",
+          "page_count": 1
+        }
+      ],
+      "deck_aspect_cards": [
+        {
+          "doc_id": "Module 2 Additional Ethical Theories 11 Aug 2025.pdf",
+          "deck_title": "Responsible AI and Ethics",
+          "declared_learning_outcomes_or_agenda": [],
+          "aspect_scan_pdf_pages": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "outcome_source_pages": [],
+          "embedded_clo_pages": [],
+          "embedded_assessment_pages": [
+            3,
+            46
+          ]
+        },
+        {
+          "doc_id": "Module 4 AI Ethics Risk Assessment.pdf",
+          "deck_title": "Responsible AI and Ethics",
+          "declared_learning_outcomes_or_agenda": [
+            "By the end of this module, students will be able to:",
+            "1. Identify and assess ethical risks in AI projects",
+            "using a risk assessment approach.",
+            "2. Apply the Ethical Matrix to evaluate decisions in",
+            "AI systems and data science."
+          ],
+          "aspect_scan_pdf_pages": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "outcome_source_pages": [
+            4
+          ],
+          "embedded_clo_pages": [],
+          "embedded_assessment_pages": []
+        },
+        {
+          "doc_id": "Module 5  Ethics Centric in AI Design.pdf",
+          "deck_title": "Responsible AI and Ethics",
+          "declared_learning_outcomes_or_agenda": [],
+          "aspect_scan_pdf_pages": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "outcome_source_pages": [],
+          "embedded_clo_pages": [],
+          "embedded_assessment_pages": [
+            56
+          ]
+        },
+        {
+          "doc_id": "Module 6  AI Governance Sept.pdf",
+          "deck_title": "Responsible AI and Ethics",
+          "declared_learning_outcomes_or_agenda": [],
+          "aspect_scan_pdf_pages": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "outcome_source_pages": [],
+          "embedded_clo_pages": [],
+          "embedded_assessment_pages": []
+        },
+        {
+          "doc_id": "Part 1 Module 3 Ethics From Religion Perspective.pdf",
+          "deck_title": "MEETING 3",
+          "declared_learning_outcomes_or_agenda": [],
+          "aspect_scan_pdf_pages": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "outcome_source_pages": [],
+          "embedded_clo_pages": [],
+          "embedded_assessment_pages": []
+        },
+        {
+          "doc_id": "Part 2 Module 3 Ethics From Religion Perspective.pdf.pdf",
+          "deck_title": "PART 2: BAB ADAB",
+          "declared_learning_outcomes_or_agenda": [
+            "Menganalisis dilema",
+            "moral dalam AI moden",
+            "Mengenali maksud",
+            "dan nilai adab dalam",
+            "konteks teknologi",
+            "Bezakan antara",
+            "tindakan beretika",
+            "dan hanya efisien",
+            "Menyuarakan pandangan",
+            "seimbang antara inovasi",
+            "dan nilai manusia"
+          ],
+          "aspect_scan_pdf_pages": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "outcome_source_pages": [
+            1
+          ],
+          "embedded_clo_pages": [],
+          "embedded_assessment_pages": []
+        },
+        {
+          "doc_id": "Week 1 Introduction to RAI and AI Ethics Class Notes.pdf",
+          "deck_title": "Responsible AI and Ethics",
+          "declared_learning_outcomes_or_agenda": [
+            "Course",
+            "Evaluation",
+            "Course Contents",
+            "Course Synopsis",
+            "Course Learning",
+            "Outcomes",
+            "This course addresses the ethical considerations and responsibilities that must be taken into",
+            "account concerning artificial intelligence.  With appropriate ethics and responsibility, the objective",
+            "of this course is to equip students with the knowledge and guided skill set necessary to develop AI",
+            "for the benefit of society and technology consumers. In addition, the course underlines the",
+            "significance of comprehending the risk, impacts and threats posed by new developments in AI",
+            "technology, as well as the application of present regulations. Ethical issues in AI, AI governance, AI",
+            "system transformation, ethical risk assessment and management, ethical matrices, along with",
+            "societal and educational AI ethics will be among the subjects covered.",
+            "Objectives",
+            "Taxonomies",
+            "T&L methods",
+            "Assessment",
+            "CLO*",
+            "PLO (MQF",
+            "generic skills",
+            "methods",
+            "Cluster",
+            "Code)",
+            "PLO2",
+            "CLO1",
+            "Recommend resolutions to the ethical issues of Artificial Intelligence",
+            "that are raised by the development, deployment and use of AI",
+            "(C2)",
+            "Lecture",
+            "Think pair share",
+            "Case Study",
+            "PLO5",
+            "(C3C)",
+            "CLO2",
+            "Explain methodologies and key approaches to AI ethics with a particular",
+            "emphasis on virtue ethics to support and enhance human well-being in",
+            "a sustainable environment",
+            "Peer Assessment",
+            "Reflection",
+            "Practise the appropriate ethical risk assessment and management using",
+            "relevant framework according to the relevant ethics and professional",
+            "code of practice",
+            "CLO3",
+            "Brainstorming",
+            "PLO11",
+            "Case Based",
+            "CADR",
+            "(C5)",
+            "Learning",
+            "SAIA1013 - RESPONSIBLE AND ETHIC (Section 01)",
+            "1 Assignment (5,5,10)",
+            "2 Presentation",
+            "3 Case Analysis and Discussion",
+            "4 Test",
+            "5 Final Exam",
+            "Total",
+            "Lecturer:",
+            "Dr Nurazean Maarop ([REDACTED_PII]) ([REDACTED_PII])",
+            "Venue:",
+            "Lecture Room 1, Level 15, MR",
+            "Day:",
+            "Slot 1: Monday (10:00am – 12:00pm) – 2 hours",
+            "Slot 2: Wednesday (2:00pm – 4:00pm) – 2 hours",
+            "Week Assessment",
+            "Introduction to  Responsible AI and AI Ethics",
+            "(lecture – synchronous, independent-study)*",
+            "Theoretical Concept of Ethics and their Application to AI",
+            "(lecture (video) asynchronous, independent-study)",
+            "Values in AI Ethics (Islamic, national, others point of view) *",
+            "( swap: Lecture on Wednesday)",
+            "Ethics Centric in AI Design*",
+            "Risk Assessment for AI Ethics*",
+            "Governance for Responsible AI*",
+            "Continuous Improvement & Presentation* (Seminar IEEE)"
+          ],
+          "aspect_scan_pdf_pages": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "outcome_source_pages": [
+            2,
+            3,
+            4,
+            5
+          ],
+          "embedded_clo_pages": [
+            2,
+            3,
+            4,
+            5
+          ],
+          "embedded_assessment_pages": [
+            44
+          ]
+        }
+      ],
+      "auxiliary_clo_pages": [
+        {
+          "doc_id": "Week 1 Introduction to RAI and AI Ethics Class Notes.pdf",
+          "pdf_page_no": 2,
+          "source_evidence_level": "Taught"
+        },
+        {
+          "doc_id": "Week 1 Introduction to RAI and AI Ethics Class Notes.pdf",
+          "pdf_page_no": 3,
+          "source_evidence_level": "Taught"
+        },
+        {
+          "doc_id": "Week 1 Introduction to RAI and AI Ethics Class Notes.pdf",
+          "pdf_page_no": 4,
+          "source_evidence_level": "Taught"
+        },
+        {
+          "doc_id": "Week 1 Introduction to RAI and AI Ethics Class Notes.pdf",
+          "pdf_page_no": 5,
+          "source_evidence_level": "Taught"
+        }
+      ]
+    },
+    "SAIA2113": {
+      "course_code": "SAIA2113",
+      "course_title": "Machine Learning",
+      "course_folders": [
+        "SAIA2113_Machine_Learning"
+      ],
+      "level_availability": {
+        "CLO": false,
+        "Taught": true,
+        "Assessed": true
+      },
+      "level_status": {
+        "CLO": "folder_empty_or_missing",
+        "Taught": "available",
+        "Assessed": "available"
+      },
+      "documents": [
+        {
+          "source_path": "D:\\Hackathons\\AI-Engineering-SkillAlignRAG\\data\\courses\\SAIA2113_Machine_Learning\\02_Lecture_Slides_Taught\\Week 1 - INTRODUCTION TO ML.pdf",
+          "source_relative_path": "SAIA2113_Machine_Learning/02_Lecture_Slides_Taught/Week 1 - INTRODUCTION TO ML.pdf",
+          "original_format": "pdf",
+          "status": "ready",
+          "error": null,
+          "pdf_path": "D:\\Hackathons\\AI-Engineering-SkillAlignRAG\\data\\courses\\SAIA2113_Machine_Learning\\02_Lecture_Slides_Taught\\Week 1 - INTRODUCTION TO ML.pdf",
+          "doc_id": "Week 1 - INTRODUCTION TO ML.pdf",
+          "evidence_level": "Taught",
+          "page_count": 46
+        },
+        {
+          "source_path": "D:\\Hackathons\\AI-Engineering-SkillAlignRAG\\data\\courses\\SAIA2113_Machine_Learning\\02_Lecture_Slides_Taught\\Week 10 Classification using Support Vector Machine.pdf",
+          "source_relative_path": "SAIA2113_Machine_Learning/02_Lecture_Slides_Taught/Week 10 Classification using Support Vector Machine.pdf",
+          "original_format": "pdf",
+          "status": "ready",
+          "error": null,
+          "pdf_path": "D:\\Hackathons\\AI-Engineering-SkillAlignRAG\\data\\courses\\SAIA2113_Machine_Learning\\02_Lecture_Slides_Taught\\Week 10 Classification using Support Vector Machine.pdf",
+          "doc_id": "Week 10 Classification using Support Vector Machine.pdf",
+          "evidence_level": "Taught",
+          "page_count": 43
+        },
+        {
+          "source_path": "D:\\Hackathons\\AI-Engineering-SkillAlignRAG\\data\\courses\\SAIA2113_Machine_Learning\\02_Lecture_Slides_Taught\\Week 11 Classification using Decision Tree and Random Forest (2).pdf",
+          "source_relative_path": "SAIA2113_Machine_Learning/02_Lecture_Slides_Taught/Week 11 Classification using Decision Tree and Random Forest (2).pdf",
+          "original_format": "pdf",
+          "status": "ready",
+          "error": null,
+          "pdf_path": "D:\\Hackathons\\AI-Engineering-SkillAlignRAG\\data\\courses\\SAIA2113_Machine_Learning\\02_Lecture_Slides_Taught\\Week 11 Classification using Decision Tree and Random Forest (2).pdf",
+          "doc_id": "Week 11 Classification using Decision Tree and Random Forest (2).pdf",
+          "evidence_level": "Taught",
+          "page_count": 39
+        },
+        {
+          "source_path": "D:\\Hackathons\\AI-Engineering-SkillAlignRAG\\data\\courses\\SAIA2113_Machine_Learning\\02_Lecture_Slides_Taught\\Week 12 Classification using Artificial Neural Network (3).pdf",
+          "source_relative_path": "SAIA2113_Machine_Learning/02_Lecture_Slides_Taught/Week 12 Classification using Artificial Neural Network (3).pdf",
+          "original_format": "pdf",
+          "status": "ready",
+          "error": null,
+          "pdf_path": "D:\\Hackathons\\AI-Engineering-SkillAlignRAG\\data\\courses\\SAIA2113_Machine_Learning\\02_Lecture_Slides_Taught\\Week 12 Classification using Artificial Neural Network (3).pdf",
+          "doc_id": "Week 12 Classification using Artificial Neural Network (3).pdf",
+          "evidence_level": "Taught",
+          "page_count": 72
+        },
+        {
+          "source_path": "D:\\Hackathons\\AI-Engineering-SkillAlignRAG\\data\\courses\\SAIA2113_Machine_Learning\\02_Lecture_Slides_Taught\\Week 13 Clustering.pdf",
+          "source_relative_path": "SAIA2113_Machine_Learning/02_Lecture_Slides_Taught/Week 13 Clustering.pdf",
+          "original_format": "pdf",
+          "status": "ready",
+          "error": null,
+          "pdf_path": "D:\\Hackathons\\AI-Engineering-SkillAlignRAG\\data\\courses\\SAIA2113_Machine_Learning\\02_Lecture_Slides_Taught\\Week 13 Clustering.pdf",
+          "doc_id": "Week 13 Clustering.pdf",
+          "evidence_level": "Taught",
+          "page_count": 66
+        },
+        {
+          "source_path": "D:\\Hackathons\\AI-Engineering-SkillAlignRAG\\data\\courses\\SAIA2113_Machine_Learning\\02_Lecture_Slides_Taught\\Week 14 Ethical Consideration.pdf",
+          "source_relative_path": "SAIA2113_Machine_Learning/02_Lecture_Slides_Taught/Week 14 Ethical Consideration.pdf",
+          "original_format": "pdf",
+          "status": "ready",
+          "error": null,
+          "pdf_path": "D:\\Hackathons\\AI-Engineering-SkillAlignRAG\\data\\courses\\SAIA2113_Machine_Learning\\02_Lecture_Slides_Taught\\Week 14 Ethical Consideration.pdf",
+          "doc_id": "Week 14 Ethical Consideration.pdf",
+          "evidence_level": "Taught",
+          "page_count": 69
+        },
+        {
+          "source_path": "D:\\Hackathons\\AI-Engineering-SkillAlignRAG\\data\\courses\\SAIA2113_Machine_Learning\\02_Lecture_Slides_Taught\\WEEK 2 & 3 - UNDERSTANDING DATA TYPES AND PRE-PROCESSING.pdf",
+          "source_relative_path": "SAIA2113_Machine_Learning/02_Lecture_Slides_Taught/WEEK 2 & 3 - UNDERSTANDING DATA TYPES AND PRE-PROCESSING.pdf",
+          "original_format": "pdf",
+          "status": "ready",
+          "error": null,
+          "pdf_path": "D:\\Hackathons\\AI-Engineering-SkillAlignRAG\\data\\courses\\SAIA2113_Machine_Learning\\02_Lecture_Slides_Taught\\WEEK 2 & 3 - UNDERSTANDING DATA TYPES AND PRE-PROCESSING.pdf",
+          "doc_id": "WEEK 2 & 3 - UNDERSTANDING DATA TYPES AND PRE-PROCESSING.pdf",
+          "evidence_level": "Taught",
+          "page_count": 38
+        },
+        {
+          "source_path": "D:\\Hackathons\\AI-Engineering-SkillAlignRAG\\data\\courses\\SAIA2113_Machine_Learning\\02_Lecture_Slides_Taught\\Week 4 - Supervised Learning.pdf",
+          "source_relative_path": "SAIA2113_Machine_Learning/02_Lecture_Slides_Taught/Week 4 - Supervised Learning.pdf",
+          "original_format": "pdf",
+          "status": "ready",
+          "error": null,
+          "pdf_path": "D:\\Hackathons\\AI-Engineering-SkillAlignRAG\\data\\courses\\SAIA2113_Machine_Learning\\02_Lecture_Slides_Taught\\Week 4 - Supervised Learning.pdf",
+          "doc_id": "Week 4 - Supervised Learning.pdf",
+          "evidence_level": "Taught",
+          "page_count": 40
+        },
+        {
+          "source_path": "D:\\Hackathons\\AI-Engineering-SkillAlignRAG\\data\\courses\\SAIA2113_Machine_Learning\\02_Lecture_Slides_Taught\\Week 5 - Unsupervised Learning.pdf",
+          "source_relative_path": "SAIA2113_Machine_Learning/02_Lecture_Slides_Taught/Week 5 - Unsupervised Learning.pdf",
+          "original_format": "pdf",
+          "status": "ready",
+          "error": null,
+          "pdf_path": "D:\\Hackathons\\AI-Engineering-SkillAlignRAG\\data\\courses\\SAIA2113_Machine_Learning\\02_Lecture_Slides_Taught\\Week 5 - Unsupervised Learning.pdf",
+          "doc_id": "Week 5 - Unsupervised Learning.pdf",
+          "evidence_level": "Taught",
+          "page_count": 33
+        },
+        {
+          "source_path": "D:\\Hackathons\\AI-Engineering-SkillAlignRAG\\data\\courses\\SAIA2113_Machine_Learning\\02_Lecture_Slides_Taught\\Week 6 - Model Evaluation.pdf",
+          "source_relative_path": "SAIA2113_Machine_Learning/02_Lecture_Slides_Taught/Week 6 - Model Evaluation.pdf",
+          "original_format": "pdf",
+          "status": "ready",
+          "error": null,
+          "pdf_path": "D:\\Hackathons\\AI-Engineering-SkillAlignRAG\\data\\courses\\SAIA2113_Machine_Learning\\02_Lecture_Slides_Taught\\Week 6 - Model Evaluation.pdf",
+          "doc_id": "Week 6 - Model Evaluation.pdf",
+          "evidence_level": "Taught",
+          "page_count": 37
+        },
+        {
+          "source_path": "D:\\Hackathons\\AI-Engineering-SkillAlignRAG\\data\\courses\\SAIA2113_Machine_Learning\\02_Lecture_Slides_Taught\\Week 7 - Linear Regression.pdf",
+          "source_relative_path": "SAIA2113_Machine_Learning/02_Lecture_Slides_Taught/Week 7 - Linear Regression.pdf",
+          "original_format": "pdf",
+          "status": "ready",
+          "error": null,
+          "pdf_path": "D:\\Hackathons\\AI-Engineering-SkillAlignRAG\\data\\courses\\SAIA2113_Machine_Learning\\02_Lecture_Slides_Taught\\Week 7 - Linear Regression.pdf",
+          "doc_id": "Week 7 - Linear Regression.pdf",
+          "evidence_level": "Taught",
+          "page_count": 48
+        },
+        {
+          "source_path": "D:\\Hackathons\\AI-Engineering-SkillAlignRAG\\data\\courses\\SAIA2113_Machine_Learning\\02_Lecture_Slides_Taught\\Week 9 Classification using Naive Bayes.pdf",
+          "source_relative_path": "SAIA2113_Machine_Learning/02_Lecture_Slides_Taught/Week 9 Classification using Naive Bayes.pdf",
+          "original_format": "pdf",
+          "status": "ready",
+          "error": null,
+          "pdf_path": "D:\\Hackathons\\AI-Engineering-SkillAlignRAG\\data\\courses\\SAIA2113_Machine_Learning\\02_Lecture_Slides_Taught\\Week 9 Classification using Naive Bayes.pdf",
+          "doc_id": "Week 9 Classification using Naive Bayes.pdf",
+          "evidence_level": "Taught",
+          "page_count": 32
+        },
+        {
+          "source_path": "D:\\Hackathons\\AI-Engineering-SkillAlignRAG\\data\\courses\\SAIA2113_Machine_Learning\\03_Assessments_Assessed\\Assignment 1 - ML (12 Nov 2025).pdf",
+          "source_relative_path": "SAIA2113_Machine_Learning/03_Assessments_Assessed/Assignment 1 - ML (12 Nov 2025).pdf",
+          "original_format": "pdf",
+          "status": "ready",
+          "error": null,
+          "pdf_path": "D:\\Hackathons\\AI-Engineering-SkillAlignRAG\\data\\courses\\SAIA2113_Machine_Learning\\03_Assessments_Assessed\\Assignment 1 - ML (12 Nov 2025).pdf",
+          "doc_id": "Assignment 1 - ML (12 Nov 2025).pdf",
+          "evidence_level": "Assessed",
+          "page_count": 7
+        },
+        {
+          "source_path": "D:\\Hackathons\\AI-Engineering-SkillAlignRAG\\data\\courses\\SAIA2113_Machine_Learning\\03_Assessments_Assessed\\SAIA 2113 - Machine Learning Project  Presentation SEM 1 20252026 (1).pdf",
+          "source_relative_path": "SAIA2113_Machine_Learning/03_Assessments_Assessed/SAIA 2113 - Machine Learning Project  Presentation SEM 1 20252026 (1).pdf",
+          "original_format": "pdf",
+          "status": "ready",
+          "error": null,
+          "pdf_path": "D:\\Hackathons\\AI-Engineering-SkillAlignRAG\\data\\courses\\SAIA2113_Machine_Learning\\03_Assessments_Assessed\\SAIA 2113 - Machine Learning Project  Presentation SEM 1 20252026 (1).pdf",
+          "doc_id": "SAIA 2113 - Machine Learning Project  Presentation SEM 1 20252026 (1).pdf",
+          "evidence_level": "Assessed",
+          "page_count": 5
+        }
+      ],
+      "deck_aspect_cards": [
+        {
+          "doc_id": "Week 1 - INTRODUCTION TO ML.pdf",
+          "deck_title": "TOPIC 1: INTRODUCTION TO MACHINE LEARNING MACHINE LEARNING (SAIA 2113)",
+          "declared_learning_outcomes_or_agenda": [
+            "INTRODUCTION TO MACHINE",
+            "LEARNING",
+            "Session 2025/2026 – Sem 1",
+            "MACHINE LEARNING (SAIA 2113)",
+            "Prepared by:",
+            "Dr. Adam Bin Mohd Khairuddin",
+            "[REDACTED_PII]",
+            "TEKNOLOGI",
+            "UNIVERSITITEKNOLOGIMALAYSIA",
+            "TOPIC1: INTRODUCTION TO MACHINE",
+            "Sessi0n 2025/2026 - Sem 1",
+            "At the end of this topic, students should be able to:",
+            "Define machine learning and why it is important.",
+            "Discover examples of machine learning applications.",
+            "Distinguish the types of machine learning systems.",
+            "Identify main challenges of machine learning.",
+            "Introduction to Machine Learning",
+            "Defining machine learning and why is it important."
+          ],
+          "aspect_scan_pdf_pages": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "outcome_source_pages": [
+            1,
+            2,
+            3
+          ],
+          "embedded_clo_pages": [
+            2
+          ],
+          "embedded_assessment_pages": []
+        },
+        {
+          "doc_id": "Week 10 Classification using Support Vector Machine.pdf",
+          "deck_title": "TOPIC 10: MACHINE LEARNING (SAIA 2113)",
+          "declared_learning_outcomes_or_agenda": [
+            "SUPERVISED LEARNING MODELLING AND EVALUATION:",
+            "CLASSIFICATION USING SUPPORT VECTOR MACHINES",
+            "MACHINE LEARNING (SAIA 2113)",
+            "Session 2025/2026 - Sem 1",
+            "Prepared by:",
+            "Dr. Noor Jannah Zakaria",
+            "[REDACTED_PII]",
+            "Faculty of",
+            "ArtificialIntelligence",
+            "UNIVERSITI TEKNOLOGI MALAYSIA",
+            "Innovating Sqlutions",
+            "Supervised Learning Modelling And Evaluation:",
+            "Classification Using Support Vector Machine",
+            "Introduction to SVM",
+            "Terminology",
+            "Application",
+            "Types",
+            "How does SVMs work?",
+            "Advantages",
+            "Disadvantages"
+          ],
+          "aspect_scan_pdf_pages": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "outcome_source_pages": [
+            1,
+            2,
+            6
+          ],
+          "embedded_clo_pages": [],
+          "embedded_assessment_pages": []
+        },
+        {
+          "doc_id": "Week 11 Classification using Decision Tree and Random Forest (2).pdf",
+          "deck_title": "TOPIC 11: MACHINE LEARNING (SAIA 2113)",
+          "declared_learning_outcomes_or_agenda": [
+            "SUPERVISED LEARNING MODELLING AND EVALUATION:",
+            "CLASSIFICATION USING DECISION TREES AND RANDOM",
+            "FORESTS",
+            "MACHINE LEARNING (SAIA 2113)",
+            "Session 2025/2026 - Sem 1",
+            "Prepared by:",
+            "Dr. Noor Jannah Zakaria",
+            "[REDACTED_PII]",
+            "Faculty of",
+            "ArtificialIntelligence",
+            "UNIVERSITI TEKNOLOGI MALAYSIA",
+            "Innovating Sqlutions",
+            "Supervised Learning Modelling And Evaluation: Classification Using Decision",
+            "Tree and Random Forest",
+            "Introduction to Decision Tree",
+            "Types of Decision Tree & Algorithms",
+            "Terminology in Decision Tree",
+            "Primary different between classification and regression tree",
+            "Introduction to Random Forest",
+            "Ensemble Learning in Random Forest",
+            "Application of RF",
+            "Advantages of DT & RF",
+            "Disadvantages of DT & RF",
+            "How to choose between DT & RF",
+            "Supervised Learning Modelling And Evaluation: Classification Using",
+            "Decision Tree and Random Forest"
+          ],
+          "aspect_scan_pdf_pages": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "outcome_source_pages": [
+            1,
+            2,
+            5
+          ],
+          "embedded_clo_pages": [],
+          "embedded_assessment_pages": []
+        },
+        {
+          "doc_id": "Week 12 Classification using Artificial Neural Network (3).pdf",
+          "deck_title": "TOPIC 12: MACHINE LEARNING (SAIA 2113)",
+          "declared_learning_outcomes_or_agenda": [
+            "SUPERVISED LEARNING MODELLING AND",
+            "EVALUATION: CLASSIFICATION USING ARTIFICIAL",
+            "NEURAL NETWORK",
+            "MACHINE LEARNING (SAIA 2113)",
+            "Session 2025/2026 - Sem 1",
+            "Prepared by:",
+            "Dr. Noor Jannah Zakaria",
+            "[REDACTED_PII]",
+            "Facultyof",
+            "Artificial Intelligence",
+            "UNIVERSITI TEKNOLOGI MALAYSIA",
+            "Innovating Seutions",
+            "What is Artificial Neural Network ?",
+            "Biological Neuron",
+            "Comparing ANN & BNN",
+            "Model",
+            "Architecture",
+            "Learning",
+            "Advantages & Disadvantages",
+            "Applications",
+            "Mathematical Representation",
+            "Backpropagation & Stopping Criteria",
+            "ANN Design Issues"
+          ],
+          "aspect_scan_pdf_pages": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "outcome_source_pages": [
+            1,
+            2
+          ],
+          "embedded_clo_pages": [],
+          "embedded_assessment_pages": []
+        },
+        {
+          "doc_id": "Week 13 Clustering.pdf",
+          "deck_title": "TOPIC 13: CLUSTERING MACHINE LEARNING (SAIA 2113)",
+          "declared_learning_outcomes_or_agenda": [
+            "CLUSTERING",
+            "MACHINE LEARNING (SAIA 2113)",
+            "Session 2025/2026 - Sem 1",
+            "Prepared by:",
+            "Dr. Noor Jannah Zakaria",
+            "[REDACTED_PII]",
+            "Faculty of",
+            "Artificial Intelligence",
+            "UNIVERSITI TEKNOLOGI MALAYSIA",
+            "Innovating Seutions",
+            "Clustering",
+            "●Clustering: An introduction",
+            "●Clustering algorithms & Its Applications",
+            "●Types of clustering methods",
+            "●K-Means clustering",
+            "●Advantages of K-means clustering",
+            "●Disadvantages of K-Means clustering",
+            "UNIVERSITTEKNOLOGIMALAYSIA"
+          ],
+          "aspect_scan_pdf_pages": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "outcome_source_pages": [
+            1,
+            2
+          ],
+          "embedded_clo_pages": [],
+          "embedded_assessment_pages": []
+        },
+        {
+          "doc_id": "Week 14 Ethical Consideration.pdf",
+          "deck_title": "TOPIC 14: ETHICAL CONSIDERATIONS MACHINE LEARNING (SAIA 2113)",
+          "declared_learning_outcomes_or_agenda": [
+            "ETHICAL CONSIDERATIONS",
+            "MACHINE LEARNING (SAIA 2113)",
+            "Session 2025/2026 - Sem 1",
+            "Prepared by:",
+            "Dr. Noor Jannah Zakaria",
+            "[REDACTED_PII]",
+            "Faculty of",
+            "ArtificialIntelligence",
+            "UNIVERSITI TEKNOLOGI MALAYSIA",
+            "Innovating Sqlutions",
+            "Ethical considerations.",
+            "Advances in Machine Learning fields.",
+            "Ethics & ethical issues",
+            "Current legislation. GDPR",
+            "ML data bias, algorithmic bias, and interpretability issues."
+          ],
+          "aspect_scan_pdf_pages": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "outcome_source_pages": [
+            1,
+            2
+          ],
+          "embedded_clo_pages": [],
+          "embedded_assessment_pages": []
+        },
+        {
+          "doc_id": "WEEK 2 & 3 - UNDERSTANDING DATA TYPES AND PRE-PROCESSING.pdf",
+          "deck_title": "TOPIC 2: UNDERSTANDING DATA TYPES AND PRE-PROCESSING MACHINE LEARNING (SAIA 2113)",
+          "declared_learning_outcomes_or_agenda": [
+            "UNDERSTANDING DATA TYPES",
+            "AND PRE-PROCESSING",
+            "Session 2025/2026 – Sem 1",
+            "MACHINE LEARNING (SAIA 2113)",
+            "Prepared by:",
+            "Dr. Adam Bin Mohd Khairuddin",
+            "[REDACTED_PII]",
+            "TEKNOLOGI",
+            "UNIVERSITITEKNOLOGIMALAYSIA",
+            "TOPIC 2:UNDERSTANDING DATA TYPES",
+            "Sessi0n 2025/2026 - Sem 1",
+            "At the end of this topic, students should be able to:",
+            "Discover types of data utilized in machine learning.",
+            "Identify steps to perform data preprocessing.",
+            "Identify main challenges related to data in machine learning.",
+            "Understanding Data Types and",
+            "Pre-Processing",
+            "UNIVERSITI TEKNOLOGIMALAYSIA"
+          ],
+          "aspect_scan_pdf_pages": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "outcome_source_pages": [
+            1,
+            2,
+            3
+          ],
+          "embedded_clo_pages": [
+            2
+          ],
+          "embedded_assessment_pages": []
+        },
+        {
+          "doc_id": "Week 4 - Supervised Learning.pdf",
+          "deck_title": "TOPIC 4: SUPERVISED LEARNING",
+          "declared_learning_outcomes_or_agenda": [
+            "SUPERVISED LEARNING",
+            "SAIA 2113 – Machine Learning",
+            "Session 2 2024/2025",
+            "Prepared by:",
+            "Dr. Adam Bin Mohd Khairuddin",
+            "[REDACTED_PII]",
+            "Facultyof",
+            "Supervised Learning",
+            "●Introduction - What is supervised learning?",
+            "●Elements of a Supervised Machine Learning Problem",
+            "●A Supervised Learning Dataset",
+            "●A Supervised Learning Algorithm",
+            "●A Supervised Learning Model",
+            "●Making New Predictions",
+            "●Why Supervised Learning?",
+            "●Anatomy of a Supervised Learning Problem: The Dataset",
+            "●Anatomy of a Supervised Learning Problem: The Learning Algorithm"
+          ],
+          "aspect_scan_pdf_pages": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "outcome_source_pages": [
+            1,
+            2,
+            5
+          ],
+          "embedded_clo_pages": [],
+          "embedded_assessment_pages": []
+        },
+        {
+          "doc_id": "Week 5 - Unsupervised Learning.pdf",
+          "deck_title": "TOPIC 5: UNSUPERVISED LEARNING",
+          "declared_learning_outcomes_or_agenda": [
+            "UNSUPERVISED LEARNING",
+            "SAIA 2113 – Machine Learning",
+            "Session 1 2025/2026",
+            "Prepared by:",
+            "Dr. Adam Bin Mohd Khairuddin",
+            "[REDACTED_PII]",
+            "Unsupervised Learning",
+            "●Introduction - What is unsupervised learning?",
+            "●The language of unsupervised learning",
+            "●Unsupervised learning in practice"
+          ],
+          "aspect_scan_pdf_pages": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "outcome_source_pages": [
+            1,
+            2
+          ],
+          "embedded_clo_pages": [],
+          "embedded_assessment_pages": []
+        },
+        {
+          "doc_id": "Week 6 - Model Evaluation.pdf",
+          "deck_title": "TOPIC 6: MODEL EVALUATION",
+          "declared_learning_outcomes_or_agenda": [
+            "MODEL EVALUATION",
+            "SAIA 2113 – Machine Learning",
+            "Session 1 2025/2026",
+            "Prepared by:",
+            "Dr. Adam Bin Mohd Khairuddin",
+            "[REDACTED_PII]",
+            "Facultyof",
+            "Model Evaluation",
+            "●What is model evaluation?",
+            "●Confusion matrix",
+            "●Classification: Evaluation metrics",
+            "●Classification: ROC, AUC and PRC",
+            "●Prediction bias",
+            "●Cross validation",
+            "●Training, validation, and test sets",
+            "UNIVERSTI TEKNOLOGI MALAYSIA"
+          ],
+          "aspect_scan_pdf_pages": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "outcome_source_pages": [
+            1,
+            2,
+            6
+          ],
+          "embedded_clo_pages": [],
+          "embedded_assessment_pages": []
+        },
+        {
+          "doc_id": "Week 7 - Linear Regression.pdf",
+          "deck_title": "TOPIC 7: LINEAR REGRESSION",
+          "declared_learning_outcomes_or_agenda": [
+            "LINEAR REGRESSION",
+            "SAIA 2113 – Machine Learning",
+            "Session 2 2024/2025",
+            "Prepared by:",
+            "Dr. Adam Bin Mohd Khairuddin",
+            "[REDACTED_PII]",
+            "Facultyof",
+            "Linear Regression",
+            "●What is linear regression?",
+            "●Loss",
+            "●Gradient descent",
+            "●Hyperparameters",
+            "UNIVERSTI TEKNOLOGI MALAYSIA"
+          ],
+          "aspect_scan_pdf_pages": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "outcome_source_pages": [
+            1,
+            2
+          ],
+          "embedded_clo_pages": [],
+          "embedded_assessment_pages": []
+        },
+        {
+          "doc_id": "Week 9 Classification using Naive Bayes.pdf",
+          "deck_title": "TOPIC 9: MACHINE LEARNING (SAIA 2113)",
+          "declared_learning_outcomes_or_agenda": [
+            "SUPERVISED LEARNING MODELLING AND EVALUATION:",
+            "CLASSIFICATION USING NAÏVE BAYES",
+            "MACHINE LEARNING (SAIA 2113)",
+            "Session 2025/2026 - Sem 1",
+            "Prepared by:",
+            "Dr. Noor Jannah Zakaria",
+            "[REDACTED_PII]",
+            "Faculty of",
+            "ArtificialIntelligence",
+            "UNIVERSITI TEKNOLOGI MALAYSIA",
+            "Innovating Sqlutions",
+            "Supervised Learning Modelling And Evaluation:",
+            "Classification Using Naïve Bayes",
+            "Introduction to Naïve Bayes Classification",
+            "Application, Types of Naïve Bayes & Bayes' Theorem",
+            "Advantages and Disadvantages of Naïve Bayes Classifier"
+          ],
+          "aspect_scan_pdf_pages": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "outcome_source_pages": [
+            1,
+            2,
+            6
+          ],
+          "embedded_clo_pages": [],
+          "embedded_assessment_pages": []
+        }
+      ],
+      "auxiliary_clo_pages": []
+    },
+    "SAIA2143": {
+      "course_code": "SAIA2143",
+      "course_title": "Data Wrangling and Visualization",
+      "course_folders": [
+        "SAIA2143_Data_Wrangling_and_Visualization"
+      ],
+      "level_availability": {
+        "CLO": true,
+        "Taught": true,
+        "Assessed": true
+      },
+      "level_status": {
+        "CLO": "available",
+        "Taught": "available",
+        "Assessed": "available"
+      },
+      "documents": [
+        {
+          "source_path": "D:\\Hackathons\\AI-Engineering-SkillAlignRAG\\data\\courses\\SAIA2143_Data_Wrangling_and_Visualization\\01_CI_CLO\\CI SAIA 2143 Data Wrangling and Visualization 202526 Sem 1.pdf",
+          "source_relative_path": "SAIA2143_Data_Wrangling_and_Visualization/01_CI_CLO/CI SAIA 2143 Data Wrangling and Visualization 202526 Sem 1.pdf",
+          "original_format": "pdf",
+          "status": "ready",
+          "error": null,
+          "pdf_path": "D:\\Hackathons\\AI-Engineering-SkillAlignRAG\\data\\courses\\SAIA2143_Data_Wrangling_and_Visualization\\01_CI_CLO\\CI SAIA 2143 Data Wrangling and Visualization 202526 Sem 1.pdf",
+          "doc_id": "CI SAIA 2143 Data Wrangling and Visualization 202526 Sem 1.pdf",
+          "evidence_level": "CLO",
+          "page_count": 4
+        },
+        {
+          "source_path": "D:\\Hackathons\\AI-Engineering-SkillAlignRAG\\data\\courses\\SAIA2143_Data_Wrangling_and_Visualization\\02_Lecture_Slides_Taught\\Topic 1- Introduction to Data and Data Wrangling and Visualization.pdf",
+          "source_relative_path": "SAIA2143_Data_Wrangling_and_Visualization/02_Lecture_Slides_Taught/Topic 1- Introduction to Data and Data Wrangling and Visualization.pdf",
+          "original_format": "pdf",
+          "status": "ready",
+          "error": null,
+          "pdf_path": "D:\\Hackathons\\AI-Engineering-SkillAlignRAG\\data\\courses\\SAIA2143_Data_Wrangling_and_Visualization\\02_Lecture_Slides_Taught\\Topic 1- Introduction to Data and Data Wrangling and Visualization.pdf",
+          "doc_id": "Topic 1- Introduction to Data and Data Wrangling and Visualization.pdf",
+          "evidence_level": "Taught",
+          "page_count": 19
+        },
+        {
+          "source_path": "D:\\Hackathons\\AI-Engineering-SkillAlignRAG\\data\\courses\\SAIA2143_Data_Wrangling_and_Visualization\\02_Lecture_Slides_Taught\\Topic 10-Ethics in Data Visualization.pdf",
+          "source_relative_path": "SAIA2143_Data_Wrangling_and_Visualization/02_Lecture_Slides_Taught/Topic 10-Ethics in Data Visualization.pdf",
+          "original_format": "pdf",
+          "status": "ready",
+          "error": null,
+          "pdf_path": "D:\\Hackathons\\AI-Engineering-SkillAlignRAG\\data\\courses\\SAIA2143_Data_Wrangling_and_Visualization\\02_Lecture_Slides_Taught\\Topic 10-Ethics in Data Visualization.pdf",
+          "doc_id": "Topic 10-Ethics in Data Visualization.pdf",
+          "evidence_level": "Taught",
+          "page_count": 31
+        },
+        {
+          "source_path": "D:\\Hackathons\\AI-Engineering-SkillAlignRAG\\data\\courses\\SAIA2143_Data_Wrangling_and_Visualization\\02_Lecture_Slides_Taught\\Topic 2-Identifying and Handling Missing Data with Spreadsheets-d.pdf",
+          "source_relative_path": "SAIA2143_Data_Wrangling_and_Visualization/02_Lecture_Slides_Taught/Topic 2-Identifying and Handling Missing Data with Spreadsheets-d.pdf",
+          "original_format": "pdf",
+          "status": "ready",
+          "error": null,
+          "pdf_path": "D:\\Hackathons\\AI-Engineering-SkillAlignRAG\\data\\courses\\SAIA2143_Data_Wrangling_and_Visualization\\02_Lecture_Slides_Taught\\Topic 2-Identifying and Handling Missing Data with Spreadsheets-d.pdf",
+          "doc_id": "Topic 2-Identifying and Handling Missing Data with Spreadsheets-d.pdf",
+          "evidence_level": "Taught",
+          "page_count": 71
+        },
+        {
+          "source_path": "D:\\Hackathons\\AI-Engineering-SkillAlignRAG\\data\\courses\\SAIA2143_Data_Wrangling_and_Visualization\\02_Lecture_Slides_Taught\\Topic 3-Dealing with Duplicates and Outliers D.pdf",
+          "source_relative_path": "SAIA2143_Data_Wrangling_and_Visualization/02_Lecture_Slides_Taught/Topic 3-Dealing with Duplicates and Outliers D.pdf",
+          "original_format": "pdf",
+          "status": "ready",
+          "error": null,
+          "pdf_path": "D:\\Hackathons\\AI-Engineering-SkillAlignRAG\\data\\courses\\SAIA2143_Data_Wrangling_and_Visualization\\02_Lecture_Slides_Taught\\Topic 3-Dealing with Duplicates and Outliers D.pdf",
+          "doc_id": "Topic 3-Dealing with Duplicates and Outliers D.pdf",
+          "evidence_level": "Taught",
+          "page_count": 32
+        },
+        {
+          "source_path": "D:\\Hackathons\\AI-Engineering-SkillAlignRAG\\data\\courses\\SAIA2143_Data_Wrangling_and_Visualization\\02_Lecture_Slides_Taught\\Topic 4- Part 3 (Complete) for student.pdf",
+          "source_relative_path": "SAIA2143_Data_Wrangling_and_Visualization/02_Lecture_Slides_Taught/Topic 4- Part 3 (Complete) for student.pdf",
+          "original_format": "pdf",
+          "status": "ready",
+          "error": null,
+          "pdf_path": "D:\\Hackathons\\AI-Engineering-SkillAlignRAG\\data\\courses\\SAIA2143_Data_Wrangling_and_Visualization\\02_Lecture_Slides_Taught\\Topic 4- Part 3 (Complete) for student.pdf",
+          "doc_id": "Topic 4- Part 3 (Complete) for student.pdf",
+          "evidence_level": "Taught",
+          "page_count": 102
+        },
+        {
+          "source_path": "D:\\Hackathons\\AI-Engineering-SkillAlignRAG\\data\\courses\\SAIA2143_Data_Wrangling_and_Visualization\\02_Lecture_Slides_Taught\\Topic 5-Advanced Data Wrangling Techniques D.pdf",
+          "source_relative_path": "SAIA2143_Data_Wrangling_and_Visualization/02_Lecture_Slides_Taught/Topic 5-Advanced Data Wrangling Techniques D.pdf",
+          "original_format": "pdf",
+          "status": "ready",
+          "error": null,
+          "pdf_path": "D:\\Hackathons\\AI-Engineering-SkillAlignRAG\\data\\courses\\SAIA2143_Data_Wrangling_and_Visualization\\02_Lecture_Slides_Taught\\Topic 5-Advanced Data Wrangling Techniques D.pdf",
+          "doc_id": "Topic 5-Advanced Data Wrangling Techniques D.pdf",
+          "evidence_level": "Taught",
+          "page_count": 50
+        },
+        {
+          "source_path": "D:\\Hackathons\\AI-Engineering-SkillAlignRAG\\data\\courses\\SAIA2143_Data_Wrangling_and_Visualization\\02_Lecture_Slides_Taught\\Topic 6-Introduction to Data Visualization D.pdf",
+          "source_relative_path": "SAIA2143_Data_Wrangling_and_Visualization/02_Lecture_Slides_Taught/Topic 6-Introduction to Data Visualization D.pdf",
+          "original_format": "pdf",
+          "status": "ready",
+          "error": null,
+          "pdf_path": "D:\\Hackathons\\AI-Engineering-SkillAlignRAG\\data\\courses\\SAIA2143_Data_Wrangling_and_Visualization\\02_Lecture_Slides_Taught\\Topic 6-Introduction to Data Visualization D.pdf",
+          "doc_id": "Topic 6-Introduction to Data Visualization D.pdf",
+          "evidence_level": "Taught",
+          "page_count": 60
+        },
+        {
+          "source_path": "D:\\Hackathons\\AI-Engineering-SkillAlignRAG\\data\\courses\\SAIA2143_Data_Wrangling_and_Visualization\\02_Lecture_Slides_Taught\\Topic 7-Data Visualization with Matplotlib and Seaborn D.pdf",
+          "source_relative_path": "SAIA2143_Data_Wrangling_and_Visualization/02_Lecture_Slides_Taught/Topic 7-Data Visualization with Matplotlib and Seaborn D.pdf",
+          "original_format": "pdf",
+          "status": "ready",
+          "error": null,
+          "pdf_path": "D:\\Hackathons\\AI-Engineering-SkillAlignRAG\\data\\courses\\SAIA2143_Data_Wrangling_and_Visualization\\02_Lecture_Slides_Taught\\Topic 7-Data Visualization with Matplotlib and Seaborn D.pdf",
+          "doc_id": "Topic 7-Data Visualization with Matplotlib and Seaborn D.pdf",
+          "evidence_level": "Taught",
+          "page_count": 38
+        },
+        {
+          "source_path": "D:\\Hackathons\\AI-Engineering-SkillAlignRAG\\data\\courses\\SAIA2143_Data_Wrangling_and_Visualization\\02_Lecture_Slides_Taught\\Topic 8-Interactive Data Visualization with Plotly D.pdf",
+          "source_relative_path": "SAIA2143_Data_Wrangling_and_Visualization/02_Lecture_Slides_Taught/Topic 8-Interactive Data Visualization with Plotly D.pdf",
+          "original_format": "pdf",
+          "status": "ready",
+          "error": null,
+          "pdf_path": "D:\\Hackathons\\AI-Engineering-SkillAlignRAG\\data\\courses\\SAIA2143_Data_Wrangling_and_Visualization\\02_Lecture_Slides_Taught\\Topic 8-Interactive Data Visualization with Plotly D.pdf",
+          "doc_id": "Topic 8-Interactive Data Visualization with Plotly D.pdf",
+          "evidence_level": "Taught",
+          "page_count": 36
+        },
+        {
+          "source_path": "D:\\Hackathons\\AI-Engineering-SkillAlignRAG\\data\\courses\\SAIA2143_Data_Wrangling_and_Visualization\\02_Lecture_Slides_Taught\\Topic 9-Introduction to Dashboards D.pdf",
+          "source_relative_path": "SAIA2143_Data_Wrangling_and_Visualization/02_Lecture_Slides_Taught/Topic 9-Introduction to Dashboards D.pdf",
+          "original_format": "pdf",
+          "status": "ready",
+          "error": null,
+          "pdf_path": "D:\\Hackathons\\AI-Engineering-SkillAlignRAG\\data\\courses\\SAIA2143_Data_Wrangling_and_Visualization\\02_Lecture_Slides_Taught\\Topic 9-Introduction to Dashboards D.pdf",
+          "doc_id": "Topic 9-Introduction to Dashboards D.pdf",
+          "evidence_level": "Taught",
+          "page_count": 38
+        },
+        {
+          "source_path": "D:\\Hackathons\\AI-Engineering-SkillAlignRAG\\data\\courses\\SAIA2143_Data_Wrangling_and_Visualization\\03_Assessments_Assessed\\Group Assignment (30%) D UPDATED.pdf",
+          "source_relative_path": "SAIA2143_Data_Wrangling_and_Visualization/03_Assessments_Assessed/Group Assignment (30%) D UPDATED.pdf",
+          "original_format": "pdf",
+          "status": "ready",
+          "error": null,
+          "pdf_path": "D:\\Hackathons\\AI-Engineering-SkillAlignRAG\\data\\courses\\SAIA2143_Data_Wrangling_and_Visualization\\03_Assessments_Assessed\\Group Assignment (30%) D UPDATED.pdf",
+          "doc_id": "Group Assignment (30%) D UPDATED.pdf",
+          "evidence_level": "Assessed",
+          "page_count": 6
+        },
+        {
+          "source_path": "D:\\Hackathons\\AI-Engineering-SkillAlignRAG\\data\\courses\\SAIA2143_Data_Wrangling_and_Visualization\\03_Assessments_Assessed\\SAIA 2143 PMA (Question Paper) 05JAN2026 .pdf",
+          "source_relative_path": "SAIA2143_Data_Wrangling_and_Visualization/03_Assessments_Assessed/SAIA 2143 PMA (Question Paper) 05JAN2026 .pdf",
+          "original_format": "pdf",
+          "status": "ready",
+          "error": null,
+          "pdf_path": "D:\\Hackathons\\AI-Engineering-SkillAlignRAG\\data\\courses\\SAIA2143_Data_Wrangling_and_Visualization\\03_Assessments_Assessed\\SAIA 2143 PMA (Question Paper) 05JAN2026 .pdf",
+          "doc_id": "SAIA 2143 PMA (Question Paper) 05JAN2026 .pdf",
+          "evidence_level": "Assessed",
+          "page_count": 10
+        }
+      ],
+      "deck_aspect_cards": [
+        {
+          "doc_id": "Topic 1- Introduction to Data and Data Wrangling and Visualization.pdf",
+          "deck_title": "TOPIC 1: DATA WRANGLING AND VISUALIZATION",
+          "declared_learning_outcomes_or_agenda": [
+            "INTRODUCTION TO DATA AND DATA WRANGLING",
+            "DATA WRANGLING AND VISUALIZATION",
+            "(SAIA2143)",
+            "Prepared by:",
+            "Ts. Dr. Norziha Megat Mohd Zainuddin",
+            "[REDACTED_PII]",
+            "Faculty of",
+            "ArtificialIntelligence",
+            "UNIVERSITITEKNOLOGIMALAYSIA",
+            "Innovating Sqlutions",
+            "At the end of this class, students should be able to:",
+            "Explain the Importance of Data Quality.",
+            "Identify the Dangers of Messy Data.",
+            "Define the concept and significance of data wrangling.",
+            "Describe the the key steps in Data Wrangling Process.",
+            "Recognize Tools for Data Wrangling.",
+            "Identify the Importance of Clean Data in Analysis.",
+            "Identify Different Types of Messy Data.",
+            "Analyze the Real-World Impact of Unclean Data.",
+            "Discover the Strategies to Prevent Data Quality Issues."
+          ],
+          "aspect_scan_pdf_pages": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "outcome_source_pages": [
+            1,
+            2
+          ],
+          "embedded_clo_pages": [],
+          "embedded_assessment_pages": []
+        },
+        {
+          "doc_id": "Topic 10-Ethics in Data Visualization.pdf",
+          "deck_title": "TOPIC 10: ETHICS IN DATA VISUALIZATION",
+          "declared_learning_outcomes_or_agenda": [
+            "ETHICS IN DATA VISUALIZATION",
+            "DATA WRANGLING AND VISUALIZAT ION",
+            "(SAIA2143)",
+            "Faculty of",
+            "ArtificialIntelligence",
+            "UNIVERSITITEKNOLOGIMALAYSIA",
+            "Innovating Sqlutions",
+            "At the end of this topic, students should be able to:",
+            "a. Analyze how visualizations influence perception",
+            "b. Evaluate ethical dimensions in data representation",
+            "c. Identify and mitigate bias in visualizations",
+            "d. Critically assess real-world examples of ethical and unethical data",
+            "visualizations",
+            "a. Introduction to Ethics in Data Visualization",
+            "b. Ethics in Practice: Misleading Visual Techniques",
+            "c. Understanding Bias in Visualization"
+          ],
+          "aspect_scan_pdf_pages": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "outcome_source_pages": [
+            1,
+            2,
+            3
+          ],
+          "embedded_clo_pages": [
+            2
+          ],
+          "embedded_assessment_pages": []
+        },
+        {
+          "doc_id": "Topic 2-Identifying and Handling Missing Data with Spreadsheets-d.pdf",
+          "deck_title": "TOPIC 2: DATA WRANGLING AND VISUALIZATION",
+          "declared_learning_outcomes_or_agenda": [
+            "IDENTIFYING AND HANDLING MISSING DATA WITH",
+            "SPREADSHEETS",
+            "DATA WRANGLING AND VISUALIZATION",
+            "(SAIA2143)",
+            "Prepared by:",
+            "Ts. Dr. Norziha Megat Mohd Zainuddin",
+            "[REDACTED_PII]",
+            "Facultyof",
+            "ArtificialIntelligence",
+            "UNIVERSITITEKNOLOGI MALAYSIA",
+            "Innovating Selutions",
+            "At the end of this class, students should be able to:",
+            "1. Identify the importance of handling missing data",
+            "2. Explain sorting, filtering, and basic data cleaning techniques",
+            "3. Identify missing values in datasets",
+            "4. Apply spreadsheet tools to manage missing data"
+          ],
+          "aspect_scan_pdf_pages": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "outcome_source_pages": [
+            1,
+            2
+          ],
+          "embedded_clo_pages": [],
+          "embedded_assessment_pages": []
+        },
+        {
+          "doc_id": "Topic 3-Dealing with Duplicates and Outliers D.pdf",
+          "deck_title": "TOPIC 3: DATA WRANGLING AND VISUALIZATION",
+          "declared_learning_outcomes_or_agenda": [
+            "DEALING WITH DUPLICATES AND OUTLIERS",
+            "DATA WRANGLING AND VISUALIZATION",
+            "(SAIA2143)",
+            "Prepared by:",
+            "Ts. Dr. Norziha Megat Mohd Zainuddin",
+            "[REDACTED_PII]",
+            "Faculty of",
+            "ArtificialIntelligence",
+            "UNIVERSITITEKNOLOGIMALAYSIA",
+            "Innovating Sqlutions",
+            "At the end of this topic, students should be able to:",
+            "Define and explain the concept of duplicates and outliers in a dataset.",
+            "Identify common causes of duplicate data entries and outliers during data",
+            "collection and processing.",
+            "iii. Apply Excel tools and functions (e.g., Remove Duplicates, COUNTIF,",
+            "Conditional Formatting) to detect and manage duplicates.",
+            "iv. Use statistical techniques (e.g., Z-Score and Interquartile Range [IQR]) to",
+            "detect outliers in a dataset.",
+            "Interpret the impact of duplicates and outliers on data analysis and decision",
+            "making."
+          ],
+          "aspect_scan_pdf_pages": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "outcome_source_pages": [
+            1,
+            2
+          ],
+          "embedded_clo_pages": [
+            2
+          ],
+          "embedded_assessment_pages": []
+        },
+        {
+          "doc_id": "Topic 4- Part 3 (Complete) for student.pdf",
+          "deck_title": "TOPIC 4: INTRODUCTION TO DATA WRANGLING WITH PANDAS (PYTHON)",
+          "declared_learning_outcomes_or_agenda": [
+            "INTRODUCTION TO DATA",
+            "WRANGLING WITH PANDAS",
+            "(PYTHON)",
+            "DATA WRANGLING AND VISUALIZATION",
+            "(SAIA2143)",
+            "Prepared by:",
+            "Ts. Dr. Norziha Megat Mohd Zainuddin",
+            "[REDACTED_PII]",
+            "Faculty of",
+            "Artificial Intelligence",
+            "UNIVERSITI TEKNOLOGI MALAYSIA",
+            "Innovating Sqlutions"
+          ],
+          "aspect_scan_pdf_pages": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "outcome_source_pages": [
+            1
+          ],
+          "embedded_clo_pages": [],
+          "embedded_assessment_pages": []
+        },
+        {
+          "doc_id": "Topic 5-Advanced Data Wrangling Techniques D.pdf",
+          "deck_title": "TOPIC 5: ADVANCED DATA WRANGLING TECHNIQUES DATA WRANGLING AND VISUALIZATION",
+          "declared_learning_outcomes_or_agenda": [
+            "ADVANCED DATA WRANGLING TECHNIQUES",
+            "DATA WRANGLING AND VISUALIZATION",
+            "(SAIA2143)",
+            "Prepared by:",
+            "Ts. Dr. Norziha Megat Mohd Zainuddin",
+            "[REDACTED_PII]",
+            "Faculty of",
+            "Artificial Intelligence",
+            "UNIVERSITI TEKNOLOGI MALAYSIA",
+            "Innovating Sqlutions",
+            "At the end of this class, students should be able to:",
+            "Techniques for managing large datasets efficiently",
+            "Best practices for merging and joining multiple",
+            "datasets",
+            "Handling time-series data and integrating external",
+            "APIs",
+            "Advanced Data Wrangling Techniques",
+            "a.  Dealing with large datasets and memory",
+            "management",
+            "b.  Merging and joining datasets using Pandas",
+            "c.  Handling time-series data and working with",
+            "external APIs"
+          ],
+          "aspect_scan_pdf_pages": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "outcome_source_pages": [
+            1,
+            2,
+            4
+          ],
+          "embedded_clo_pages": [
+            2
+          ],
+          "embedded_assessment_pages": []
+        },
+        {
+          "doc_id": "Topic 6-Introduction to Data Visualization D.pdf",
+          "deck_title": "TOPIC 6: DATA WRANGLING AND VISUALIZATION",
+          "declared_learning_outcomes_or_agenda": [
+            "INTRODUCTION TO DATA VISUALIZATION",
+            "DATA WRANGLING AND VISUALIZATION",
+            "(SAIA2143)",
+            "Prepared by:",
+            "Ts. Dr. Norziha Megat Mohd Zainuddin",
+            "[REDACTED_PII]",
+            "Faculty of",
+            "ArtificialIntelligence",
+            "UNIVERSITITEKNOLOGIMALAYSIA",
+            "Innovating Sqlutions",
+            "At the end of this topic, students should be able to:",
+            "1. Explain why data visualization is essential in analysis.",
+            "2. Identify and describe common types of visualizations.",
+            "3. Apply principles of effective visualization to create clear and",
+            "insightful charts.",
+            "Introduction to Data Visualization",
+            "a. Importance of visualization in data",
+            "analysis",
+            "b. Basic visualization concepts: charts, graphs, and",
+            "plots",
+            "c. Principles of effective visualization"
+          ],
+          "aspect_scan_pdf_pages": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "outcome_source_pages": [
+            1,
+            2,
+            4
+          ],
+          "embedded_clo_pages": [
+            2
+          ],
+          "embedded_assessment_pages": []
+        },
+        {
+          "doc_id": "Topic 7-Data Visualization with Matplotlib and Seaborn D.pdf",
+          "deck_title": "TOPIC 7: DATA VISUALIZATION WITH MATPLOTLIB AND SEABORN DATA WRANGLING AND VISUALIZATION",
+          "declared_learning_outcomes_or_agenda": [
+            "DATA VISUALIZATION WITH MATPLOTLIB AND",
+            "SEABORN",
+            "DATA WRANGLING AND VISUALIZATION",
+            "(SAIA2143)",
+            "Prepared by:",
+            "Ts. Dr. Norziha Megat Mohd Zainuddin",
+            "[REDACTED_PII]",
+            "Faculty of",
+            "ArtificialIntelligence",
+            "UNIVERSITITEKNOLOGIMALAYSIA",
+            "Innovating Sqlutions",
+            "At the end of this  two hours class, students should be",
+            "able to:",
+            "a. Identify an overview, anatomy and types of plots in",
+            "Matplotlib for Python.",
+            "b. Creating various charts and plot in Matplotlib.",
+            "c. Creating attractive and informative statistical graphics",
+            "using Seaborn.",
+            "d. Customizing color pallets and themes for  visual appeal.",
+            "DATA VISUALIZATION WITH",
+            "MATPLOTLIB AND SEABORN",
+            "a.  Overview of Matplotlib for Python",
+            "b.  Creating various plots: line charts, bar charts, scatter plots",
+            "c.  Introduction to the Seaborn library for statistical data",
+            "visualization"
+          ],
+          "aspect_scan_pdf_pages": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "outcome_source_pages": [
+            1,
+            2,
+            3
+          ],
+          "embedded_clo_pages": [
+            2
+          ],
+          "embedded_assessment_pages": []
+        },
+        {
+          "doc_id": "Topic 8-Interactive Data Visualization with Plotly D.pdf",
+          "deck_title": "TOPIC 8: INTERACTIVE DATA VISUALIZATION WITH PLOTLY DATA WRANGLING AND VISUALIZATION",
+          "declared_learning_outcomes_or_agenda": [
+            "INTERACTIVE DATA VISUALIZATION WITH",
+            "PLOTLY",
+            "DATA WRANGLING AND VISUALIZATION",
+            "(SAIA2143)",
+            "Prepared by:",
+            "Ts. Dr. Norziha Megat Mohd Zainuddin",
+            "[REDACTED_PII]",
+            "Faculty of",
+            "ArtificialIntelligence",
+            "UNIVERSITITEKNOLOGIMALAYSIA",
+            "Innovating Sqlutions",
+            "At the end of this topic, students should be able to:",
+            "a. Understand the role and benefits of interactive",
+            "visualizations.",
+            "b. Use Plotly to create various interactive charts and",
+            "dashboards.",
+            "c. Analyze datasets using interactive visual exploration.",
+            "d. Apply learned techniques to a hands-on case study.",
+            "INTERACTIVE DATA VISUALIZATION",
+            "WITH PLOTLY",
+            "a. Introduction to interactive visualizations",
+            "b. Creating dynamic and interactive plots with Plotly",
+            "c. Case studies in interactive data exploration"
+          ],
+          "aspect_scan_pdf_pages": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "outcome_source_pages": [
+            1,
+            2,
+            3
+          ],
+          "embedded_clo_pages": [
+            2
+          ],
+          "embedded_assessment_pages": []
+        },
+        {
+          "doc_id": "Topic 9-Introduction to Dashboards D.pdf",
+          "deck_title": "TOPIC 9: DATA WRANGLING AND VISUALIZATION",
+          "declared_learning_outcomes_or_agenda": [
+            "INTRODUCTION TO DASHBOARD",
+            "DATA WRANGLING AND VISUALIZATION",
+            "(SAIA2143)",
+            "Faculty of",
+            "ArtificialIntelligence",
+            "UNIVERSITI TEKNOLOGI MALAYSIA",
+            "Innovating Sqlutions",
+            "At the end of this  topic, students should be able to:",
+            "Explain the concept and role of visualization dashboards in data analysis and decision-making",
+            "processes.",
+            "Differentiate between various types of dashboards (e.g., operational, strategic, analytical, and",
+            "tactical) and identify their appropriate use cases.",
+            "Describe the key components of a data dashboard, including metrics, data sources, interactivity,",
+            "and layout structures.",
+            "Analyze the purpose and audience of a dashboard to guide the selection of content and",
+            "visualization types.",
+            "Apply dashboard design principles to create clear, user-friendly, and impactful data",
+            "visualizations.",
+            "Build and configure a basic interactive dashboard using Google Looker Studio.",
+            "a. Introduction to Visualization Dashboard",
+            "b. Understanding the purpose and components of data",
+            "dashboards",
+            "c. Design principles for effective dashboards"
+          ],
+          "aspect_scan_pdf_pages": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "outcome_source_pages": [
+            1,
+            2,
+            3
+          ],
+          "embedded_clo_pages": [
+            2
+          ],
+          "embedded_assessment_pages": []
+        }
+      ],
+      "auxiliary_clo_pages": [
+        {
+          "doc_id": "Topic 10-Ethics in Data Visualization.pdf",
+          "pdf_page_no": 2,
+          "source_evidence_level": "Taught"
+        },
+        {
+          "doc_id": "Topic 3-Dealing with Duplicates and Outliers D.pdf",
+          "pdf_page_no": 2,
+          "source_evidence_level": "Taught"
+        },
+        {
+          "doc_id": "Topic 5-Advanced Data Wrangling Techniques D.pdf",
+          "pdf_page_no": 2,
+          "source_evidence_level": "Taught"
+        },
+        {
+          "doc_id": "Topic 6-Introduction to Data Visualization D.pdf",
+          "pdf_page_no": 2,
+          "source_evidence_level": "Taught"
+        },
+        {
+          "doc_id": "Topic 7-Data Visualization with Matplotlib and Seaborn D.pdf",
+          "pdf_page_no": 2,
+          "source_evidence_level": "Taught"
+        },
+        {
+          "doc_id": "Topic 8-Interactive Data Visualization with Plotly D.pdf",
+          "pdf_page_no": 2,
+          "source_evidence_level": "Taught"
+        },
+        {
+          "doc_id": "Topic 9-Introduction to Dashboards D.pdf",
+          "pdf_page_no": 2,
+          "source_evidence_level": "Taught"
+        }
+      ]
+    }
+  },
+  "normalization_manifest": "normalization_manifest.json"
+}
