@@ -45,7 +45,12 @@ def tokens(text: str) -> list[str]:
 
 def evidence_levels(chunk: dict) -> list[str]:
     source = chunk.get("source_evidence_level", chunk["evidence_level"])
-    return list(dict.fromkeys([source, *chunk.get("auxiliary_evidence_levels", [])]))
+    # Physical assessment provenance can never be overridden by auxiliary metadata.
+    if source == "Assessed":
+        return ["Assessed"]
+    if source == "Taught":
+        return ["Taught", *(["CLO"] if "CLO" in chunk.get("auxiliary_evidence_levels", []) else [])]
+    return [source]
 
 
 def base_parser(description: str) -> argparse.ArgumentParser:

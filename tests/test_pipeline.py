@@ -317,17 +317,38 @@ def test_auxiliary_clo_routes_preserve_source_and_empty_folder_abstention(tmp_pa
     chunks = read_json(output / "parsed_course_chunks.json")
     assert len(chunks) == len(read_json(output / "verbatim_lookup_store.json")) == 5
     auxiliary = [c for c in chunks if c["auxiliary_evidence_levels"]]
-    assert {c["evidence_level"] for c in auxiliary} == {"Taught", "Assessed"} and len(auxiliary) == 2
-    assert len(catalog["courses"]["SAIA1013"]["auxiliary_clo_pages"]) == 2
+    assert {c["evidence_level"] for c in auxiliary} == {"Taught"} and len(auxiliary) == 1
+    assert len(catalog["courses"]["SAIA1013"]["auxiliary_clo_pages"]) == 1
     assert not catalog["courses"]["SAIA2113"]["level_availability"]["CLO"]
     assert not explicit_clo_statement("This activity addresses CLO3 and requires a report.")
     build(output, lexical_only=True)
     retriever = Retriever(output)
     clo = retriever.retrieve("SAIA1013", "clean missing data", "CLO")
-    assert {h["source_evidence_level"] for h in clo} == {"Taught", "Assessed"}
+    assert {h["source_evidence_level"] for h in clo} == {"Taught"}
     assert all(h["evidence_level"] == "CLO" and h["is_auxiliary_evidence"] for h in clo)
     assert retriever.retrieve("SAIA2113", "clean missing data", "CLO") == []
     assert len(retriever.manifest["partitions"]["pooled"]["SAIA1013"]) == 4
+
+
+def test_official_clo_ranks_before_embedded_lecture_and_repairs_legacy_exam(tmp_path):
+    data, output = tmp_path / 'data', tmp_path / 'outputs'
+    make_pdf(data / 'courses/SAIA1013_Test/01_CI_CLO/ci.pdf', ['CLO1: Explain data processing concepts.'])
+    make_pdf(data / 'courses/SAIA1013_Test/02_Lecture_Slides_Taught/deck.pdf', [
+        'CLO2: Clean data, handle missing values and remove duplicate data.'])
+    make_pdf(data / 'courses/SAIA1013_Test/03_Assessments_Assessed/exam.pdf', [
+        'Course Learning Outcome 2: Clean data, handle missing values and remove duplicate data.'])
+    ingest(data, output, PDFExtractor(ExtractionConfig(enable_ocr=False)))
+    chunks = read_json(output / 'parsed_course_chunks.json')
+    exam = next(c for c in chunks if c['evidence_level'] == 'Assessed')
+    exam['auxiliary_evidence_levels'] = ['CLO', 'Taught']  # Simulate an artifact from the old builder.
+    write_json(output / 'parsed_course_chunks.json', chunks)
+    build(output, lexical_only=True)
+    retriever = Retriever(output)
+    clo = retriever.retrieve('SAIA1013', 'clean missing data duplicate values', 'CLO')
+    assert clo[0]['doc_id'] == 'ci.pdf'
+    assert {h['doc_id'] for h in clo} == {'ci.pdf', 'deck.pdf'}
+    assert {h['doc_id'] for h in retriever.retrieve('SAIA1013', 'clean data', 'Taught')} == {'deck.pdf'}
+    assert next(c for c in read_json(output / 'parsed_course_chunks.json') if c['doc_id'] == 'exam.pdf')['auxiliary_evidence_levels'] == []
 
 
 @pytest.fixture

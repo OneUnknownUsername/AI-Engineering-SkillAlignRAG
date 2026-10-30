@@ -7,6 +7,7 @@ from pathlib import Path
 import numpy as np
 from rank_bm25 import BM25Plus
 
+from src.curriculum_scope import clo_evidence_window, has_official_commitment, refresh_auxiliary_clo_pages, explicit_clo_statement
 from src.common import COURSES, LEVELS, base_parser, evidence_levels, fingerprint, read_json, tokens, write_json
 
 DEFAULT_MODEL = "BAAI/bge-small-en-v1.5"
@@ -14,7 +15,11 @@ STOPWORDS = set("a an the and or to of in on for with by is are be as how this t
 
 
 def search_text(chunk: dict) -> str:
-    return "\n".join(filter(None, [chunk["verbatim_text_span"], chunk.get("visual_diagram_summary", "")]))
+    text = chunk["verbatim_text_span"]
+    if has_official_commitment(chunk):
+        # Rank on the commitment, rather than staff metadata and duplicate OCR prefixes.
+        text = clo_evidence_window(text)[:3000]
+    return "\n".join(filter(None, [text, chunk.get("visual_diagram_summary", "")]))
 
 
 def catalog_overlap(query: str, card: dict) -> float:
@@ -32,6 +37,11 @@ def load_model(model: str, directory: Path, offline: bool):
 def build(output_dir: Path, model_name: str = DEFAULT_MODEL, *, lexical_only: bool = False, offline: bool = False) -> dict:
     all_chunks = read_json(output_dir / "parsed_course_chunks.json")
     catalog = read_json(output_dir / "course_catalog_manifest.json")
+    before = fingerprint({'chunks': all_chunks, 'catalog': catalog})
+    refresh_auxiliary_clo_pages(all_chunks, catalog)
+    if fingerprint({'chunks': all_chunks, 'catalog': catalog}) != before:
+        write_json(output_dir / 'parsed_course_chunks.json', all_chunks)
+        write_json(output_dir / 'course_catalog_manifest.json', catalog)
     chunks = [c for c in all_chunks if c.get("indexable", True) and search_text(c).strip()]
     if len({c["chunk_id"] for c in chunks}) != len(chunks):
         raise ValueError("Duplicate chunk IDs in input")
@@ -57,7 +67,7 @@ def build(output_dir: Path, model_name: str = DEFAULT_MODEL, *, lexical_only: bo
             partitions["routed"][f"{course}::{level}"] = rows
             write_json(directory / "routed" / course / f"{level}.json", rows)
     manifest = {
-        "schema_version": 1, "mode": "lexical_only_diagnostic" if lexical_only else "dense_bm25_hybrid",
+        "schema_version": 2, "routing_policy": "strict_levels_official_clo_first_v2", "mode": "lexical_only_diagnostic" if lexical_only else "dense_bm25_hybrid",
         "model": None if lexical_only else model_name, "chunk_count": len(chunks),
         "source_fingerprint": fingerprint({"chunks": all_chunks, "catalog": catalog}),
         "index_fingerprint": fingerprint({"chunks": chunks, "catalog": catalog}),
@@ -75,6 +85,8 @@ class Retriever:
     def __init__(self, output_dir: Path, *, offline: bool = False):
         directory = output_dir / "indexes"
         self.manifest = read_json(directory / "manifest.json")
+        if self.manifest.get("routing_policy") != "strict_levels_official_clo_first_v2":
+            raise ValueError("Index routing policy is stale; rerun build_indexes")
         self.chunks = read_json(directory / "chunks.json")
         self.catalog = read_json(directory / "catalog.json")
         current = {"chunks": read_json(output_dir / "parsed_course_chunks.json"),
@@ -102,6 +114,8 @@ class Retriever:
             raise ValueError("top_k must be positive")
         kind, key = ("pooled", course) if level is None else ("routed", f"{course}::{level}")
         rows = self.manifest["partitions"][kind][key]
+        if level and any(level not in evidence_levels(self.chunks[i]) for i in rows):
+            raise ValueError("Wrong-level source in index partition; rebuild indexes")
         if not rows:
             return []
         terms = tokens(query)
@@ -125,7 +139,12 @@ class Retriever:
             boosts = np.array([catalog_overlap(query, cards.get(self.chunks[i]["doc_id"], {}))
                                if self.chunks[i]["evidence_level"] == "Taught" else 0 for i in rows])
         scores = base + self.manifest["catalog_boost_weight"] * boosts * (base > 0)
-        ranked = sorted(range(len(rows)), key=lambda j: (-scores[j], self.chunks[rows[j]]["chunk_id"]))
+        def rank_key(j):
+            chunk = self.chunks[rows[j]]
+            # Explicit CI commitments are primary; embedded lecture CLOs are secondary.
+            priority = (0 if has_official_commitment(chunk) else 1 if chunk['evidence_level'] == 'Taught' else 2) if level == 'CLO' else 0
+            return (priority, -scores[j], chunk['chunk_id'])
+        ranked = sorted(range(len(rows)), key=rank_key)
         results = []
         for j in ranked:
             if base[j] <= 0:
@@ -140,6 +159,10 @@ class Retriever:
                 "score": round(float(scores[j]), 6), "dense_score": round(float(dense[j]), 6),
                 "lexical_score": round(float(lexical[j]), 6), "catalog_overlap": round(float(boosts[j]), 6),
                 "snippet": chunk["verbatim_text_span"][:320],
+                "verbatim_text_span": chunk["verbatim_text_span"],
+                "slide_or_section_title": (chunk.get("slide_or_section_title", "") + " — " +
+                    ("Course Learning Outcomes" if explicit_clo_statement(chunk["verbatim_text_span"]) else "Course Synopsis"))
+                    if has_official_commitment(chunk) else chunk.get("slide_or_section_title", ""),
                 "extraction_methods_used": chunk["extraction_methods_used"],
                 "visual_diagram_summary": chunk.get("visual_diagram_summary", ""),
             })

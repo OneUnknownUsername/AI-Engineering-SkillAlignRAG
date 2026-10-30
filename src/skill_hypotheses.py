@@ -1,0 +1,70 @@
+"""Atomic skill facets and explicit domain vocabulary for the weak-NLI gate."""
+ATOMIC_HYPOTHESES = {'S01': ['The course material covers data collection.',
+         'The course material covers data cleaning.',
+         'The course material covers data preprocessing.',
+         'The course material covers handling missing data or duplicate records.'],
+ 'S02': ['The course material covers checking data quality.',
+         'The course material covers data validation.',
+         'The course material covers outlier detection.',
+         'The course material covers remediating data errors.'],
+ 'S03': ['The course material covers exploratory data analysis.',
+         'The course material covers statistical data exploration.',
+         'The course material covers data visualization.',
+         'The course material covers communicating insights with charts.'],
+ 'S04': ['The course material covers machine learning problem framing.',
+         'The course material covers feature engineering.',
+         'The course material covers feature selection.',
+         'The course material covers feature extraction.'],
+ 'S05': ['The course material covers supervised machine learning.',
+         'The course material covers unsupervised machine learning.',
+         'The course material covers classification or regression.',
+         'The course material covers clustering.'],
+ 'S06': ['The course material covers model evaluation.',
+         'The course material covers performance metrics.',
+         'The course material covers validation splits.',
+         'The course material covers prediction error analysis.'],
+ 'S07': ['The course material covers diagnosing overfitting.',
+         'The course material covers diagnosing underfitting.',
+         'The course material covers applying regularization.',
+         'The course material covers adjusting hyperparameters.'],
+ 'S08': ['The course material covers algorithmic fairness.',
+         'The course material covers bias mitigation.',
+         'The course material covers AI transparency or explainability.',
+         'The course material covers AI accountability.'],
+ 'S09': ['The course material covers ethical risk assessment.',
+         'The course material covers AI impact assessment.',
+         'The course material covers identifying ethical risks.',
+         'The course material covers mitigating ethical harms.'],
+ 'S10': ['The course material covers data privacy.',
+         'The course material covers security safeguards.',
+         'The course material covers AI governance.',
+         'The course material covers regulatory compliance.'],
+ 'S11': ['The course material covers packaging trained machine learning models into APIs.',
+         'The course material covers serving model predictions through software integration services.'],
+ 'S12': ['The course material covers automating production MLOps pipelines.',
+         'The course material covers CI/CD orchestration for machine learning deployment.',
+         'The course material covers container deployment of machine learning models.',
+         'The course material covers model versioning or continuous production model monitoring.']}
+
+# Explicit skill-specific terms, excluding generic words such as course/material/method.
+CORE_DOMAIN_TERMS = {
+    'S01': 'data clean cleaning preprocessing preprocess missing duplicates duplicate raw messy collect collecting structuring',
+    'S02': 'data quality validation validating checking errors outliers consistency inconsistencies remediation integrity',
+    'S03': 'data exploratory analysis statistical visualization visualisation visualizations visualisations charts plots graphs insights',
+    'S04': 'machine learning problem framing feature features engineering selection extraction training',
+    'S05': 'supervised unsupervised machine learning classification regression clustering predictive labelled unlabelled',
+    'S06': 'model models evaluation performance metrics accuracy precision recall validation splits prediction errors',
+    'S07': 'overfitting underfitting regularization regularisation hyperparameter hyperparameters adjustment adjustments tuning selection diagnosing generalization generalisation model',
+    'S08': 'algorithmic fairness fair bias discrimination transparency explainability accountability ethical ethics ai',
+    'S09': 'ethical ethics risk risks impact impacts assessment harms mitigation societal ai',
+    'S10': 'data privacy security protection consent governance regulatory compliance safeguards personal',
+    'S11': 'trained model models predictions inference packaging serving deployment api apis rest endpoint fastapi flask',
+    'S12': 'mlops pipelines orchestration container containers docker kubernetes versioning monitoring production deployment continuous',
+}
+
+
+def atomic_hypotheses(skill: dict) -> list[str]:
+    values = skill.get('atomic_hypotheses', ATOMIC_HYPOTHESES.get(skill['skill_id']))
+    if not isinstance(values, list) or not 2 <= len(values) <= 4 or any(not isinstance(v, str) or not v.strip() for v in values):
+        raise ValueError(f"{skill['skill_id']}: expected 2–4 nonempty atomic hypotheses")
+    return values

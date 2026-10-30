@@ -95,7 +95,7 @@ PII detection is regex-based and does not claim to anonymize names or every
 possible personal identifier.
 
 CI/CLO documents force full-page RapidOCR and table extraction on every page.
-Explicit CLO definition/header pages in lecture and assessment files gain
+Explicit CLO definition/header pages in lecture files gain
 `auxiliary_evidence_levels: ["CLO"]` when the course has usable CI/CLO documents.
 Their original `evidence_level`, page identity, and verbatim lookup remain intact;
 the CLO route includes those pages while the pooled baseline stores them once.
@@ -150,3 +150,124 @@ University course lecturers and programme coordinators teaching or overseeing co
 |------|-------|-------------|--------|
 | W1 | System map + project scope | README + docs | ✅ |
 | W2 | Requirements + eval + architecture | Requirements + evaluation criteria + v1 architecture + ADR | ✅ |
+
+## Step 2/5/6/7/8: local judgement and verified coverage audit
+
+The runner consumes Pipeline A/B's `course_catalog_manifest.json`,
+`industry_skills_benchmark.json`, `parsed_course_chunks.json`,
+`verbatim_lookup_store.json`, and the shared `indexes/` artifacts. Build them
+first using the ingestion, benchmark and index commands above. It does not
+create substitute evidence when artifacts or models are unavailable.
+
+Inside your university B200 `2g.45gb` Slurm allocation, activate a **Linux**
+Python environment (the checked-in local `.venv` may be a Windows environment).
+Install your university-supported B200 PyTorch CUDA build, then:
+
+```bash
+python -m pip install -r requirements-audit.txt
+# Use your allocated scratch/project storage rather than a small HOME quota.
+export HF_HOME=/path/to/your/scratch/huggingface
+python -m src.run_skill_audit_pipeline --output-dir outputs
+```
+
+The default is Qwen2.5-14B in BF16 with greedy decoding, and DeBERTa-v3-large
+NLI on `cuda:0`. Both load once. `device_map=auto` reserves GPU headroom but may
+offload on a crowded allocation; the device map and actual available VRAM are
+logged. Use `--llm-model Qwen/Qwen2.5-7B-Instruct` for the smaller LLM,
+`--nli-model cross-encoder/nli-deberta-v3-base` for smaller NLI, or
+`--cache-path /scratch/your/cache` if neither `HF_HOME` nor
+`TRANSFORMERS_CACHE` is set. Environment cache settings take precedence.
+`--offline` requires already-cached inference and embedding models.
+Retrieval embeddings retain the existing `outputs/models` cache.
+
+For an already-running local vLLM/Ollama OpenAI-compatible server:
+
+```bash
+python -m src.run_skill_audit_pipeline --backend openai_compat \
+  --base-url http://localhost:8000/v1 --llm-model Qwen/Qwen2.5-14B-Instruct
+```
+
+For Ollama, use `http://localhost:11434/v1` and its actual installed model name.
+The server must return JSON content and prompt/completion usage. NLI still runs
+locally on CUDA; account for the server's VRAM usage on the same MIG slice.
+The client accepts localhost endpoints only.
+
+The completed run writes:
+
+- `outputs/skill_coverage_audit_report.md`: three lecturer-facing S01–S12 tables.
+- `outputs/skill_coverage_audit_results.json`: all 108 cells, candidates, raw
+  classifications, exact canonical citations, rejection reasons, NLI scores,
+  token usage, configuration, hardware and input fingerprints.
+- `outputs/routed_vs_baseline_comparison_report.md`: counts, verification gates,
+  latency percentiles, token totals, missing-document conflation and level
+  omission diagnostics. Pooled baseline decisions remain unfiltered; its gates
+  run retrospectively. Baseline per-cell timing/tokens are explicitly amortized
+  over three levels; actual single-pass batch timing is also reported.
+- `outputs/scope_and_abstention_safety_report.md`: 25 refusal cases, 12 valid
+  queries, synthetic missing-folder cases, and actual missing manifest levels.
+
+A checkpoint JSON is written after every completed course–skill pair for
+inspection if interrupted; it is not automatically resumed. Malformed model
+responses produce an explicit generation-error flag and no accepted citation.
+Model execution failures stop the run rather than produce completed reports.
+Gate 6B batches 2–4 atomic hypotheses per skill against both quote-only and
+title-plus-quote premises. Both carry the factual `Course material:` source label
+so NLI can resolve the hypothesis subject; this label does not assert skill support. It accepts maximum entailment ≥0.40, or ≥0.20 with
+contradiction <0.15, non-contradiction ≥0.85 and at least two shared quote-domain
+terms, after the pedagogical boundary checks. All fallback probabilities come
+from the same winning pair. Every atomic score is retained in JSON. NLI
+label order is read from the model config, never assumed. LLM candidate text is limited to 350 words and 1,800 characters; full
+page/chunk text remains available to verification. CLO prompts start at the
+extracted outcome table. Generation uses a compact classification/rank/quote
+JSON schema (pooled levels use shorter classification/rank/quote arrays)
+with 128 routed / 140 pooled token budgets, then restores document/page from the selected
+rank into the full audit schema. Rationale is optional and at most 12 words.
+Oversized NLI premises are rejected rather than silently truncating quotes.
+
+Local inference API charge is reported as zero, excluding compute/electricity.
+To calculate a cloud-equivalent estimate, pass both
+`--input-usd-per-million` and `--output-usd-per-million` with your chosen
+provider's rates. Without supplied rates the cloud estimate is “Not configured”.
+Latency/cost targets are measured and reported, not presumed satisfied.
+Observed routed/baseline differences require manual relevance review; they are
+not ground-truth accuracy or recall measurements.
+
+Run the controls without CUDA, dependencies or generated indexes:
+
+```bash
+python -m src.run_skill_audit_pipeline --safety-only
+python -m unittest discover -s tests -p test_skill_audit.py -v
+```
+
+The integration test uses explicit model/retrieval doubles in a temporary
+folder. It checks all 108 cells, baseline call accounting and missing-category
+short-circuiting; it does not benchmark model quality or B200 latency.
+
+Index rebuilds recompute auxiliary CLO memberships from physical source levels,
+repairing legacy artifacts. Assessment documents can only enter Assessed or
+pooled retrieval. CLO accepts official CI sources and explicit embedded lecture
+CLOs when the CI folder is available; official outcome/synopsis pages rank first.
+The new routing-policy version requires rebuilding older indexes. CI extraction
+continues to use forced OCR plus native text and tables; the calibrated search
+representation focuses on the extracted outcome section instead of staff metadata.
+
+Gate 6A accepts normalized verbatim quote matches of at least 20 characters.
+For 20–44 character seeds it prefers an enclosing sentence/bullet of at least
+45 characters, but retains the exact seed if no suitable expansion exists.
+The 45-character target is not a rejection threshold. It never pads a short
+bullet with unrelated text. The quote must occur on the canonical lookup page
+and within the matching retrieved chunk.
+
+If a valid Top-3 citation points to the wrong page, Gate 6A checks the other
+same-course, same-level candidates in that Top-3 list and corrects the rank,
+document and page to the first verified match. It does not search the whole
+lookup store, cross course/level boundaries, or repair paraphrased wording.
+Original decisions stay unchanged in JSON; correction attempts and resolved
+citation metadata are logged, and Gate 6B uses the resolved chunk's context.
+
+S07's four atomic facets separately cover diagnosing overfitting, diagnosing
+underfitting, applying regularization, and adjusting hyperparameters.
+
+Local HF decoding stops at the first complete JSON object to prevent trailing
+commentary or duplicate decisions when token budgets increase. Numbered task
+boundaries are recognized even when PDF extraction flattens them onto one line.

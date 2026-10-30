@@ -8,6 +8,7 @@ from pathlib import Path
 
 import numpy as np
 
+from src.skill_hypotheses import atomic_hypotheses
 from src.build_indexes import DEFAULT_MODEL, STOPWORDS, load_model
 from src.common import ROOT, base_parser, extraction_options, fingerprint, md, read_json, tokens, write_json
 from src.extraction import extractor_from_args, unique_lines
@@ -29,6 +30,7 @@ def validate_skills(skills: list[dict]) -> None:
         for field in ("skill_name", "bucket", "retrieval_query", "nli_hypothesis_template"):
             if not isinstance(skill.get(field), str) or not skill[field].strip():
                 raise ValueError(f"{skill['skill_id']}: missing {field}")
+        atomic_hypotheses(skill)
         bucket = skill["bucket"].removeprefix("Bucket ").split(":")[0].strip()
         if bucket not in BUCKETS or int(skill["skill_id"][1:]) not in BUCKETS[bucket]:
             raise ValueError(f"{skill['skill_id']}: incorrect bucket")
@@ -76,7 +78,7 @@ def keyword_terms(text: str) -> set[str]:
 
 def definition_fingerprint(skill: dict) -> str:
     return fingerprint({k: skill[k] for k in ("skill_id", "skill_name", "bucket", "sfia_codes",
-                                            "retrieval_query", "nli_hypothesis_template", "expected_primary_courses") if k in skill})
+                                            "retrieval_query", "nli_hypothesis_template", "atomic_hypotheses", "expected_primary_courses") if k in skill})
 
 
 def compile_benchmark(skills: list[dict], items: list[dict], *, encoder=None, model_name: str = DEFAULT_MODEL,
@@ -153,6 +155,7 @@ def compile_benchmark(skills: list[dict], items: list[dict], *, encoder=None, mo
             if len(provenance) == top_k:
                 break
         definition = {k: v for k, v in skill.items() if k not in {"indsf_provenance", "provided_indsf_provenance"}}
+        definition["atomic_hypotheses"] = atomic_hypotheses(skill)
         compiled.append({**definition, "indsf_provenance": provenance,
                          "provenance_verified": bool(provenance), "mapping_status": "mapped" if provenance else "no_match",
                          "mapping_method": "dense_semantic_keyword_sfia", "semantic_model": model_name,
@@ -161,7 +164,7 @@ def compile_benchmark(skills: list[dict], items: list[dict], *, encoder=None, mo
                                                 "section_weights": dict(SECTION_WEIGHTS),
                                                 "semantic_queries": "max_title_phrases_and_description",
                                                 "keywords": "max_phrase_idf_cosine_title_weight_2"},
-                         "skill_definition_fingerprint": definition_fingerprint(skill),
+                         "skill_definition_fingerprint": definition_fingerprint(definition),
                          "stage_b1_fingerprint": fingerprint(items), "sfia_mapping_status": "user_locked_labels"})
     return compiled
 

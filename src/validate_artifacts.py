@@ -43,7 +43,7 @@ def validate(output_dir: Path) -> dict:
         expected_lookup[key] = union
         document_pages[(chunk["course_code"], chunk["doc_id"])].add(chunk["pdf_page_no"])
         if chunk.get("auxiliary_evidence_levels"):
-            require(chunk["auxiliary_evidence_levels"] == ["CLO"] and chunk["evidence_level"] != "CLO" and
+            require(chunk["auxiliary_evidence_levels"] == ["CLO"] and chunk["evidence_level"] == "Taught" and
                     catalog["courses"][chunk["course_code"]]["level_availability"]["CLO"] and
                     explicit_clo_statement(chunk["verbatim_text_span"]), f"Invalid auxiliary CLO membership: {key}")
         if chunk["evidence_level"] == "CLO":

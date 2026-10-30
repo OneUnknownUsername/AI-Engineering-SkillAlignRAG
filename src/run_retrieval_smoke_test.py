@@ -47,7 +47,7 @@ def run(output_dir: Path, *, offline: bool = False) -> list[dict]:
     report = ["# Retrieval smoke test", "", f"Index mode: **{retriever.manifest['mode']}**.",
               "Both configurations use exactly the same indexable chunks and embeddings. Routed retrieval "
               "uses per-level BM25 and a 0.15 catalog overlap boost; pooled retrieval has no catalog boost.",
-              "Explicit CLO definitions in other source levels also enter the CLO route when CI/CLO files are available. "
+              "Explicit CLO definitions in lecture slides also enter the CLO route when CI/CLO files are available. "
               "Their original source level is retained; the pooled corpus contains each page once.",
               "Routed has up to 3 candidates per level; pooled has 3 overall. Scores are normalized within each "
               "search partition and are not calibrated relevance probabilities.",
