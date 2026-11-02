@@ -1,5 +1,32 @@
 # SkillAlign-RAG
 
+## Current implementation and planned V1
+
+The current implementation provides command-line course ingestion, HRD Corp
+IndSF benchmark preparation, routed retrieval, local model judgement, citation
+verification, and Markdown/JSON audit reports. Sign-in, staff-only uploads,
+automatic processing from the interface, and the interactive dashboard are
+planned requirements; they are not implemented yet.
+
+The agreed V1 covers **SAIA1013, SAIA2113, and SAIA2143**, **S01–S12**, and
+**CLO / Taught / Assessed**: 36 course–skill rows and 108 coverage cells.
+Users will see the predefined industry benchmark without preparing industry
+inputs. Approved staff will submit course files by category; the application
+will process them and refresh affected audit results. Filters will change the
+displayed results without rerunning the models. There is no planned free-text
+query interface.
+
+For the demonstration, the dashboard will be viewed in a laptop browser through
+localhost or cloud hosting. Inference will run on the university B200 GPU
+allocation accessed through Open OnDemand; connecting the application backend
+to that environment is part of the planned integration. The laptop is not
+required to run the models. The evaluation table defines tests for a later stage.
+
+- [Requirements](docs/week2_requirements.md)
+- [Evaluation criteria](docs/week2_evaluation_criteria.md)
+- [V1 target architecture and diagram](docs/week2_architecture_decisions.md)
+- [Features remaining and known implementation gaps](docs/implementation_status.md)
+
 ## Local Ingestion And Retrieval Smoke Test
 
 Use Python 3.12 (recommended) and select `.venv` as the VS Code interpreter.
@@ -64,7 +91,8 @@ vision descriptions with `--enable-vision-llm --vision-model qwen2.5vl:3b` on ei
 ingestion pipeline after starting Ollama and pulling that vision model. Ollama
 must run on loopback. Unavailable Ollama is logged and extraction continues via
 native text and OCR. Vision text is kept in `visual_diagram_summary` and never
-enters the verbatim lookup. No answer-generation UI or NLI inference is included.
+enters the verbatim lookup. These ingestion commands do not run NLI inference;
+the separate coverage-audit runner below does. No interactive UI is included yet.
 OCR uses a page render with native word regions masked, preserving native text
 in its own field while recognizing new text in screenshots and diagrams.
 Vision inference receives the original page image. Identical OCR images are
@@ -99,7 +127,9 @@ Explicit CLO definition/header pages in lecture files gain
 `auxiliary_evidence_levels: ["CLO"]` when the course has usable CI/CLO documents.
 Their original `evidence_level`, page identity, and verbatim lookup remain intact;
 the CLO route includes those pages while the pooled baseline stores them once.
-Empty CI/CLO folders still cause missing-evidence abstention. Deck aspect cards
+Empty CI/CLO folders still cause missing-evidence abstention. This is current
+behavior, not full compliance with revised FR3: CI/slide agreement checks,
+CI-backed CLO support, and conflict notices are still to be implemented. Deck aspect cards
 scan pages 1-6 for outcome, overview, outline, agenda, and numbered topic headings,
 and trim trailing faculty/university footer lines. Room redaction requires an
 explicit room/office label with a colon or hash, or an MJIIT room identifier.
@@ -116,7 +146,7 @@ relevance judgements and are intentionally not fabricated by this smoke test.
 
 ## Problem Statement
 
-Course lecturers struggle to manually verify whether specific industry skills are covered across scattered course information PDFs, lecture slides, and assessment rubrics. In the UTM SAIAH programme, learning outcomes, weekly teaching materials, and assessments are distributed across heterogeneous files with different levels of detail. AI engineering is appropriate because source-routed retrieval, document provenance, and citation verification can produce evidence-backed skill-coverage judgements while distinguishing insufficient evidence from confirmed skill absence.
+Course lecturers struggle to manually verify whether specific industry skills are covered across scattered course information PDFs, lecture slides, and assessment rubrics. In the UTM SAIAH programme, learning outcomes, weekly teaching materials, and assessments are distributed across heterogeneous files with different levels of detail. AI engineering is appropriate because source-routed retrieval, document provenance, and citation verification can produce evidence-backed skill-coverage judgements while distinguishing unavailable evidence from a completed search that found no qualifying support.
 
 ## Evidence of the Problem
 
@@ -131,7 +161,7 @@ Course lecturers struggle to manually verify whether specific industry skills ar
 
 ## Project Objectives
 
-- O1: To construct a standardized curriculum evidence schema and ground-truth dataset from 3–5 core SAIAH courses using PDFs and PPTXs while preserving page and slide provenance.
+- O1: To construct a standardized curriculum evidence schema and ground-truth dataset from the three V1 SAIAH courses using PDF, PPTX, and DOCX course materials and 12 HRD Corp IndSF-derived skill tasks while preserving page and slide provenance.
 - O2: To develop a source-routed RAG pipeline for CLO, Taught, and Assessed evidence, paired with deterministic span matching and NLI-based citation verification, to classify skill coverage as Supported or Not Found / Insufficient Evidence.
 - O3: To evaluate the system against a single-pass RAG baseline using per-level Precision, Recall, and F1; citation faithfulness; unsupported-claim rate; runtime; and token usage.
 
@@ -141,8 +171,8 @@ University course lecturers and programme coordinators teaching or overseeing co
 
 ## Data Sources
 
-- SAIAH course documents: course information PDFs, lecture PPTXs, and assessment rubrics from 3–5 core courses — URL: pending provision by the course team.
-- Industry Skill Benchmark: a bounded set of 12–15 Malaysian AI industry skill tasks derived from published competency frameworks and curated job descriptions — URL: pending benchmark curation and source selection.
+- SAIAH course documents: Course Information, lecture slides, and assessment rubrics for SAIA1013, SAIA2113, and SAIA2143, supplied in PDF/PPTX/DOCX format under `data/courses/`. Internal course files are untracked.
+- Industry Skill Benchmark: the locked S01–S12 tasks in `config/benchmark_skills.json`, grounded by Pipeline B in the HRD Corp IndSF Data Science and Artificial Intelligence documents. Generated document/page/excerpt references come from Pipeline B; input citation strings are not authoritative. AI Nation 2030 and other policy references provide project context rather than additional V1 benchmark inputs.
 
 ## Weekly Progress
 
@@ -206,6 +236,10 @@ The completed run writes:
 - `outputs/scope_and_abstention_safety_report.md`: 25 refusal cases, 12 valid
   queries, synthetic missing-folder cases, and actual missing manifest levels.
 
+The query-refusal suite is a legacy backend regression check. It does not
+establish compliance with revised FR4, which requires supported course/skill
+selection validation through the planned dashboard and backend.
+
 A checkpoint JSON is written after every completed course–skill pair for
 inspection if interrupted; it is not automatically resumed. Malformed model
 responses produce an explicit generation-error flag and no accepted citation.
@@ -247,6 +281,8 @@ Index rebuilds recompute auxiliary CLO memberships from physical source levels,
 repairing legacy artifacts. Assessment documents can only enter Assessed or
 pooled retrieval. CLO accepts official CI sources and explicit embedded lecture
 CLOs when the CI folder is available; official outcome/synopsis pages rank first.
+This ranking policy does not yet enforce the CI authority and slide-corroboration
+policy in revised FR3.
 The new routing-policy version requires rebuilding older indexes. CI extraction
 continues to use forced OCR plus native text and tables; the calibrated search
 representation focuses on the extracted outcome section instead of staff metadata.

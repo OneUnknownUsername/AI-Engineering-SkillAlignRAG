@@ -7,7 +7,12 @@ Stage B1 records. Input `indsf_provenance` fields are optional and ignored;
 Code labels including `ETHICS` and `MELT` are preserved as supplied, not certified
 as official SFIA codes.
 
-To replace the benchmark, use this input contract.
+The planned V1 dashboard exposes this predefined benchmark without requiring
+users to configure it. The commands and replacement contract below are for
+maintainers; they are not dashboard setup steps. In the current command-line
+implementation, Pipeline B must still be run explicitly.
+
+To replace the benchmark as a maintainer, use this input contract.
 Exactly 12 entries are required: A = S01-S03, B = S04-S07,
 C = S08-S10, D = S11-S12.
 
