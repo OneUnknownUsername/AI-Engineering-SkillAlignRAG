@@ -2,8 +2,6 @@
 __pycache__/
 .pytest_cache/
 *.py[cod]
-/data/
-outputs/
 
 hf_cache/
 .cache/
@@ -11,3 +9,4 @@ outputs/models/
 outputs/extraction_cache/
 outputs/tools/
 outputs/verification-*/
+
