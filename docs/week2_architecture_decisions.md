@@ -48,6 +48,7 @@ planned design; implementation status is tracked separately in
 | **O2** | **FR3, RAI1** | CI Authority and Corroborating Slide Evidence | **Citation & Span Verification Control** \+ **CI Authority and Conflict Reporting** | Prepared matching/conflicting/slide-only/missing-CI cases satisfy the CI authority policy, corroboration labels, conflict notices, and Insufficient Evidence behavior. |
 | **O3** | **FR2, NFR2** | Multi-Level Skill-Coverage Classification Correctness | **Application Interface & Source-Routing Logic** \+ **Multi-Level Course Knowledge Sources** \+ **Language Model Service** | Comparative benchmark evaluation table reporting per-level Precision, Recall, and Macro-F1 (≥ 0.80) and positive F1 gain over the single-pass RAG baseline. |
 | **O3** | **NFR1, NFR3** | Response Latency and Token Cost Efficiency | **Language Model Service** \+ **Evaluation Point** | Benchmark telemetry logs demonstrating p90 latency \< 3,000 ms per evidence-level query (\< 9,000 ms per full 3-level audit) and inference cost \< US\$0.50 per 100 queries. |
+| **O1** | **FR1, FR3, FR7, RAI1, RAI2, RAI3, NFR4** | Provenance Schema Completeness | **Multi-Level Course Knowledge Sources** \+ **Pipeline A / Pipeline B** | Week 3: [pipeline decisions](week3_pipeline_decisions.md), [data inventory](week3_data_inventory.md), and the [lineage manifest](../data/week3_manifest.json). |
 
 ---
 

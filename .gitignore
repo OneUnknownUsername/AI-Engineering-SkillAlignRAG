@@ -10,3 +10,11 @@ outputs/extraction_cache/
 outputs/tools/
 outputs/verification-*/
 
+# Internal course files and generated outputs stay local; the repository is public.
+data/courses/
+outputs/
+
+# Week 3 prepared course records contain full course text; IndSF records and manifests stay trackable.
+data/processed/prepared_text.jsonl
+data/pipeline_v1/course_documents/prepared_text.jsonl
+

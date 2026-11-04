@@ -1,0 +1,104 @@
+{
+  "pipeline_version": "week3-v1",
+  "generated_at_utc": "2026-11-04T10:05:31.133381+00:00",
+  "git_commit": "850760461c05eacc30632d1b7556dfce2f573273",
+  "data_type": "indsf_documents",
+  "stages": [
+    "source",
+    "ingest",
+    "inspect",
+    "prepare",
+    "validate",
+    "record_lineage"
+  ],
+  "configuration": {
+    "extraction_cache": "disabled",
+    "ocr": true,
+    "vision_llm": false
+  },
+  "processing_method": "page-level records; native text + RapidOCR union; PII regex redaction; vision disabled; structured B1 item extraction (no embeddings)",
+  "sources": [
+    {
+      "path": "data/industry_benchmark/HRD-Corp_IndSF_Artificial_Intelligence.pdf",
+      "sha256": "c1e65253310bcd36368f4779ed78e8d75f70eacd04a2cfdac52ca6bbb60e99e6",
+      "normalized_pdf_sha256": null
+    },
+    {
+      "path": "data/industry_benchmark/HRDCorp_IndSF_DataScience_2ndEdition.pdf",
+      "sha256": "03d9aca56d8be38564d4cba33f3fb15c5e78bcb08d49c25205ceee4f5a17dec6",
+      "normalized_pdf_sha256": null
+    }
+  ],
+  "outputs": [
+    "data/pipeline_v1/indsf_documents/prepared_indsf_text.jsonl",
+    "data/pipeline_v1/indsf_documents/prepared_indsf_items.jsonl"
+  ],
+  "source_output_mapping": [
+    {
+      "source": "data/industry_benchmark/HRD-Corp_IndSF_Artificial_Intelligence.pdf",
+      "output": "data/pipeline_v1/indsf_documents/prepared_indsf_text.jsonl",
+      "records": 28
+    },
+    {
+      "source": "data/industry_benchmark/HRDCorp_IndSF_DataScience_2ndEdition.pdf",
+      "output": "data/pipeline_v1/indsf_documents/prepared_indsf_text.jsonl",
+      "records": 21
+    }
+  ],
+  "inspection": {
+    "documents": 2,
+    "pages": 49,
+    "structured_items": 526,
+    "items_by_section": {
+      "common_tools": 151,
+      "competencies": 138,
+      "essential_skills": 78,
+      "job_description_tasks": 152,
+      "sfia_level_definitions": 7
+    },
+    "ocr_pages": 32,
+    "empty_text_pages": 0,
+    "redaction_events": {
+      "email": 2
+    }
+  },
+  "validation": {
+    "output_count": 2,
+    "outputs": [
+      "data/pipeline_v1/indsf_documents/prepared_indsf_text.jsonl",
+      "data/pipeline_v1/indsf_documents/prepared_indsf_items.jsonl"
+    ],
+    "output_sha256": [
+      "15331fb3633234bb296ea48f0b1663feaafd04d9a1b186046263e862445362de",
+      "9bcc7c5fa510f249d63c64ab7db8f060fa4ff1fdc47230088583b0a6959f5fd3"
+    ],
+    "output_bytes": [
+      109835,
+      299523
+    ],
+    "output_records": [
+      49,
+      526
+    ],
+    "residual_pii_pattern_matches": {
+      "email": 0,
+      "phone": 0,
+      "office_room": 0
+    }
+  },
+  "known_gaps": [],
+  "source_version": "Not verified",
+  "access_rights": "HRD Corp publication; licence terms not verified",
+  "runtime": {
+    "seconds": 35.9,
+    "python": "3.12.3",
+    "platform": "Linux",
+    "packages": {
+      "PyMuPDF": "2.0",
+      "pdfplumber": "0.11.10",
+      "rapidocr-onnxruntime": "1.4.4",
+      "onnxruntime": "1.31.1",
+      "Pillow": "12.3.0"
+    }
+  }
+}

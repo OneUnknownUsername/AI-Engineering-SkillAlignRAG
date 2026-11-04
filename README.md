@@ -81,7 +81,8 @@ Downstream validation regenerates B1 and checks item IDs, source excerpts,
 graduate eligibility, scores and definition/source fingerprints without a model.
 
 All generated data, models, indexes, quality reports and retrieval logs go under
-`outputs/` (gitignored). Source inputs remain untracked unless explicitly added.
+`outputs/` (gitignored). Course files under `data/courses/` are also gitignored and
+stay local; the IndSF PDFs under `data/industry_benchmark/` are tracked.
 The two existing HRD Corp filenames and the specification's canonical filenames
 are recognized; ambiguous or missing benchmark PDFs are errors.
 
@@ -180,6 +181,22 @@ University course lecturers and programme coordinators teaching or overseeing co
 |------|-------|-------------|--------|
 | W1 | System map + project scope | README + docs | ✅ |
 | W2 | Requirements + eval + architecture | Requirements + evaluation criteria + v1 architecture + ADR | ✅ |
+| W3 | V1 data pipeline, lineage and workflow | [Notebook](notebooks/week3_pipeline.ipynb) + [data inventory](docs/week3_data_inventory.md) + [pipeline diagram](docs/week3_pipeline_diagram.png) + [pipeline decisions](docs/week3_pipeline_decisions.md) + [lineage manifest](data/week3_manifest.json) + [pipeline manifests](data/pipeline_v1/) | ✅ |
+
+## Week 3 data pipeline
+
+The Week 3 pipeline prepares both document branches and records their lineage,
+stopping before embeddings and model work:
+
+```bash
+python -m pip install -r requirements.txt -r requirements-notebook.txt
+python -m src.week3_pipeline --repeat
+```
+
+Or run [the notebook](notebooks/week3_pipeline.ipynb) locally. Each extraction pass
+takes about 7 minutes on CPU with 6 workers, and the notebook runs three. Prepared
+course records stay local because they hold full course text, so a fresh clone needs
+the course files under `data/courses/` to run the course branch.
 
 ## Step 2/5/6/7/8: local judgement and verified coverage audit
 
