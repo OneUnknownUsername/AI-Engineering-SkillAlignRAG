@@ -29,6 +29,8 @@ from datetime import datetime, timezone
 from importlib import metadata
 from pathlib import Path
 
+import pymupdf as fitz
+
 from src.common import ROOT, read_json, write_json
 from src.extraction import PII, ExtractionConfig, PDFExtractor
 from src.indsf_extraction import extract_all_skills
@@ -45,6 +47,7 @@ ACCESS_RIGHTS = {
     COURSE_KIND: "Internal UTM course material; redistribution permission not verified; do not publish",
     INDSF_KIND: "HRD Corp publication; licence terms not verified",
 }
+SOURCE_SUFFIXES = {".pdf", ".pptx", ".docx"}
 OWNERS = {COURSE_KIND: "UTM Faculty of Artificial Intelligence (course teaching team)", INDSF_KIND: "HRD Corp"}
 
 
@@ -66,6 +69,7 @@ class Extraction:
     known_gaps: list[dict] = field(default_factory=list)
     seconds: float = 0.0
     comparison_pages: list[dict] = field(default_factory=list, repr=False)  # Not written to disk.
+    raw_documents: dict[tuple, list[str]] = field(default_factory=dict, repr=False)  # Not written to disk.
 
 
 def sha256_file(path: Path) -> str:
@@ -102,6 +106,11 @@ def _extractor(enable_ocr: bool, ocr_threads: int) -> PDFExtractor:
                                          ocr_threads=ocr_threads), None)
 
 
+def _row_source(row: dict) -> str:
+    """Page records name their source; IndSF items name only the benchmark document."""
+    return row.get("source") or f"data/industry_benchmark/{row['doc_id']}"
+
+
 def _redaction_counts(pages: list[dict]) -> dict:
     return dict(sorted(Counter(event["kind"] for page in pages for event in page.get("redaction_events", [])).items()))
 
@@ -135,6 +144,7 @@ def extract_courses(root: Path = ROOT, *, enable_ocr: bool = True, workers: int 
     if workers > 1:
         # Forking a live notebook kernel can deadlock; spawned workers start clean.
         multiprocessing.set_start_method("spawn", force=True)
+    raw_documents = {}
     with tempfile.TemporaryDirectory() as workspace:
         workspace = Path(workspace)
         converted = root / "outputs/normalized_pdf"
@@ -157,6 +167,9 @@ def extract_courses(root: Path = ROOT, *, enable_ocr: bool = True, workers: int 
             document["source_sha256"] = sha256_file(source)
             document["normalized_pdf_sha256"] = (sha256_file(Path(document["pdf_path"]))
                                                  if document["original_format"] != "pdf" else None)
+            # Unflattened page text, kept in memory for the Part B chunking comparison only.
+            with fitz.open(document["pdf_path"]) as pdf:
+                raw_documents[(document["course_code"], document["doc_id"])] = [page.get_text() for page in pdf]
     by_document = {(d["course_code"], d["doc_id"]): d for d in documents}
     records = []
     for chunk in chunks:
@@ -193,7 +206,7 @@ def extract_courses(root: Path = ROOT, *, enable_ocr: bool = True, workers: int 
         "redaction_events": _redaction_counts(chunks),
     }
     extraction = Extraction(COURSE_KIND, sources, {"prepared_text.jsonl": records}, inspection, COURSE_METHOD, gaps,
-                            comparison_pages=chunks)
+                            comparison_pages=chunks, raw_documents=raw_documents)
     extraction.seconds = round(time.perf_counter() - started, 1)
     return extraction
 
@@ -268,6 +281,8 @@ def store_and_validate(extraction: Extraction, directory: Path, root: Path = ROO
                 handle.write(json.dumps(row, ensure_ascii=False) + "\n")
         if not rows or target.stat().st_size == 0:
             raise PipelineStageError("validate", f"Prepared output is empty: {name}")
+        if any(not str(row.get("text") or row.get("verbatim_text") or "").strip() for row in rows):
+            raise PipelineStageError("validate", f"A record has empty text: {name}")
         with target.open(encoding="utf-8") as handle:
             if [json.loads(line) for line in handle] != rows:
                 raise PipelineStageError("validate", f"Read-back differs from prepared rows: {name}")
@@ -282,6 +297,9 @@ def store_and_validate(extraction: Extraction, directory: Path, root: Path = ROO
     for row in pages:
         if known.get(row["source"], {}).get("sha256") != row["source_sha256"]:
             raise PipelineStageError("validate", f"Record does not match a registered source: {row['record_id']}")
+    for name, rows in extraction.outputs.items():
+        if any(_row_source(row) not in known for row in rows):
+            raise PipelineStageError("validate", f"A record in {name} does not link to a registered source")
     mismatched = [s["path"] for s in extraction.sources if s["pages"] != s["records"]]
     if mismatched:
         raise PipelineStageError("validate", f"Page count differs from record count: {mismatched}")
@@ -294,6 +312,16 @@ def store_and_validate(extraction: Extraction, directory: Path, root: Path = ROO
         "output_records": [len(rows) for rows in extraction.outputs.values()],
         "residual_pii_pattern_matches": {kind: pii[kind] for kind in PII},
     }
+
+
+def _source_output_links(extraction: Extraction, validation: dict) -> list[dict]:
+    """Link every source to every prepared output it contributes to, with that output's record count."""
+    links = []
+    for rows, output, digest in zip(extraction.outputs.values(), validation["outputs"], validation["output_sha256"]):
+        counts = Counter(_row_source(row) for row in rows)
+        links.extend({"source": source, "output": output, "output_sha256": digest, "records": counts[source["path"]]}
+                     for source in extraction.sources)
+    return links
 
 
 def _git_commit(root: Path) -> str:
@@ -316,7 +344,6 @@ def execute_pipeline(kind: str, root: Path = ROOT, pipeline_dir: Path | None = N
     directory = (Path(pipeline_dir) if pipeline_dir else root / "data/pipeline_v1") / kind
     extraction = extract(kind, root, **options)
     validation = store_and_validate(extraction, directory, root)
-    text_output = next(path for path in validation["outputs"] if path.endswith("_text.jsonl"))
     record = {
         "pipeline_version": PIPELINE_VERSION,
         "generated_at_utc": datetime.now(timezone.utc).isoformat(),
@@ -328,8 +355,8 @@ def execute_pipeline(kind: str, root: Path = ROOT, pipeline_dir: Path | None = N
         "sources": [{"path": s["path"], "sha256": s["sha256"], "normalized_pdf_sha256": s["normalized_pdf_sha256"]}
                     for s in extraction.sources],
         "outputs": validation["outputs"],
-        "source_output_mapping": [{"source": s["path"], "output": text_output, "records": s["records"]}
-                                  for s in extraction.sources],
+        "source_output_mapping": [{"source": link["source"]["path"], "output": link["output"], "records": link["records"]}
+                                  for link in _source_output_links(extraction, validation)],
         "inspection": extraction.inspection,
         "validation": validation,
         "known_gaps": extraction.known_gaps,
@@ -352,21 +379,22 @@ def build_lineage_manifest(extractions: list[Extraction], processed_dir: Path, m
                            root: Path = ROOT) -> dict:
     """Write the common Part B source-to-output manifest with relative paths only."""
     root = Path(root)
-    lineage = []
+    lineage, source_ids = [], {}
     for extraction in extractions:
         validation = store_and_validate(extraction, processed_dir, root)
-        text_name = next(name for name in extraction.outputs if name.endswith("_text.jsonl"))
-        output = next(path for path in validation["outputs"] if path.endswith(text_name))
-        output_sha = validation["output_sha256"][validation["outputs"].index(output)]
         for source in extraction.sources:
+            source_ids[source["path"]] = f"SRC{len(source_ids) + 1:02d}"
+        for link in _source_output_links(extraction, validation):
+            source = link["source"]
             lineage.append({
-                "source_id": f"SRC{len(lineage) + 1:02d}", "source_filename": source["path"],
+                "source_id": source_ids[source["path"]], "source_filename": source["path"],
                 "source_sha256": source["sha256"], "normalized_pdf_sha256": source["normalized_pdf_sha256"],
                 "original_format": source["format"], "course_code": source["course_code"],
-                "evidence_level": source["evidence_level"], "pages": source["pages"], "records": source["records"],
-                "prepared_output": output, "prepared_sha256": output_sha, "processing_note": extraction.method,
-                "source_version": "Not verified", "owner": OWNERS[extraction.kind],
-                "access_rights": ACCESS_RIGHTS[extraction.kind], "status": "Prepared; quality review pending",
+                "evidence_level": source["evidence_level"], "pages": source["pages"], "records": link["records"],
+                "prepared_output": link["output"], "prepared_sha256": link["output_sha256"],
+                "processing_note": extraction.method, "source_version": "Not verified",
+                "owner": OWNERS[extraction.kind], "access_rights": ACCESS_RIGHTS[extraction.kind],
+                "status": "Prepared; quality review pending",
             })
     manifest = {
         "pipeline_version": PIPELINE_VERSION, "generated_at_utc": datetime.now(timezone.utc).isoformat(),
@@ -378,7 +406,10 @@ def build_lineage_manifest(extractions: list[Extraction], processed_dir: Path, m
 
 
 def verify_manifest(manifest_path: Path, root: Path = ROOT) -> int:
-    """Recompute every recorded hash. This proves integrity, not data quality or permission to share."""
+    """Recompute every recorded hash and check the manifest is complete against the files on disk.
+
+    This proves integrity and coverage, not data quality or permission to share.
+    """
     root = Path(root)
     records = read_json(manifest_path).get("records", [])
     if not records:
@@ -390,7 +421,28 @@ def verify_manifest(manifest_path: Path, root: Path = ROOT) -> int:
                 raise PipelineStageError("record_lineage", f"Missing file: {record[path_field]}")
             if sha256_file(target) != record[hash_field]:
                 raise PipelineStageError("record_lineage", f"Checksum mismatch: {record[path_field]}")
+    _check_manifest_complete(records, root)
     return len(records)
+
+
+def _check_manifest_complete(records: list[dict], root: Path) -> None:
+    """Hashes only cover what is listed, so also look for sources, outputs and records the manifest left out."""
+    listed_sources = {record["source_filename"] for record in records}
+    source_dirs = (root / "data/courses", root / "data/industry_benchmark")
+    on_disk = {relative(path, root) for directory in source_dirs for path in directory.rglob("*")
+               if path.suffix.lower() in SOURCE_SUFFIXES and path.is_file()}
+    if on_disk - listed_sources:
+        raise PipelineStageError("record_lineage", f"Sources missing from manifest: {sorted(on_disk - listed_sources)}")
+    listed_outputs = {record["prepared_output"] for record in records}
+    prepared = {relative(path, root) for output in listed_outputs for path in (root / output).parent.glob("*.jsonl")}
+    if prepared - listed_outputs:
+        raise PipelineStageError("record_lineage", f"Outputs missing from manifest: {sorted(prepared - listed_outputs)}")
+    for output in sorted(listed_outputs):
+        with (root / output).open(encoding="utf-8") as handle:
+            actual = sum(1 for _ in handle)
+        listed = sum(record["records"] for record in records if record["prepared_output"] == output)
+        if listed != actual:
+            raise PipelineStageError("record_lineage", f"Manifest lists {listed} records but {output} has {actual}")
 
 
 def _fixed_spans(text: str, size: int) -> list[tuple[int, int]]:
@@ -428,18 +480,26 @@ def _paragraph_spans(text: str, size: int) -> list[tuple[int, int]]:
     return spans
 
 
-def compare_chunking(pages: list[dict], size: int = 500) -> list[dict]:
-    """Compare page-level records with the lab's two 500-character whole-document splitters."""
+def compare_chunking(pages: list[dict], raw_documents: dict[tuple, list[str]], size: int = 500) -> list[dict]:
+    """Compare page-level records with the lab's two splitters on unflattened text, so blank lines survive.
+
+    Prepared records have their line breaks removed, which would reduce the paragraph-aware splitter to fixed cuts.
+    OCR text is kept so every approach covers the same content.
+    """
     documents: dict[tuple, list[dict]] = {}
     for page in pages:
         documents.setdefault((page["course_code"], page["doc_id"]), []).append(page)
     results = {"page-level (selected)": [], f"fixed-char-{size}": [], f"paragraph-aware-char-{size}": []}
-    for document in documents.values():
+    for key, document in documents.items():
+        raw_pages = raw_documents[key]
+        if len(raw_pages) != len(document):
+            raise ValueError(f"Raw page count differs from prepared page count: {key}")
         joined, starts = "", []
         for page in document:
-            content = re.sub(r"[ \t]+", " ", "\n".join(filter(None, [page["native_text"], page["ocr_extracted_text"]]))).strip()
+            raw = raw_pages[page["pdf_page_no"] - 1]
+            content = re.sub(r"[ \t]+", " ", "\n".join(filter(None, [raw.strip(), page["ocr_extracted_text"]]))).strip()
             starts.append(len(joined))
-            joined += content + "\n"
+            joined += content + "\n\n"  # What the lab's "\n".join gives for page text that ends in a newline.
         for name, spans in ((f"fixed-char-{size}", _fixed_spans(joined, size)),
                             (f"paragraph-aware-char-{size}", _paragraph_spans(joined, size))):
             for begin, end in spans:
@@ -461,6 +521,13 @@ def compare_chunking(pages: list[dict], size: int = 500) -> list[dict]:
             "records_a_page_reference": len(chunks) if name.startswith("page-level") else 0,
         })
     return rows
+
+
+def blank_line_breaks(raw_documents: dict[tuple, list[str]]) -> dict:
+    """Count what the paragraph-aware splitter can split on: real breaks inside pages, or page boundaries."""
+    inside = [len(re.findall(r"\n\s*\n", page.strip())) for pages in raw_documents.values() for page in pages]
+    return {"inside_a_page": sum(inside), "pages_with_a_break_inside": sum(count > 0 for count in inside),
+            "page_boundaries": sum(len(pages) - 1 for pages in raw_documents.values()), "pages": len(inside)}
 
 
 def compare_ocr(pages: list[dict]) -> list[dict]:

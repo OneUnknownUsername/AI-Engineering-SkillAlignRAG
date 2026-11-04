@@ -37,7 +37,7 @@ File names of course documents appear in the public manifests. Earlier commits w
 
 ## Inventory
 
-Inspection evidence is the file's pages and prepared records, plus the first 12 characters of its SHA-256. Every source's page count equals its record count, and no page has empty text after OCR.
+Inspection evidence is the file's pages and prepared records, plus the first 12 characters of its SHA-256. Every source's page count equals its page-record count, and no page has empty text after OCR. SRC39 and SRC40 also produce 332 and 194 structured items, linked to their source in the manifest.
 
 | Source ID | Filename | Type and purpose | Version / date / owner | Access / rights | Inspection evidence |
 | :--- | :--- | :--- | :--- | :--- | :--- |
@@ -84,9 +84,10 @@ Inspection evidence is the file's pages and prepared records, plus the first 12 
 
 ## Representative inspection
 
-The notebook's A3 and B3 cells show samples from two sources, including source hash, page count and text:
+The notebook's A2 cell lists every input file with its size. Its A3 and B3 cells show samples from two sources, including source hash, page count and text:
 
 - **SAIA2113, `Week 13 Clustering.pdf`, page 9:** a lecture slide, with text readable after extraction.
 - **HRD Corp IndSF AI, page 7:** a job description page, with text readable after extraction.
+- **Structured IndSF items:** one job description task (page 3) and one competency (page 19), each with its role, section and source page.
 
 File existence alone was not accepted as evidence: three committed files were found to be truncated, as described in the [pipeline decisions](week3_pipeline_decisions.md).

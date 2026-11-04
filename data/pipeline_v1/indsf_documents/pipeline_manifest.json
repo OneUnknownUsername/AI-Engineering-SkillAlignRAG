@@ -1,7 +1,7 @@
 {
   "pipeline_version": "week3-v1",
-  "generated_at_utc": "2026-11-04T10:05:31.133381+00:00",
-  "git_commit": "850760461c05eacc30632d1b7556dfce2f573273",
+  "generated_at_utc": "2026-11-04T15:34:02.562464+00:00",
+  "git_commit": "9891716d6d7d824bcf8fd1e01ed9a4b42e68a218",
   "data_type": "indsf_documents",
   "stages": [
     "source",
@@ -43,6 +43,16 @@
       "source": "data/industry_benchmark/HRDCorp_IndSF_DataScience_2ndEdition.pdf",
       "output": "data/pipeline_v1/indsf_documents/prepared_indsf_text.jsonl",
       "records": 21
+    },
+    {
+      "source": "data/industry_benchmark/HRD-Corp_IndSF_Artificial_Intelligence.pdf",
+      "output": "data/pipeline_v1/indsf_documents/prepared_indsf_items.jsonl",
+      "records": 332
+    },
+    {
+      "source": "data/industry_benchmark/HRDCorp_IndSF_DataScience_2ndEdition.pdf",
+      "output": "data/pipeline_v1/indsf_documents/prepared_indsf_items.jsonl",
+      "records": 194
     }
   ],
   "inspection": {
@@ -90,7 +100,7 @@
   "source_version": "Not verified",
   "access_rights": "HRD Corp publication; licence terms not verified",
   "runtime": {
-    "seconds": 35.9,
+    "seconds": 36.0,
     "python": "3.12.3",
     "platform": "Linux",
     "packages": {
