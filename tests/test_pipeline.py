@@ -247,6 +247,42 @@ def test_office_conversion_preserves_original_format_and_reuses_pdf(tmp_path, mo
     assert len(calls) == 1 and source.read_bytes() == b"synthetic office input"
 
 
+FLAT_PRESENTATION = """<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+ xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+ xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" office:version="1.3"
+ office:mimetype="application/vnd.oasis.opendocument.presentation">
+ <office:body><office:presentation><draw:page draw:name="p1">
+  <draw:frame svg:x="2cm" svg:y="2cm" svg:width="20cm" svg:height="4cm"><draw:text-box>
+   <text:p>{text}</text:p></draw:text-box></draw:frame>
+ </draw:page></office:presentation></office:body></office:document>"""
+
+
+def test_real_office_files_convert_with_installed_libreoffice(tmp_path):
+    """Converts synthetic DOCX and PPTX with the real converter; skipped where LibreOffice is absent."""
+    import subprocess
+    from src.step0_normalize_formats import find_soffice
+    soffice = find_soffice()
+    if soffice is None:
+        pytest.skip("LibreOffice is not installed")
+    folder = tmp_path / "data/courses/SAIA1013/02_Lecture_Slides_Taught"
+    folder.mkdir(parents=True)
+    texts = {"notes.docx": "Synthetic DOCX notes on supervised learning",
+             "deck.pptx": "Synthetic PPTX slide on model evaluation"}
+    (tmp_path / "notes.txt").write_text(texts["notes.docx"], encoding="utf-8")
+    (tmp_path / "deck.fodp").write_text(FLAT_PRESENTATION.format(text=texts["deck.pptx"]), encoding="utf-8")
+    profile = (tmp_path / "profile").resolve().as_uri()
+    for name, target in (("notes.txt", "docx:MS Word 2007 XML"), ("deck.fodp", "pptx")):
+        subprocess.run([soffice, f"-env:UserInstallation={profile}", "--headless", "--convert-to", target,
+                        "--outdir", str(folder), str(tmp_path / name)], check=True, capture_output=True, timeout=180)
+    assert sorted(path.name for path in folder.iterdir()) == ["deck.pptx", "notes.docx"]
+    records = normalize_formats(tmp_path / "data", tmp_path / "outputs")
+    assert {record["original_format"]: record["status"] for record in records} == {"docx": "ready", "pptx": "ready"}
+    for record in records:
+        with fitz.open(record["pdf_path"]) as pdf:
+            assert texts[os.path.basename(record["source_path"])] in " ".join(page.get_text() for page in pdf).replace("\n", " ")
+
+
 def test_automated_provenance_is_source_verified():
     skills = locked_skills()
     pages = benchmark_pages()

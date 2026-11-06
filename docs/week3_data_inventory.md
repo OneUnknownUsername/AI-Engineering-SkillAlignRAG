@@ -33,7 +33,7 @@ File names of course documents appear in the public manifests. Earlier commits w
 - **Version and date:** not verified for any source. Dates in file names were not checked against the documents. A hash identifies the exact file, not its version or authority.
 - **Permission:** a hash says nothing about permission to share. Course material permissions come from the lecturers and were not independently verified.
 - **Names:** redaction covers email addresses, phone numbers and office rooms by regex. It does not detect names, so prepared course text must stay local.
-- **Office files:** SRC07 (PPTX) and SRC09 (DOCX) were read through PDFs converted earlier, because LibreOffice is not installed on this node. The PDF hashes are recorded in the manifest.
+- **Office files:** SRC07 (PPTX) and SRC09 (DOCX) were read through PDFs converted earlier on Windows, because LibreOffice was not yet installed on this node when the pipeline ran. The PDF hashes are recorded in the manifest.
 
 ## Inventory
 

@@ -35,6 +35,10 @@ def find_soffice() -> str | None:
         candidate = Path(root) / "LibreOffice/program/soffice.exe"
         if candidate.is_file():
             return console_launcher(candidate)
+    # Linux build unpacked into the project without admin rights (see README).
+    for candidate in sorted((ROOT / "outputs/tools/libreoffice_linux/opt").glob("libreoffice*/program/soffice")):
+        if os.name != "nt" and os.access(candidate, os.X_OK):
+            return str(candidate)
     runtime = ROOT / "outputs/tools/libreoffice_runtime.json"
     if runtime.is_file():
         candidate = Path(read_json(runtime)["soffice_path"])

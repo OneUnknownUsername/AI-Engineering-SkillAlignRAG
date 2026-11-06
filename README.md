@@ -46,6 +46,15 @@ On Windows the console launcher `soffice.com` is preferred so conversion waits
 for completion. An optional `outputs/tools/libreoffice_runtime.json` containing
 `{"soffice_path": "absolute/path/to/soffice.com"}` selects a workspace-local
 extracted LibreOffice runtime without a system installation.
+
+On Linux without admin rights, such as the university GPU node, unpack the official
+LibreOffice Linux DEB archive into `outputs/tools/libreoffice_linux/`; the pipeline
+finds `opt/libreoffice*/program/soffice` there automatically:
+
+```bash
+tar -xzf LibreOffice_<version>_Linux_x86-64_deb.tar.gz
+for deb in LibreOffice_*_deb/DEBS/*.deb; do dpkg-deb -x "$deb" outputs/tools/libreoffice_linux; done
+```
 Converted PDFs are cached under `outputs/normalized_pdf/`; source materials are
 never modified. Pipeline A also runs normalization automatically. A failed or
 stale conversion is logged and excluded, rather than treated as an empty folder.
