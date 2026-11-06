@@ -1,5 +1,10 @@
 # Lab Activity: Part C \- Semester Project Scoping and GitHub Setup
 
+This document preserves the initial Week 1 scope. The later V1 decisions in
+[the requirements](week2_requirements.md) supersede its provisional dataset
+ranges and industry-source choices: V1 uses three courses, 12 HRD Corp IndSF-derived
+tasks, PDF/PPTX/DOCX uploads, authorised staff access, and an interactive dashboard.
+
 ## Step C2 \- Complete the Project Scoping Template (10 minutes)
 
 | Project Name | SkillAlign-RAG  |

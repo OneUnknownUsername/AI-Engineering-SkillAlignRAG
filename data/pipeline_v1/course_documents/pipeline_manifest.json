@@ -1,0 +1,491 @@
+{
+  "pipeline_version": "week3-v1",
+  "generated_at_utc": "2026-11-04T15:33:26.565819+00:00",
+  "git_commit": "9891716d6d7d824bcf8fd1e01ed9a4b42e68a218",
+  "data_type": "course_documents",
+  "stages": [
+    "source",
+    "ingest",
+    "inspect",
+    "prepare",
+    "validate",
+    "record_lineage"
+  ],
+  "configuration": {
+    "extraction_cache": "disabled",
+    "ocr": true,
+    "vision_llm": false
+  },
+  "processing_method": "page-level records; native text + RapidOCR union; PII regex redaction; vision disabled",
+  "sources": [
+    {
+      "path": "data/courses/SAIA1013_Responsible_AI_and_Ethics/01_CI_CLO/SAIA1013 Responsible AI and Ethics 2425-1.pdf",
+      "sha256": "beb5792ca4300aafe202e639bc5f091acbbb12e75335a3d7307a26671079a666",
+      "normalized_pdf_sha256": null
+    },
+    {
+      "path": "data/courses/SAIA1013_Responsible_AI_and_Ethics/02_Lecture_Slides_Taught/Module 2 Additional Ethical Theories 11 Aug 2025.pdf",
+      "sha256": "f4018454e7f5495bac7390d6d91ca6c30adef7bdddd7aed3597ed8165911f59c",
+      "normalized_pdf_sha256": null
+    },
+    {
+      "path": "data/courses/SAIA1013_Responsible_AI_and_Ethics/02_Lecture_Slides_Taught/Module 4 AI Ethics Risk Assessment.pdf",
+      "sha256": "b8500e5894c94d60a8dc2e28cfa71d0686a4438a16f068a43aadb26d4271b2e1",
+      "normalized_pdf_sha256": null
+    },
+    {
+      "path": "data/courses/SAIA1013_Responsible_AI_and_Ethics/02_Lecture_Slides_Taught/Module 5  Ethics Centric in AI Design.pdf",
+      "sha256": "bdf412dedbba3611c8a536423b7ecf101a9db6f10a313056e5495797adc900c2",
+      "normalized_pdf_sha256": null
+    },
+    {
+      "path": "data/courses/SAIA1013_Responsible_AI_and_Ethics/02_Lecture_Slides_Taught/Module 6  AI Governance Sept.pdf",
+      "sha256": "7919e9d622c6849d3d88c22ff73c3189e372e72f7a9dc4c3ecf88061e80f744e",
+      "normalized_pdf_sha256": null
+    },
+    {
+      "path": "data/courses/SAIA1013_Responsible_AI_and_Ethics/02_Lecture_Slides_Taught/Part 1 Module 3 Ethics From Religion Perspective.pdf",
+      "sha256": "8c85f6fb7f1f3e517dabd2d5b757bb68a1e6b3559859d4f848a35f0b890b2d12",
+      "normalized_pdf_sha256": null
+    },
+    {
+      "path": "data/courses/SAIA1013_Responsible_AI_and_Ethics/02_Lecture_Slides_Taught/Part 2 Module 3 Ethics From Religion Perspective.pdf.pptx",
+      "sha256": "352a78f6ae36ff111ca2b0c40093d6d774c7670bd91f5045079d35b83b8da5fb",
+      "normalized_pdf_sha256": "ca94cc973df4a9a1749b293ad33d7caaf8c669f5188e8f39228b5f5cd54610d5"
+    },
+    {
+      "path": "data/courses/SAIA1013_Responsible_AI_and_Ethics/02_Lecture_Slides_Taught/Week 1 Introduction to RAI and AI Ethics Class Notes.pdf",
+      "sha256": "8258d61d14e149bb43e860a7b0e3d4a68cda0dbab2b464f35d15b868f570c73b",
+      "normalized_pdf_sha256": null
+    },
+    {
+      "path": "data/courses/SAIA1013_Responsible_AI_and_Ethics/03_Assessments_Assessed/1-GROUP ASSIGNMENT SAIA 1013 RES AI ETHICS_3_24_25.docx",
+      "sha256": "e9211eac20a6b70e668862bfc709821ee57458e6fc4917d87d0f25a5d8a52e5e",
+      "normalized_pdf_sha256": "44d1faffc3fc8a3aef95cae18e92b618a520c1fbd2d620a63b7d3305ccffda0d"
+    },
+    {
+      "path": "data/courses/SAIA1013_Responsible_AI_and_Ethics/03_Assessments_Assessed/Assignment 3 (5%) Module 5.pdf",
+      "sha256": "60516b878e19c1f5e9d3bb6c60b62ded44c49a3bad4cdd5028bf78f9be620da0",
+      "normalized_pdf_sha256": null
+    },
+    {
+      "path": "data/courses/SAIA1013_Responsible_AI_and_Ethics/03_Assessments_Assessed/SAIA 1013 Rubrics Assignment (5+5%).pdf",
+      "sha256": "7bb369e747d93513357eb1fb0c2afe6e7edf7014573c36391c34d661c2eb3458",
+      "normalized_pdf_sha256": null
+    },
+    {
+      "path": "data/courses/SAIA2113_Machine_Learning/02_Lecture_Slides_Taught/WEEK 2 & 3 - UNDERSTANDING DATA TYPES AND PRE-PROCESSING.pdf",
+      "sha256": "184a865f700519c70faa0d03d09148cf80509964aef3e0fb0cf75b089cd9c68f",
+      "normalized_pdf_sha256": null
+    },
+    {
+      "path": "data/courses/SAIA2113_Machine_Learning/02_Lecture_Slides_Taught/Week 1 - INTRODUCTION TO ML.pdf",
+      "sha256": "9c9c3090a23e54ea4bcf908a78f49cfebfeed3ebe87ce729c73823c6739a728a",
+      "normalized_pdf_sha256": null
+    },
+    {
+      "path": "data/courses/SAIA2113_Machine_Learning/02_Lecture_Slides_Taught/Week 10 Classification using Support Vector Machine.pdf",
+      "sha256": "24ed8fc11ca3c784e23ff752158224fff32dc42ddcdecd54a2eef60821c3d7a5",
+      "normalized_pdf_sha256": null
+    },
+    {
+      "path": "data/courses/SAIA2113_Machine_Learning/02_Lecture_Slides_Taught/Week 11 Classification using Decision Tree and Random Forest (2).pdf",
+      "sha256": "cc2727916ddbed7e57b67abb8b62a1a22710324c27808e3dab02050043daa549",
+      "normalized_pdf_sha256": null
+    },
+    {
+      "path": "data/courses/SAIA2113_Machine_Learning/02_Lecture_Slides_Taught/Week 12 Classification using Artificial Neural Network (3).pdf",
+      "sha256": "a6693bb8a5e98067b49f31d4210af9a97c45ada349fa126161784d0083eace91",
+      "normalized_pdf_sha256": null
+    },
+    {
+      "path": "data/courses/SAIA2113_Machine_Learning/02_Lecture_Slides_Taught/Week 13 Clustering.pdf",
+      "sha256": "de58300fd9d1e40ae1050ef8e1ce10289cf218d3598fb14e8acbff078b798544",
+      "normalized_pdf_sha256": null
+    },
+    {
+      "path": "data/courses/SAIA2113_Machine_Learning/02_Lecture_Slides_Taught/Week 14 Ethical Consideration.pdf",
+      "sha256": "40ea912a62e15177127eff1d0c398ff907be450a3966bb2c8ed2f611e515a6e7",
+      "normalized_pdf_sha256": null
+    },
+    {
+      "path": "data/courses/SAIA2113_Machine_Learning/02_Lecture_Slides_Taught/Week 4 - Supervised Learning.pdf",
+      "sha256": "4ba557440e340182788a58c75a533e3eaa92e774105e439b883170b8e01c82e9",
+      "normalized_pdf_sha256": null
+    },
+    {
+      "path": "data/courses/SAIA2113_Machine_Learning/02_Lecture_Slides_Taught/Week 5 - Unsupervised Learning.pdf",
+      "sha256": "7d5f34c7c8b9d27cd7cf2557e700022949bd4d928699ad5d378fbc07317e6689",
+      "normalized_pdf_sha256": null
+    },
+    {
+      "path": "data/courses/SAIA2113_Machine_Learning/02_Lecture_Slides_Taught/Week 6 - Model Evaluation.pdf",
+      "sha256": "4e6ddfa8466376475eedd86a8ade662b5f1599cf31824ca3c4ffe26244ac544b",
+      "normalized_pdf_sha256": null
+    },
+    {
+      "path": "data/courses/SAIA2113_Machine_Learning/02_Lecture_Slides_Taught/Week 7 - Linear Regression.pdf",
+      "sha256": "3cad947e677b936121403de17a64e9003af56195ed631bc303444ce4216463fb",
+      "normalized_pdf_sha256": null
+    },
+    {
+      "path": "data/courses/SAIA2113_Machine_Learning/02_Lecture_Slides_Taught/Week 9 Classification using Naive Bayes.pdf",
+      "sha256": "6b358b5669913cd0268b46ad41ba7654339b053c7fff6f9ef708b9745f1f9676",
+      "normalized_pdf_sha256": null
+    },
+    {
+      "path": "data/courses/SAIA2113_Machine_Learning/03_Assessments_Assessed/Assignment 1 - ML (12 Nov 2025).pdf",
+      "sha256": "acd32dbb8f608f08c8ad1071e0dd877850b20feff7aa57aca8fb9b2e74cda935",
+      "normalized_pdf_sha256": null
+    },
+    {
+      "path": "data/courses/SAIA2113_Machine_Learning/03_Assessments_Assessed/SAIA 2113 - Machine Learning Project  Presentation SEM 1 20252026 (1).pdf",
+      "sha256": "9c4410bc164f8b6ebbdf12504878d7f2b7098d4977f71f062de2dd793bc2786f",
+      "normalized_pdf_sha256": null
+    },
+    {
+      "path": "data/courses/SAIA2143_Data_Wrangling_and_Visualization/01_CI_CLO/CI SAIA 2143 Data Wrangling and Visualization 202526 Sem 1.pdf",
+      "sha256": "1c85947fcf0d07ab5e3f8c4f85451f002b357071479a317b255a399e976492cb",
+      "normalized_pdf_sha256": null
+    },
+    {
+      "path": "data/courses/SAIA2143_Data_Wrangling_and_Visualization/02_Lecture_Slides_Taught/Topic 1- Introduction to Data and Data Wrangling and Visualization.pdf",
+      "sha256": "48d99525fb8d7efe620562d89a997ad18217b7b4e01e37ca9d73f901340c21f0",
+      "normalized_pdf_sha256": null
+    },
+    {
+      "path": "data/courses/SAIA2143_Data_Wrangling_and_Visualization/02_Lecture_Slides_Taught/Topic 10-Ethics in Data Visualization.pdf",
+      "sha256": "fee75712835a5f6c1d34def9b38b4f297d6bc6fd77e472fe934d477167624a09",
+      "normalized_pdf_sha256": null
+    },
+    {
+      "path": "data/courses/SAIA2143_Data_Wrangling_and_Visualization/02_Lecture_Slides_Taught/Topic 2-Identifying and Handling Missing Data with Spreadsheets-d.pdf",
+      "sha256": "b447f8f1493e2d642405d5e9ac96164fb432b8d29edb2471b6c1e5a67c977aa8",
+      "normalized_pdf_sha256": null
+    },
+    {
+      "path": "data/courses/SAIA2143_Data_Wrangling_and_Visualization/02_Lecture_Slides_Taught/Topic 3-Dealing with Duplicates and Outliers D.pdf",
+      "sha256": "c05096695965be15779b51d5199359beadfc3a136c8692674abe5fa7435497f4",
+      "normalized_pdf_sha256": null
+    },
+    {
+      "path": "data/courses/SAIA2143_Data_Wrangling_and_Visualization/02_Lecture_Slides_Taught/Topic 4- Part 3 (Complete) for student.pdf",
+      "sha256": "145c7a647e66cc2f8f50b28aa12c344286709e71ed6c2336a6fae89a99a9c79f",
+      "normalized_pdf_sha256": null
+    },
+    {
+      "path": "data/courses/SAIA2143_Data_Wrangling_and_Visualization/02_Lecture_Slides_Taught/Topic 5-Advanced Data Wrangling Techniques D.pdf",
+      "sha256": "e6a1a016bfa7af0f3b5fc6ab01b93ba0ad43541c007e5f2b842f7be8d46bc36b",
+      "normalized_pdf_sha256": null
+    },
+    {
+      "path": "data/courses/SAIA2143_Data_Wrangling_and_Visualization/02_Lecture_Slides_Taught/Topic 6-Introduction to Data Visualization D.pdf",
+      "sha256": "1e9f9436c39a3b5f395f0afbb98f694d262c428e3319699c66d45533d35606dd",
+      "normalized_pdf_sha256": null
+    },
+    {
+      "path": "data/courses/SAIA2143_Data_Wrangling_and_Visualization/02_Lecture_Slides_Taught/Topic 7-Data Visualization with Matplotlib and Seaborn D.pdf",
+      "sha256": "d3ff988535f9366c56977a6003878d93a350393d22ed6f3b96b6206d7ab355e8",
+      "normalized_pdf_sha256": null
+    },
+    {
+      "path": "data/courses/SAIA2143_Data_Wrangling_and_Visualization/02_Lecture_Slides_Taught/Topic 8-Interactive Data Visualization with Plotly D.pdf",
+      "sha256": "d118095dc4f6f19adf50ac2717ef8b6bae3cb437e3631e388f177087f305798f",
+      "normalized_pdf_sha256": null
+    },
+    {
+      "path": "data/courses/SAIA2143_Data_Wrangling_and_Visualization/02_Lecture_Slides_Taught/Topic 9-Introduction to Dashboards D.pdf",
+      "sha256": "d879742d1e2a0326aa7d9eb25e04bd62fc1ee43e9b08fa2a44452ad935fc4bb2",
+      "normalized_pdf_sha256": null
+    },
+    {
+      "path": "data/courses/SAIA2143_Data_Wrangling_and_Visualization/03_Assessments_Assessed/Group Assignment (30%) D UPDATED.pdf",
+      "sha256": "4225b2debe061e954dd51a7918669f6a8d33938b5455109c986554a3b7c7fdb4",
+      "normalized_pdf_sha256": null
+    },
+    {
+      "path": "data/courses/SAIA2143_Data_Wrangling_and_Visualization/03_Assessments_Assessed/SAIA 2143 PMA (Question Paper) 05JAN2026 .pdf",
+      "sha256": "9413780861c47dbb283802d1e28f2dd13b101c54e435414e9ddf2a197a751501",
+      "normalized_pdf_sha256": null
+    }
+  ],
+  "outputs": [
+    "data/pipeline_v1/course_documents/prepared_text.jsonl"
+  ],
+  "source_output_mapping": [
+    {
+      "source": "data/courses/SAIA1013_Responsible_AI_and_Ethics/01_CI_CLO/SAIA1013 Responsible AI and Ethics 2425-1.pdf",
+      "output": "data/pipeline_v1/course_documents/prepared_text.jsonl",
+      "records": 3
+    },
+    {
+      "source": "data/courses/SAIA1013_Responsible_AI_and_Ethics/02_Lecture_Slides_Taught/Module 2 Additional Ethical Theories 11 Aug 2025.pdf",
+      "output": "data/pipeline_v1/course_documents/prepared_text.jsonl",
+      "records": 46
+    },
+    {
+      "source": "data/courses/SAIA1013_Responsible_AI_and_Ethics/02_Lecture_Slides_Taught/Module 4 AI Ethics Risk Assessment.pdf",
+      "output": "data/pipeline_v1/course_documents/prepared_text.jsonl",
+      "records": 54
+    },
+    {
+      "source": "data/courses/SAIA1013_Responsible_AI_and_Ethics/02_Lecture_Slides_Taught/Module 5  Ethics Centric in AI Design.pdf",
+      "output": "data/pipeline_v1/course_documents/prepared_text.jsonl",
+      "records": 56
+    },
+    {
+      "source": "data/courses/SAIA1013_Responsible_AI_and_Ethics/02_Lecture_Slides_Taught/Module 6  AI Governance Sept.pdf",
+      "output": "data/pipeline_v1/course_documents/prepared_text.jsonl",
+      "records": 37
+    },
+    {
+      "source": "data/courses/SAIA1013_Responsible_AI_and_Ethics/02_Lecture_Slides_Taught/Part 1 Module 3 Ethics From Religion Perspective.pdf",
+      "output": "data/pipeline_v1/course_documents/prepared_text.jsonl",
+      "records": 21
+    },
+    {
+      "source": "data/courses/SAIA1013_Responsible_AI_and_Ethics/02_Lecture_Slides_Taught/Part 2 Module 3 Ethics From Religion Perspective.pdf.pptx",
+      "output": "data/pipeline_v1/course_documents/prepared_text.jsonl",
+      "records": 59
+    },
+    {
+      "source": "data/courses/SAIA1013_Responsible_AI_and_Ethics/02_Lecture_Slides_Taught/Week 1 Introduction to RAI and AI Ethics Class Notes.pdf",
+      "output": "data/pipeline_v1/course_documents/prepared_text.jsonl",
+      "records": 53
+    },
+    {
+      "source": "data/courses/SAIA1013_Responsible_AI_and_Ethics/03_Assessments_Assessed/1-GROUP ASSIGNMENT SAIA 1013 RES AI ETHICS_3_24_25.docx",
+      "output": "data/pipeline_v1/course_documents/prepared_text.jsonl",
+      "records": 4
+    },
+    {
+      "source": "data/courses/SAIA1013_Responsible_AI_and_Ethics/03_Assessments_Assessed/Assignment 3 (5%) Module 5.pdf",
+      "output": "data/pipeline_v1/course_documents/prepared_text.jsonl",
+      "records": 1
+    },
+    {
+      "source": "data/courses/SAIA1013_Responsible_AI_and_Ethics/03_Assessments_Assessed/SAIA 1013 Rubrics Assignment (5+5%).pdf",
+      "output": "data/pipeline_v1/course_documents/prepared_text.jsonl",
+      "records": 1
+    },
+    {
+      "source": "data/courses/SAIA2113_Machine_Learning/02_Lecture_Slides_Taught/WEEK 2 & 3 - UNDERSTANDING DATA TYPES AND PRE-PROCESSING.pdf",
+      "output": "data/pipeline_v1/course_documents/prepared_text.jsonl",
+      "records": 38
+    },
+    {
+      "source": "data/courses/SAIA2113_Machine_Learning/02_Lecture_Slides_Taught/Week 1 - INTRODUCTION TO ML.pdf",
+      "output": "data/pipeline_v1/course_documents/prepared_text.jsonl",
+      "records": 46
+    },
+    {
+      "source": "data/courses/SAIA2113_Machine_Learning/02_Lecture_Slides_Taught/Week 10 Classification using Support Vector Machine.pdf",
+      "output": "data/pipeline_v1/course_documents/prepared_text.jsonl",
+      "records": 43
+    },
+    {
+      "source": "data/courses/SAIA2113_Machine_Learning/02_Lecture_Slides_Taught/Week 11 Classification using Decision Tree and Random Forest (2).pdf",
+      "output": "data/pipeline_v1/course_documents/prepared_text.jsonl",
+      "records": 39
+    },
+    {
+      "source": "data/courses/SAIA2113_Machine_Learning/02_Lecture_Slides_Taught/Week 12 Classification using Artificial Neural Network (3).pdf",
+      "output": "data/pipeline_v1/course_documents/prepared_text.jsonl",
+      "records": 72
+    },
+    {
+      "source": "data/courses/SAIA2113_Machine_Learning/02_Lecture_Slides_Taught/Week 13 Clustering.pdf",
+      "output": "data/pipeline_v1/course_documents/prepared_text.jsonl",
+      "records": 66
+    },
+    {
+      "source": "data/courses/SAIA2113_Machine_Learning/02_Lecture_Slides_Taught/Week 14 Ethical Consideration.pdf",
+      "output": "data/pipeline_v1/course_documents/prepared_text.jsonl",
+      "records": 69
+    },
+    {
+      "source": "data/courses/SAIA2113_Machine_Learning/02_Lecture_Slides_Taught/Week 4 - Supervised Learning.pdf",
+      "output": "data/pipeline_v1/course_documents/prepared_text.jsonl",
+      "records": 40
+    },
+    {
+      "source": "data/courses/SAIA2113_Machine_Learning/02_Lecture_Slides_Taught/Week 5 - Unsupervised Learning.pdf",
+      "output": "data/pipeline_v1/course_documents/prepared_text.jsonl",
+      "records": 33
+    },
+    {
+      "source": "data/courses/SAIA2113_Machine_Learning/02_Lecture_Slides_Taught/Week 6 - Model Evaluation.pdf",
+      "output": "data/pipeline_v1/course_documents/prepared_text.jsonl",
+      "records": 37
+    },
+    {
+      "source": "data/courses/SAIA2113_Machine_Learning/02_Lecture_Slides_Taught/Week 7 - Linear Regression.pdf",
+      "output": "data/pipeline_v1/course_documents/prepared_text.jsonl",
+      "records": 48
+    },
+    {
+      "source": "data/courses/SAIA2113_Machine_Learning/02_Lecture_Slides_Taught/Week 9 Classification using Naive Bayes.pdf",
+      "output": "data/pipeline_v1/course_documents/prepared_text.jsonl",
+      "records": 32
+    },
+    {
+      "source": "data/courses/SAIA2113_Machine_Learning/03_Assessments_Assessed/Assignment 1 - ML (12 Nov 2025).pdf",
+      "output": "data/pipeline_v1/course_documents/prepared_text.jsonl",
+      "records": 7
+    },
+    {
+      "source": "data/courses/SAIA2113_Machine_Learning/03_Assessments_Assessed/SAIA 2113 - Machine Learning Project  Presentation SEM 1 20252026 (1).pdf",
+      "output": "data/pipeline_v1/course_documents/prepared_text.jsonl",
+      "records": 5
+    },
+    {
+      "source": "data/courses/SAIA2143_Data_Wrangling_and_Visualization/01_CI_CLO/CI SAIA 2143 Data Wrangling and Visualization 202526 Sem 1.pdf",
+      "output": "data/pipeline_v1/course_documents/prepared_text.jsonl",
+      "records": 4
+    },
+    {
+      "source": "data/courses/SAIA2143_Data_Wrangling_and_Visualization/02_Lecture_Slides_Taught/Topic 1- Introduction to Data and Data Wrangling and Visualization.pdf",
+      "output": "data/pipeline_v1/course_documents/prepared_text.jsonl",
+      "records": 19
+    },
+    {
+      "source": "data/courses/SAIA2143_Data_Wrangling_and_Visualization/02_Lecture_Slides_Taught/Topic 10-Ethics in Data Visualization.pdf",
+      "output": "data/pipeline_v1/course_documents/prepared_text.jsonl",
+      "records": 31
+    },
+    {
+      "source": "data/courses/SAIA2143_Data_Wrangling_and_Visualization/02_Lecture_Slides_Taught/Topic 2-Identifying and Handling Missing Data with Spreadsheets-d.pdf",
+      "output": "data/pipeline_v1/course_documents/prepared_text.jsonl",
+      "records": 71
+    },
+    {
+      "source": "data/courses/SAIA2143_Data_Wrangling_and_Visualization/02_Lecture_Slides_Taught/Topic 3-Dealing with Duplicates and Outliers D.pdf",
+      "output": "data/pipeline_v1/course_documents/prepared_text.jsonl",
+      "records": 32
+    },
+    {
+      "source": "data/courses/SAIA2143_Data_Wrangling_and_Visualization/02_Lecture_Slides_Taught/Topic 4- Part 3 (Complete) for student.pdf",
+      "output": "data/pipeline_v1/course_documents/prepared_text.jsonl",
+      "records": 102
+    },
+    {
+      "source": "data/courses/SAIA2143_Data_Wrangling_and_Visualization/02_Lecture_Slides_Taught/Topic 5-Advanced Data Wrangling Techniques D.pdf",
+      "output": "data/pipeline_v1/course_documents/prepared_text.jsonl",
+      "records": 50
+    },
+    {
+      "source": "data/courses/SAIA2143_Data_Wrangling_and_Visualization/02_Lecture_Slides_Taught/Topic 6-Introduction to Data Visualization D.pdf",
+      "output": "data/pipeline_v1/course_documents/prepared_text.jsonl",
+      "records": 60
+    },
+    {
+      "source": "data/courses/SAIA2143_Data_Wrangling_and_Visualization/02_Lecture_Slides_Taught/Topic 7-Data Visualization with Matplotlib and Seaborn D.pdf",
+      "output": "data/pipeline_v1/course_documents/prepared_text.jsonl",
+      "records": 38
+    },
+    {
+      "source": "data/courses/SAIA2143_Data_Wrangling_and_Visualization/02_Lecture_Slides_Taught/Topic 8-Interactive Data Visualization with Plotly D.pdf",
+      "output": "data/pipeline_v1/course_documents/prepared_text.jsonl",
+      "records": 36
+    },
+    {
+      "source": "data/courses/SAIA2143_Data_Wrangling_and_Visualization/02_Lecture_Slides_Taught/Topic 9-Introduction to Dashboards D.pdf",
+      "output": "data/pipeline_v1/course_documents/prepared_text.jsonl",
+      "records": 38
+    },
+    {
+      "source": "data/courses/SAIA2143_Data_Wrangling_and_Visualization/03_Assessments_Assessed/Group Assignment (30%) D UPDATED.pdf",
+      "output": "data/pipeline_v1/course_documents/prepared_text.jsonl",
+      "records": 6
+    },
+    {
+      "source": "data/courses/SAIA2143_Data_Wrangling_and_Visualization/03_Assessments_Assessed/SAIA 2143 PMA (Question Paper) 05JAN2026 .pdf",
+      "output": "data/pipeline_v1/course_documents/prepared_text.jsonl",
+      "records": 10
+    }
+  ],
+  "inspection": {
+    "documents": 38,
+    "pages": 1407,
+    "documents_by_format": {
+      "docx": 1,
+      "pdf": 36,
+      "pptx": 1
+    },
+    "pages_by_level": {
+      "Assessed": 34,
+      "CLO": 7,
+      "Taught": 1366
+    },
+    "level_status": {
+      "SAIA1013": {
+        "CLO": "available",
+        "Taught": "available",
+        "Assessed": "available"
+      },
+      "SAIA2113": {
+        "CLO": "folder_empty_or_missing",
+        "Taught": "available",
+        "Assessed": "available"
+      },
+      "SAIA2143": {
+        "CLO": "available",
+        "Taught": "available",
+        "Assessed": "available"
+      }
+    },
+    "ocr_pages": 1205,
+    "empty_text_pages": 0,
+    "indexable_pages": 1376,
+    "skip_reasons": {
+      "activity_without_explanation": 28,
+      "divider": 3
+    },
+    "redaction_events": {
+      "email": 129,
+      "office_room": 13,
+      "phone": 9
+    }
+  },
+  "validation": {
+    "output_count": 1,
+    "outputs": [
+      "data/pipeline_v1/course_documents/prepared_text.jsonl"
+    ],
+    "output_sha256": [
+      "77a78dddca462c90d28e762a081ee696a18697c98f8bdcf04e625724b915b2a5"
+    ],
+    "output_bytes": [
+      2108318
+    ],
+    "output_records": [
+      1407
+    ],
+    "residual_pii_pattern_matches": {
+      "email": 0,
+      "phone": 0,
+      "office_room": 0
+    }
+  },
+  "known_gaps": [
+    {
+      "course_code": "SAIA2113",
+      "evidence_level": "CLO",
+      "status": "folder_empty_or_missing"
+    }
+  ],
+  "source_version": "Not verified",
+  "access_rights": "Internal UTM course material; redistribution permission not verified; do not publish",
+  "runtime": {
+    "seconds": 402.7,
+    "python": "3.12.3",
+    "platform": "Linux",
+    "packages": {
+      "PyMuPDF": "2.0",
+      "pdfplumber": "0.11.10",
+      "rapidocr-onnxruntime": "1.4.4",
+      "onnxruntime": "1.31.1",
+      "Pillow": "12.3.0"
+    }
+  }
+}

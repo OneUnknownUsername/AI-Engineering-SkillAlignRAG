@@ -1,0 +1,123 @@
+{
+  "locked_skills_fingerprint": "00bfa5ab9ac1033aa902ad8b82fc87ec208b18f9b778b859d13987e94dcdd28f",
+  "notes": [
+    "S04 combines framing on AI PDF page 27 with data-source preparation on PDF page 6.",
+    "Ellipses and semicolon-joined excerpts are split into literal source spans.",
+    "Composite role labels are resolved to the role actually present on each cited page.",
+    "Native PDF split words are preserved in exact excerpts."
+  ],
+  "overrides": {
+    "S01": [
+      {
+        "doc_id": "IndSF_Data_Science_2023.pdf",
+        "pdf_page_no": 5,
+        "role_title": "Data Analyst",
+        "matched_source_excerpt": "Collect, clean and preprocess data from various sources, implement data processing workflows an d ensure that data is suitable for analysis."
+      },
+      {
+        "doc_id": "IndSF_Artificial_Intelligence.pdf",
+        "pdf_page_no": 27,
+        "role_title": "AI Application Developer",
+        "matched_source_excerpt": "b) Collecting the raw data c) Process the data for analysis"
+      },
+      {
+        "doc_id": "IndSF_Artificial_Intelligence.pdf",
+        "pdf_page_no": 27,
+        "role_title": "AI Application Developer",
+        "matched_source_excerpt": "a) Data gathering b) Data preparation"
+      }
+    ],
+    "S03": [
+      {
+        "doc_id": "IndSF_Data_Science_2023.pdf",
+        "pdf_page_no": 5,
+        "role_title": "Data Analyst",
+        "matched_source_excerpt": "Utilise mathematical and statistical methods to identify trends, patterns and insights. Create and present data insights in creative ways to facilitate the understanding of data across a range o f technical and non-technical audiences."
+      },
+      {
+        "doc_id": "IndSF_Artificial_Intelligence.pdf",
+        "role_title": "Associate AI/ML Engineer",
+        "pdf_page_no": 3,
+        "matched_source_excerpt": "Uses a visualization product, as guided, to design and create data visuals. Engages with the target user to prototype and refine specified visualizations."
+      }
+    ],
+    "S04": [
+      {
+        "doc_id": "IndSF_Artificial_Intelligence.pdf",
+        "pdf_page_no": 27,
+        "role_title": "AI Application Developer",
+        "matched_source_excerpt": "Frame the problem"
+      },
+      {
+        "doc_id": "IndSF_Artificial_Intelligence.pdf",
+        "pdf_page_no": 6,
+        "role_title": "AI/ML Engineer",
+        "matched_source_excerpt": "Selects from existing data sources and prepares data to be used by data science models."
+      }
+    ],
+    "S05": [
+      {
+        "doc_id": "IndSF_Artificial_Intelligence.pdf",
+        "pdf_page_no": 3,
+        "role_title": "Associate AI/ML Engineer",
+        "matched_source_excerpt": "Applies given machine learning techniques to data, under the guidance of technical leadership."
+      },
+      {
+        "doc_id": "IndSF_Data_Science_2023.pdf",
+        "role_title": "Data Scientist",
+        "pdf_page_no": 8,
+        "matched_source_excerpt": "Utilise advanced data science techniques to develop models using specialised programming languages and tools."
+      }
+    ],
+    "S07": [
+      {
+        "doc_id": "IndSF_Artificial_Intelligence.pdf",
+        "pdf_page_no": 27,
+        "role_title": "AI Application Developer",
+        "matched_source_excerpt": "c) Model selection d)Training Model evaluation e) Hyperparameter f) Tuning Prediction"
+      }
+    ],
+    "S09": [
+      {
+        "doc_id": "IndSF_Artificial_Intelligence.pdf",
+        "pdf_page_no": 18,
+        "role_title": "AI Ethics Officer",
+        "matched_source_excerpt": "Identify and assesses potential risks and impacts in AI projects Recommends appropriate mitigations, and prevents harm during the design and planning phase of AI systems"
+      },
+      {
+        "doc_id": "IndSF_Artificial_Intelligence.pdf",
+        "pdf_page_no": 18,
+        "role_title": "AI Ethics Officer",
+        "matched_source_excerpt": "Coordinates efforts between Ethics team and stakeholders to run AI impact assessments"
+      }
+    ],
+    "S10": [
+      {
+        "doc_id": "IndSF_Artificial_Intelligence.pdf",
+        "pdf_page_no": 19,
+        "role_title": "AI Ethics Officer",
+        "matched_source_excerpt": "Strong command of data and AI governance, privacy principles, strategies and frameworks, translating them into clear recommendations"
+      },
+      {
+        "doc_id": "IndSF_Artificial_Intelligence.pdf",
+        "pdf_page_no": 19,
+        "role_title": "AI Ethics Officer",
+        "matched_source_excerpt": "Familiarity with relevant regulatory and certification frameworks such as: GDPR, CCPA, ISO 27001/SOC2, and Open Data/Opening Banking Regimes"
+      },
+      {
+        "doc_id": "IndSF_Data_Science_2023.pdf",
+        "role_title": "Data Engineer",
+        "pdf_page_no": 11,
+        "matched_source_excerpt": "Ensure data is appropriately stored and archived, in line with relevant legislation."
+      }
+    ],
+    "S12": [
+      {
+        "doc_id": "IndSF_Artificial_Intelligence.pdf",
+        "pdf_page_no": 24,
+        "role_title": "AI DevOps",
+        "matched_source_excerpt": "Responsible for the MLOps pipelines creation and automation on cloud and on premise, CI/CD pipelines orchestration ML models deployment, testing and continuous maintenance"
+      }
+    ]
+  }
+}
