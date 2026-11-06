@@ -1,7 +1,7 @@
 {
   "pipeline_version": "week3-v1",
-  "generated_at_utc": "2026-11-04T15:33:26.565819+00:00",
-  "git_commit": "9891716d6d7d824bcf8fd1e01ed9a4b42e68a218",
+  "generated_at_utc": "2026-11-06T11:12:32.374931+00:00",
+  "git_commit": "7ffc49d5164fe253f3d5c0508a2f3ba265302c84",
   "data_type": "course_documents",
   "stages": [
     "source",
@@ -477,7 +477,7 @@
   "source_version": "Not verified",
   "access_rights": "Internal UTM course material; redistribution permission not verified; do not publish",
   "runtime": {
-    "seconds": 402.7,
+    "seconds": 400.9,
     "python": "3.12.3",
     "platform": "Linux",
     "packages": {
