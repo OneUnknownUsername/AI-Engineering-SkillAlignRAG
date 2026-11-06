@@ -80,6 +80,16 @@ py -3.12 -m venv .venv
 .venv/Scripts/python -m src.pipeline_b_indsf_skills --extract-only
 ```
 
+On Linux, such as the university GPU node:
+
+```bash
+python3.12 -m venv .venv
+.venv/bin/python -m pip install -r requirements.txt
+.venv/bin/python -m src.step0_normalize_formats
+.venv/bin/python -m src.pipeline_a_course_ingestion
+.venv/bin/python -m src.pipeline_b_indsf_skills --extract-only
+```
+
 Install LibreOffice and put `soffice` on PATH for PPTX/DOCX conversion. On Windows,
 Microsoft Office plus `requirements-windows.txt` provides an optional COM fallback.
 On Windows the console launcher `soffice.com` is preferred so conversion waits
@@ -119,6 +129,16 @@ Compile the benchmark, then run:
 .venv/Scripts/python -m pytest -q
 ```
 
+On Linux, replace `.venv/Scripts/python` with `.venv/bin/python`:
+
+```bash
+.venv/bin/python -m src.pipeline_b_indsf_skills --reuse-extraction
+.venv/bin/python -m src.build_indexes
+.venv/bin/python -m src.run_retrieval_smoke_test
+.venv/bin/python -m src.validate_artifacts
+.venv/bin/python -m pytest -q
+```
+
 `--extract-only` runs B1 without loading an embedding model. `--reuse-extraction`
 rebuilds both stages from the existing parsed/OCR pages. B2 reuses the same cached
 `BAAI/bge-small-en-v1.5` model as indexing; use `--offline` to require a cached
@@ -150,6 +170,9 @@ reused within a run. Sanitized
 per-document extraction caches under `outputs/extraction_cache/` are keyed by
 source content, extraction settings and parser revision, so interrupted runs can
 reuse completed documents. Failed vision requests are retried on the next run.
+The cache key does not include the operating system or library versions, so when
+moving to a new machine, move `outputs/extraction_cache/` aside before ingestion to
+re-extract the text there; otherwise the previous machine's text is reused.
 For larger corpora, course ingestion accepts `--workers 2 --ocr-threads 8` to
 use separate local extraction processes. Reduce these values on smaller CPUs.
 

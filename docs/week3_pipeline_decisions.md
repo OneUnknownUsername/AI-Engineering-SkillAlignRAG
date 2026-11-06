@@ -79,7 +79,7 @@ Both diagram failure points were tested on temporary synthetic files in the note
 - **432 pages have different text**, all of them lecture slides.
 - Among those, median similarity is 98%, 39 pages fall below 90%, and the lowest is 32%.
 
-The cause has not been established. The two runs differ in operating system and possibly in library versions. Existing indexes and audit results under `outputs/` were built from the earlier text, so they should be rebuilt from one consistent run before the Week 2 evaluation relies on them.
+The cause has not been established. The two runs differ in operating system and possibly in library versions. The indexes and audit results under `outputs/` were originally built from the earlier text. On 6 November 2026 they were rebuilt on this node from a fresh extraction with the cache moved aside. The rebuilt page text is identical to this Week 3 output on all 1,407 pages, none of the 108 audit classifications changed, and two Supported cells now cite different evidence (SAIA2113 S04 and S07, Taught). The previous outputs are kept locally for comparison.
 
 ## Provenance and access caveats
 
