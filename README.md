@@ -182,8 +182,9 @@ use `--offline`. Model download failures are errors. An explicit `--lexical-only
 indexing option supports offline BM25 diagnostics; reports label this mode and
 do not describe it as hybrid retrieval. Both retrieval configurations use the
 same page chunks and dense vectors. Routed Top-3 is per level; pooled Top-3 is
-per course. Dense/BM25 weights are 0.5/0.5; catalog overlap adds up to 0.15 for
-Taught candidates. Index manifests persist corpus fingerprints and reject stale
+per course. Dense and BM25 rankings are fused with Reciprocal Rank Fusion
+(k0 = 60, from Cormack, Clarke and Buttcher, 2009), so no fusion weights are tuned
+on course data. Rebuild older indexes after this change. Index manifests persist corpus fingerprints and reject stale
 source artifacts. Embedding models may truncate pages beyond their token limit.
 
 The lookup stores the whitespace-normalized, PII-redacted native/OCR union,

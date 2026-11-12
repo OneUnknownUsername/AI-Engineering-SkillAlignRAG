@@ -10,7 +10,7 @@ import numpy as np
 import pytest
 from PIL import Image, ImageDraw
 
-from src.build_indexes import Retriever, build, catalog_overlap
+from src.build_indexes import Retriever, build, ranking, reciprocal_rank_fusion
 from src.common import COURSES, LEVELS, fingerprint, read_json, write_json
 from src.extraction import ExtractionConfig, PDFExtractor, clean, covered_area, mask_native_words, unique_lines
 from src.pipeline_a_course_ingestion import aspect_card, explicit_clo_statement, ingest, skip_reason
@@ -321,7 +321,6 @@ def test_aspect_cards_detect_embedded_evidence():
     card = aspect_card("test.pdf", pages)
     assert "Handle missing values" in card["declared_learning_outcomes_or_agenda"]
     assert card["embedded_clo_pages"] == [1] and card["embedded_assessment_pages"] == [1]
-    assert catalog_overlap("Handle missing values", card) > 0
     pages[0]["native_text"] = "Bab Adab\nPelajar akan dapat:\nMenganalisis dilema moral dalam AI moden"
     assert "Menganalisis dilema moral dalam AI moden" in aspect_card("malay.pdf", pages)["declared_learning_outcomes_or_agenda"]
 
@@ -431,6 +430,17 @@ def test_stale_index_is_rejected(indexed):
     write_json(indexed / "parsed_course_chunks.json", chunks)
     with pytest.raises(ValueError, match="stale"):
         Retriever(indexed)
+
+
+def test_reciprocal_rank_fusion_uses_ranks_not_raw_scores():
+    lexical = ranking(np.array([9.0, 0.0, 3.0]))  # row 1 has no query term, so BM25 does not rank it
+    dense = ranking(np.array([0.2, 0.9, 0.5]))
+    assert lexical == {0: 1, 2: 2} and dense == {1: 1, 2: 2, 0: 3}
+    fused = reciprocal_rank_fusion([lexical, dense], 3, k0=60)
+    assert np.allclose(fused, [1 / 61 + 1 / 63, 1 / 61, 1 / 62 + 1 / 62])
+    # A row ranked by both retrievers beats a row that tops only one list.
+    assert fused[2] > fused[1]
+    assert not reciprocal_rank_fusion([{}, {}], 2).any()
 
 
 def test_failed_processing_is_not_empty_folder():

@@ -11,7 +11,9 @@ from src.curriculum_scope import clo_evidence_window, has_official_commitment, r
 from src.common import COURSES, LEVELS, base_parser, evidence_levels, fingerprint, read_json, tokens, write_json
 
 DEFAULT_MODEL = "BAAI/bge-small-en-v1.5"
-STOPWORDS = set("a an the and or to of in on for with by is are be as how this that from at it its".split())
+STOPWORDS = set("a an the and or to of in on for with by is are be as how this that from at it its".split())  # Used by Pipeline B.
+FUSION = "reciprocal_rank_fusion"
+RRF_K0 = 60  # Smoothing constant from Cormack, Clarke and Buttcher (2009); not tuned on course data.
 
 
 def search_text(chunk: dict) -> str:
@@ -22,11 +24,19 @@ def search_text(chunk: dict) -> str:
     return "\n".join(filter(None, [text, chunk.get("visual_diagram_summary", "")]))
 
 
-def catalog_overlap(query: str, card: dict) -> float:
-    query_terms = set(tokens(query)) - STOPWORDS
-    card_terms = set(tokens(card.get("deck_title", "") + " " + " ".join(
-        card.get("declared_learning_outcomes_or_agenda", [])))) - STOPWORDS
-    return len(query_terms & card_terms) / len(query_terms) if query_terms else 0.0
+def ranking(scores: np.ndarray) -> dict[int, int]:
+    """1-based rank of each row the retriever matched; unmatched rows (score 0) are unranked."""
+    order = sorted((j for j in range(len(scores)) if scores[j] > 0), key=lambda j: -scores[j])
+    return {j: rank for rank, j in enumerate(order, 1)}
+
+
+def reciprocal_rank_fusion(rankings: list[dict[int, int]], size: int, k0: int = RRF_K0) -> np.ndarray:
+    """Score each row by the sum of 1 / (k0 + rank) over the retrievers that ranked it."""
+    fused = np.zeros(size)
+    for ranks in rankings:
+        for j, rank in ranks.items():
+            fused[j] += 1 / (k0 + rank)
+    return fused
 
 
 def load_model(model: str, directory: Path, offline: bool):
@@ -67,13 +77,13 @@ def build(output_dir: Path, model_name: str = DEFAULT_MODEL, *, lexical_only: bo
             partitions["routed"][f"{course}::{level}"] = rows
             write_json(directory / "routed" / course / f"{level}.json", rows)
     manifest = {
-        "schema_version": 2, "routing_policy": "strict_levels_official_clo_first_v2", "mode": "lexical_only_diagnostic" if lexical_only else "dense_bm25_hybrid",
+        "schema_version": 3, "routing_policy": "strict_levels_official_clo_first_v2", "mode": "lexical_only_diagnostic" if lexical_only else "dense_bm25_hybrid",
         "model": None if lexical_only else model_name, "chunk_count": len(chunks),
         "source_fingerprint": fingerprint({"chunks": all_chunks, "catalog": catalog}),
         "index_fingerprint": fingerprint({"chunks": chunks, "catalog": catalog}),
         "embedding_shape": list(embeddings.shape), "partitions": partitions,
         "embedding_sha256": hashlib.sha256((directory / "embeddings.npy").read_bytes()).hexdigest(),
-        "dense_weight": 0 if lexical_only else .5, "catalog_boost_weight": .15,
+        "fusion": FUSION, "rrf_k0": RRF_K0,
         "lexical_algorithm": "BM25Plus", "embedding_file": "embeddings.npy",
     }
     write_json(directory / "manifest.json", manifest)
@@ -87,6 +97,8 @@ class Retriever:
         self.manifest = read_json(directory / "manifest.json")
         if self.manifest.get("routing_policy") != "strict_levels_official_clo_first_v2":
             raise ValueError("Index routing policy is stale; rerun build_indexes")
+        if self.manifest.get("fusion") != FUSION:
+            raise ValueError("Index fusion settings are stale; rerun build_indexes")
         self.chunks = read_json(directory / "chunks.json")
         self.catalog = read_json(directory / "catalog.json")
         current = {"chunks": read_json(output_dir / "parsed_course_chunks.json"),
@@ -121,7 +133,7 @@ class Retriever:
         terms = tokens(query)
         lexical = np.maximum(0, np.asarray(self.bm25[(kind, key)].get_scores(terms)))
         # BM25Plus adds a query-dependent constant to every row. Remove the
-        # nonmatching floor so catalog overlap alone cannot create lexical evidence.
+        # nonmatching floor so rows without a query term are not ranked by BM25.
         term_sets = [set(tokens(search_text(self.chunks[i]))) for i in rows]
         matching = np.array([bool(set(terms) & terms_in_doc) for terms_in_doc in term_sets])
         lexical[~matching] = 0
@@ -131,14 +143,9 @@ class Retriever:
             if query not in self.query_vectors:
                 self.query_vectors[query] = np.asarray(self.model.encode([query], normalize_embeddings=True))[0]
             dense = np.clip(self.embeddings[rows] @ self.query_vectors[query], 0, 1)
-        weight = self.manifest["dense_weight"]
-        base = weight * dense + (1 - weight) * lexical
-        boosts = np.zeros(len(rows))
-        if level is not None:
-            cards = {c["doc_id"]: c for c in self.catalog["courses"][course]["deck_aspect_cards"]}
-            boosts = np.array([catalog_overlap(query, cards.get(self.chunks[i]["doc_id"], {}))
-                               if self.chunks[i]["evidence_level"] == "Taught" else 0 for i in rows])
-        scores = base + self.manifest["catalog_boost_weight"] * boosts * (base > 0)
+        lexical_ranks = ranking(lexical)
+        dense_ranks = ranking(dense) if self.model is not None else {}
+        scores = reciprocal_rank_fusion([lexical_ranks, dense_ranks], len(rows), self.manifest["rrf_k0"])
         def rank_key(j):
             chunk = self.chunks[rows[j]]
             # Explicit CI commitments are primary; embedded lecture CLOs are secondary.
@@ -147,7 +154,7 @@ class Retriever:
         ranked = sorted(range(len(rows)), key=rank_key)
         results = []
         for j in ranked:
-            if base[j] <= 0:
+            if scores[j] <= 0:
                 continue
             chunk = self.chunks[rows[j]]
             results.append({
@@ -157,7 +164,8 @@ class Retriever:
                 "auxiliary_evidence_levels": chunk.get("auxiliary_evidence_levels", []),
                 "is_auxiliary_evidence": level is not None and level != chunk["evidence_level"],
                 "score": round(float(scores[j]), 6), "dense_score": round(float(dense[j]), 6),
-                "lexical_score": round(float(lexical[j]), 6), "catalog_overlap": round(float(boosts[j]), 6),
+                "lexical_score": round(float(lexical[j]), 6),
+                "lexical_rank": lexical_ranks.get(j), "dense_rank": dense_ranks.get(j),
                 "snippet": chunk["verbatim_text_span"][:320],
                 "verbatim_text_span": chunk["verbatim_text_span"],
                 "slide_or_section_title": (chunk.get("slide_or_section_title", "") + " — " +

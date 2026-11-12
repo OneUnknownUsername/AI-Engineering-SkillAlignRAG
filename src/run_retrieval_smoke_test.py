@@ -45,12 +45,13 @@ def run(output_dir: Path, *, offline: bool = False) -> list[dict]:
                 if doc["status"] != "ready"]
     logs, dilution_count = [], 0
     report = ["# Retrieval smoke test", "", f"Index mode: **{retriever.manifest['mode']}**.",
-              "Both configurations use exactly the same indexable chunks and embeddings. Routed retrieval "
-              "uses per-level BM25 and a 0.15 catalog overlap boost; pooled retrieval has no catalog boost.",
+              "Both configurations use exactly the same indexable chunks and embeddings. Both fuse the BM25 "
+              f"and dense rankings with Reciprocal Rank Fusion (k0 = {retriever.manifest['rrf_k0']}); "
+              "lexical-only diagnostic mode uses the BM25 ranking alone.",
               "Explicit CLO definitions in lecture slides also enter the CLO route when CI/CLO files are available. "
               "Their original source level is retained; the pooled corpus contains each page once.",
-              "Routed has up to 3 candidates per level; pooled has 3 overall. Scores are normalized within each "
-              "search partition and are not calibrated relevance probabilities.",
+              "Routed has up to 3 candidates per level; pooled has 3 overall. Scores are RRF sums of "
+              "1 / (k0 + rank); they order candidates and are not calibrated relevance probabilities.",
               "These are retrieval candidates, not supported-coverage decisions. Without relevance labels, "
               "this report cannot measure retrieval accuracy, precision, recall or F1.", ""]
     if failures:
