@@ -83,7 +83,8 @@ def pedagogical_boundary(level: str, skill: dict, candidate: dict, quote: str) -
     text = (candidate.get('slide_or_section_title', '') + '\n' + quote).lower()
     if level == 'CLO' and not (re.search(r'learning outcome|course synopsis|course learning|\bclo\s*\d|\btlo\s*\d|upon completion|on completion', text) or explicit_clo_statement(candidate.get('verbatim_text_span', ''))):
         return 'No explicit outcome or synopsis commitment'
-    if level == 'Assessed' and not re.search(r'\b(assignment|question|task|rubric|marks|students? must|you (?:must|are required)|implement|analyse|analyze|evaluate|develop|design|create|compare|explain|demonstrate)\b', text):
+    # Stems accept word forms, so "Model evaluation" in a rubric counts like "evaluate".
+    if level == 'Assessed' and not re.search(r'\b(assignments?|questions?|tasks?|rubrics?|marks?|students? must|you (?:must|are required)|implement\w*|analy[sz]\w*|evaluat\w*|assess\w*|develop\w*|design\w*|creat\w*|compar\w*|explain\w*|demonstrat\w*)\b', text):
         return 'No assessed task or criterion'
     if re.search(r'^(references|bibliography)\b', text.strip()):
         return 'Bibliographic material'

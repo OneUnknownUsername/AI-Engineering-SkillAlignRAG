@@ -11,7 +11,7 @@ from unittest.mock import patch
 from src.common import COURSES, LEVELS
 from src.config import AuditConfig
 from src.scope_and_abstention_control import check_scope, missing_document, safety_report, IN_SCOPE, OUT_OF_SCOPE
-from src.citation_span_verifier import CitationSpanVerifier, canonical_span, expand_short_quote
+from src.citation_span_verifier import CitationSpanVerifier, canonical_span, expand_short_quote, pedagogical_boundary
 from src.llm_judgement_service import validate_decision, LLMJudgementService, prompt_candidate, expand_decision, json_object_complete
 from src.run_skill_audit_pipeline import run, percentile
 
@@ -125,6 +125,15 @@ class ControlTests(unittest.TestCase):
     def test_page_quote_outside_selected_chunk(self):
         self.hit['verbatim_text_span'] = 'Unrelated section of this page.'
         self.assertEqual(self.verify()['gate_6a'], 'rejected')
+
+    def test_assessed_check_accepts_word_forms_of_task_words(self):
+        page = {'slide_or_section_title': 'Project presentation'}
+        for line in ['Model evaluation (i.e. Accuracy, precision, recall, F1- score and confusion matrix).',
+                     'Assessment of the cleaning pipeline and its outputs.']:
+            with self.subTest(line=line):
+                self.assertIsNone(pedagogical_boundary('Assessed', self.skill, page, line))
+        self.assertEqual(pedagogical_boundary('Assessed', self.skill, page, 'Submit one PDF file before 5pm on Friday.'),
+                         'No assessed task or criterion')
 
     def test_s11_requires_model_packaging_evidence(self):
         self.skill['skill_id'] = 'S11'
