@@ -90,8 +90,6 @@ def pedagogical_boundary(level: str, skill: dict, candidate: dict, quote: str) -
     if level == 'Taught':
         if re.search(r'^(source:|figure credit|history of|timeline)', text.strip()) or re.search(r'\b(history|timeline)\b', candidate.get('slide_or_section_title', '').lower()):
             return 'Credit or historical mention'
-        if re.search(r'spotify|sephora|booking\.com|source: amazon aws', text) and not re.search(r'algorithm|step\s*\d|procedure|gradient|formula|pseudocode|def |fit\(|transform\(', text):
-            return 'Consumer example or figure credit without underlying method'
         if re.search(r'font size|turnitin|plagiarism policy', text):
             return 'Generic administrative content'
         if candidate.get('course_code') == 'SAIA1013' and skill['skill_id'] in ('S04', 'S05', 'S06', 'S07'):

@@ -18,9 +18,9 @@ use an empty rationale for Not Found. Never quote generated visual summaries. Pr
 CLO: support only official Course/Topic Learning Outcomes or Course Synopsis commitments.
 Exclude bibliographies, SLT hour tables and generic plagiarism policies.
 Taught: support only material teaching concepts, methods, steps, algorithms or techniques.
-Reject passing keywords, historical timelines, figure credits (Source: Amazon AWS), consumer screenshots
-(Spotify, Sephora, Booking.com) without methods, and one-sentence ML/DL/CV introductory recaps in Ethics.
-For S11, consuming OpenWeatherMap/CoinGecko APIs is not packaging trained ML models into APIs.
+Reject passing keywords, historical timelines, figure credits, product or app examples shown without
+the method behind them, and brief introductory recaps that do not teach how to do the task.
+For S11, calling a third-party API is not packaging a trained ML model into an API.
 High-level ethical API access policy does not support software API packaging S11 or CI/CD containers S12.
 Assessed: require an assignment instruction, case task, exam question or rubric requiring students to perform,
 analyze or be graded on the skill. Quote the skill-specific task or rubric requirement; generic risk severity and likelihood instructions do not establish a privacy or fairness skill requirement. Ignore formatting, fonts and Turnitin instructions.
