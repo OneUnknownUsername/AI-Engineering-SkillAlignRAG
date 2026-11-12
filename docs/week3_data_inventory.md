@@ -31,7 +31,7 @@ File names of course documents appear in the public manifests. Earlier commits w
 
 - **SAIA2113 CLO:** the `01_CI_CLO` folder is empty, so 12 of the 108 coverage cells (the CLO cells for all 12 skills on this course) can only be Insufficient Evidence until a Course Information document is supplied.
 - **Version and date:** not verified for any source. Dates in file names were not checked against the documents. A hash identifies the exact file, not its version or authority.
-- **Permission:** a hash says nothing about permission to share. Course material permissions come from the lecturers and were not independently verified.
+- **Permission:** a hash says nothing about permission to share. Permission to use the course materials was given in person by the Head of the Intelligence and Informatics Department.
 - **Names:** redaction covers email addresses, phone numbers and office rooms by regex. It does not detect names, so prepared course text must stay local.
 - **Office files:** SRC07 (PPTX) and SRC09 (DOCX) were read through PDFs converted earlier on Windows, because LibreOffice was not yet installed on this node when the pipeline ran. The PDF hashes are recorded in the manifest.
 
