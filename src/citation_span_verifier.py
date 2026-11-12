@@ -92,9 +92,6 @@ def pedagogical_boundary(level: str, skill: dict, candidate: dict, quote: str) -
             return 'Credit or historical mention'
         if re.search(r'font size|turnitin|plagiarism policy', text):
             return 'Generic administrative content'
-        if candidate.get('course_code') == 'SAIA1013' and skill['skill_id'] in ('S04', 'S05', 'S06', 'S07'):
-            if not re.search(r'algorithm|step\s*\d|loss function|gradient|train_test_split|cross.valid|regulariz|hyperparameter', text):
-                return 'Introductory modelling recap in Ethics without methods'
     if skill['skill_id'] == 'S11':
         if not re.search(r'\b(models?|predictions?|inference)\b', text) or not re.search(r'\b(deploy\w*|serv\w*|packag\w*|endpoint|rest|flask|fastapi)\b', text):
             return 'No trained-model service packaging evidence'

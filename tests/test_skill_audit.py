@@ -126,7 +126,7 @@ class ControlTests(unittest.TestCase):
         self.hit['verbatim_text_span'] = 'Unrelated section of this page.'
         self.assertEqual(self.verify()['gate_6a'], 'rejected')
 
-    def test_api_consumption_and_ethics_recap_rejected(self):
+    def test_s11_requires_model_packaging_evidence(self):
         self.skill['skill_id'] = 'S11'
         self.assertEqual(self.verify()['gate_6b'], 'rejected')
         self.assertEqual(self.nli.calls, 0)
