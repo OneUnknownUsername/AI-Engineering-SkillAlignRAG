@@ -320,7 +320,7 @@ def test_aspect_cards_detect_embedded_evidence():
               "verbatim_text_span": "CLO1: Clean data. Assignment (5%) submit analysis."}]
     card = aspect_card("test.pdf", pages)
     assert "Handle missing values" in card["declared_learning_outcomes_or_agenda"]
-    assert card["embedded_clo_pages"] == [1] and card["embedded_assessment_pages"] == [1]
+    assert card["embedded_clo_pages"] == [1]
     pages[0]["native_text"] = "Bab Adab\nPelajar akan dapat:\nMenganalisis dilema moral dalam AI moden"
     assert "Menganalisis dilema moral dalam AI moden" in aspect_card("malay.pdf", pages)["declared_learning_outcomes_or_agenda"]
 

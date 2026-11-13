@@ -65,10 +65,6 @@ def aspect_card(doc_id: str, pages: list[dict]) -> dict:
         "outcome_source_pages": outcome_pages,
         "embedded_clo_pages": [p["pdf_page_no"] for p in pages
                                if explicit_clo_statement(p["verbatim_text_span"])],
-        "embedded_assessment_pages": [p["pdf_page_no"] for p in pages
-                                      if re.search(r"(?:assignment|assessment|rubric|project brief)\b.{0,100}"
-                                                   r"(?:\d+\s*%|submit|deadline|task|criteria|marks)",
-                                                   p["verbatim_text_span"], re.I)],
     }
 
 
