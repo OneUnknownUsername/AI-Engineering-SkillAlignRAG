@@ -1,7 +1,9 @@
 -r requirements.txt
 # Install a B200-compatible PyTorch CUDA build from your university environment.
+# Versions used for the 2026-11-12 B200 run: torch 2.14.1+cu130, transformers 5.22.0,
+# accelerate 1.15.0, sentencepiece 0.2.2, protobuf 7.36.2.
 torch>=2.7,<3
-transformers>=4.45,<5
+transformers>=5.22,<6
 accelerate>=1,<2
 sentencepiece>=0.2,<0.3
-protobuf>=4,<7
+protobuf>=7,<8
