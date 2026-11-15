@@ -7,12 +7,13 @@ from pathlib import Path
 import numpy as np
 from rank_bm25 import BM25Plus
 
-from src.curriculum_scope import clo_evidence_window, has_official_commitment, refresh_auxiliary_clo_pages, explicit_clo_statement
+from src.curriculum_scope import clo_evidence_window, has_official_commitment, mark_slide_clo_pages, explicit_clo_statement
 from src.common import COURSES, LEVELS, base_parser, evidence_levels, fingerprint, read_json, tokens, write_json
 
 DEFAULT_MODEL = "BAAI/bge-small-en-v1.5"
 STOPWORDS = set("a an the and or to of in on for with by is are be as how this that from at it its".split())  # Used by Pipeline B.
 FUSION = "reciprocal_rank_fusion"
+ROUTING_POLICY = "ci_only_clo_v3"  # The CI alone feeds the CLO route (FR3).
 RRF_K0 = 60  # Smoothing constant from Cormack, Clarke and Buttcher (2009); not tuned on course data.
 
 
@@ -48,7 +49,7 @@ def build(output_dir: Path, model_name: str = DEFAULT_MODEL, *, lexical_only: bo
     all_chunks = read_json(output_dir / "parsed_course_chunks.json")
     catalog = read_json(output_dir / "course_catalog_manifest.json")
     before = fingerprint({'chunks': all_chunks, 'catalog': catalog})
-    refresh_auxiliary_clo_pages(all_chunks, catalog)
+    mark_slide_clo_pages(all_chunks, catalog)
     if fingerprint({'chunks': all_chunks, 'catalog': catalog}) != before:
         write_json(output_dir / 'parsed_course_chunks.json', all_chunks)
         write_json(output_dir / 'course_catalog_manifest.json', catalog)
@@ -77,7 +78,7 @@ def build(output_dir: Path, model_name: str = DEFAULT_MODEL, *, lexical_only: bo
             partitions["routed"][f"{course}::{level}"] = rows
             write_json(directory / "routed" / course / f"{level}.json", rows)
     manifest = {
-        "schema_version": 3, "routing_policy": "strict_levels_official_clo_first_v2", "mode": "lexical_only_diagnostic" if lexical_only else "dense_bm25_hybrid",
+        "schema_version": 3, "routing_policy": ROUTING_POLICY, "mode": "lexical_only_diagnostic" if lexical_only else "dense_bm25_hybrid",
         "model": None if lexical_only else model_name, "chunk_count": len(chunks),
         "source_fingerprint": fingerprint({"chunks": all_chunks, "catalog": catalog}),
         "index_fingerprint": fingerprint({"chunks": chunks, "catalog": catalog}),
@@ -95,7 +96,7 @@ class Retriever:
     def __init__(self, output_dir: Path, *, offline: bool = False):
         directory = output_dir / "indexes"
         self.manifest = read_json(directory / "manifest.json")
-        if self.manifest.get("routing_policy") != "strict_levels_official_clo_first_v2":
+        if self.manifest.get("routing_policy") != ROUTING_POLICY:
             raise ValueError("Index routing policy is stale; rerun build_indexes")
         if self.manifest.get("fusion") != FUSION:
             raise ValueError("Index fusion settings are stale; rerun build_indexes")
@@ -148,8 +149,8 @@ class Retriever:
         scores = reciprocal_rank_fusion([lexical_ranks, dense_ranks], len(rows), self.manifest["rrf_k0"])
         def rank_key(j):
             chunk = self.chunks[rows[j]]
-            # Explicit CI commitments are primary; embedded lecture CLOs are secondary.
-            priority = (0 if has_official_commitment(chunk) else 1 if chunk['evidence_level'] == 'Taught' else 2) if level == 'CLO' else 0
+            # Within the CI, pages with an explicit outcome or synopsis statement rank first.
+            priority = (0 if has_official_commitment(chunk) else 1) if level == 'CLO' else 0
             return (priority, -scores[j], chunk['chunk_id'])
         ranked = sorted(range(len(rows)), key=rank_key)
         results = []
@@ -161,8 +162,6 @@ class Retriever:
                 "chunk_id": chunk["chunk_id"], "doc_id": chunk["doc_id"], "course_code": course,
                 "evidence_level": level or chunk["evidence_level"], "pdf_page_no": chunk["pdf_page_no"],
                 "source_evidence_level": chunk["evidence_level"],
-                "auxiliary_evidence_levels": chunk.get("auxiliary_evidence_levels", []),
-                "is_auxiliary_evidence": level is not None and level != chunk["evidence_level"],
                 "score": round(float(scores[j]), 6), "dense_score": round(float(dense[j]), 6),
                 "lexical_score": round(float(lexical[j]), 6),
                 "lexical_rank": lexical_ranks.get(j), "dense_rank": dense_ranks.get(j),

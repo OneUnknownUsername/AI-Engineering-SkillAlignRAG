@@ -26,8 +26,6 @@ def hit_description(hits: list[dict]) -> str:
         snippet = md(hit["snippet"]) if hit["snippet"] else "(No native/OCR text)"
         description = f"{i}. {md(hit['doc_id'])}, p{hit['pdf_page_no']}, score={hit['score']:.4f}, " + (
             f"level={hit['evidence_level']}, methods={md(', '.join(hit['extraction_methods_used']))}: {snippet}")
-        if hit.get("is_auxiliary_evidence"):
-            description += f"<br>Auxiliary CLO evidence; original source level: {hit['source_evidence_level']}"
         if hit.get("visual_diagram_summary"):
             description += "<br>Vision summary (generated, not a quote): " + md(hit["visual_diagram_summary"])
         descriptions.append(description)

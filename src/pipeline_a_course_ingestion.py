@@ -7,7 +7,7 @@ from pathlib import Path
 
 import pymupdf as fitz
 
-from src.curriculum_scope import explicit_clo_statement, refresh_auxiliary_clo_pages
+from src.curriculum_scope import explicit_clo_statement, mark_slide_clo_pages
 from src.common import COURSES, LEVELS, base_parser, extraction_options, md, normalize, write_json
 from src.extraction import PDFExtractor, extractor_from_args
 from src.step0_normalize_formats import normalize_formats
@@ -153,7 +153,7 @@ def ingest(data_dir: Path, output_dir: Path, extractor, workers: int = 1) -> dic
                     "evidence_level": level, "doc_id": doc_id, "original_format": record["original_format"],
                     "slide_or_section_title": next(iter(page["native_text"].splitlines()), ""),
                     **page, "indexable": reason is None, "skip_reason": reason,
-                    "auxiliary_evidence_levels": [],
+                    "restates_clo": False,
                 }
                 chunks.append(chunk)
                 lookup[f"{code}::{doc_id}::{number}"] = page["verbatim_text_span"]
@@ -165,7 +165,7 @@ def ingest(data_dir: Path, output_dir: Path, extractor, workers: int = 1) -> dic
                 else "available" if course["level_availability"][level]
                 else "processing_failed" if docs else "folder_empty_or_missing"
             )
-    refresh_auxiliary_clo_pages(chunks, catalog)
+    mark_slide_clo_pages(chunks, catalog)
     if len(lookup) != len(chunks) or len({c["chunk_id"] for c in chunks}) != len(chunks):
         raise ValueError("Document IDs collided; refusing to overwrite provenance")
     write_json(output_dir / "course_catalog_manifest.json", catalog)
@@ -176,7 +176,7 @@ def ingest(data_dir: Path, output_dir: Path, extractor, workers: int = 1) -> dic
     for row in quality:
         if "pdf_page_no" in row:
             chunk = chunk_events[(row["course_code"], row["doc_id"], row["pdf_page_no"])]
-            row.update(skip_reason=chunk["skip_reason"], auxiliary_evidence_levels=chunk["auxiliary_evidence_levels"])
+            row.update(skip_reason=chunk["skip_reason"], restates_clo=chunk["restates_clo"])
     telemetry = [{k: v for k, v in row.items() if k not in {
         "native_text", "ocr_extracted_text", "verbatim_text_span", "tables_markdown", "visual_diagram_summary"
     }} for row in quality]
@@ -188,13 +188,12 @@ def ingest(data_dir: Path, output_dir: Path, extractor, workers: int = 1) -> dic
               "## Folder availability", "", "| Course | CLO | Taught | Assessed |", "| --- | --- | --- | --- |"]
     for code, course in catalog["courses"].items():
         report.append("| " + " | ".join([code, *course["level_status"].values()]) + " |")
-    report += ["", "## Auxiliary CLO memberships", "",
-               "Explicit CLO pages from lecture slides retain their source level and verbatim lookup key. They also enter the CLO route "
-               "only when a usable CI/CLO document exists; the pooled corpus keeps each page once.", "",
-               "| Course | Document | PDF page | Source level |", "| --- | --- | --- | --- |"]
+    report += ["", "## Lecture pages that state learning outcomes", "",
+               "These pages stay Taught evidence. Only the Course Information document decides CLO coverage; "
+               "the audit report compares these statements with the CI.", "",
+               "| Course | Document | PDF page |", "| --- | --- | --- |"]
     for code, course in catalog["courses"].items():
-        report.extend(f"| {code} | {md(p['doc_id'])} | {p['pdf_page_no']} | {p['source_evidence_level']} |"
-                      for p in course["auxiliary_clo_pages"])
+        report.extend(f"| {code} | {md(p['doc_id'])} | {p['pdf_page_no']} |" for p in course["slide_clo_pages"])
     report += ["", "## Page events", "", "| Course / document | PDF page | Event |", "| --- | --- | --- |"]
     for row in telemetry:
         events = []

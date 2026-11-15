@@ -181,7 +181,10 @@ def extract_courses(root: Path = ROOT, *, enable_ocr: bool = True, workers: int 
             "evidence_level": chunk["evidence_level"], "doc_id": chunk["doc_id"],
             "original_format": chunk["original_format"], "tables_markdown": chunk["tables_markdown"],
             "indexable": chunk["indexable"], "skip_reason": chunk["skip_reason"],
-            "auxiliary_evidence_levels": chunk["auxiliary_evidence_levels"],
+            # Week 3 records keep the field of the routing policy they were produced under, so
+            # their committed hashes stay reproducible; the audit no longer routes on it.
+            "auxiliary_evidence_levels": ["CLO"] if chunk["restates_clo"] and catalog["courses"][
+                chunk["course_code"]]["level_availability"]["CLO"] else [],
             "extraction_methods_used": chunk["extraction_methods_used"],
             "redaction_count": len(chunk["redaction_events"]),
         })

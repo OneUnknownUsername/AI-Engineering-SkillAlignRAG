@@ -197,13 +197,13 @@ PII detection is regex-based and does not claim to anonymize names or every
 possible personal identifier.
 
 CI/CLO documents force full-page RapidOCR and table extraction on every page.
-Explicit CLO definition/header pages in lecture files gain
-`auxiliary_evidence_levels: ["CLO"]` when the course has usable CI/CLO documents.
-Their original `evidence_level`, page identity, and verbatim lookup remain intact;
-the CLO route includes those pages while the pooled baseline stores them once.
-Empty CI/CLO folders still cause missing-evidence abstention. This is current
-behavior, not full compliance with revised FR3: CI/slide agreement checks,
-CI-backed CLO support, and conflict notices are still to be implemented. Deck aspect cards
+Only the Course Information (CI) document decides CLO coverage (FR3). Lecture pages
+that state learning outcomes are flagged `restates_clo: true` but stay Taught
+evidence. The audit report compares their statements with the CI's numbered CLOs
+(`repeats_ci`, `differs_from_ci`, `not_in_ci`, or `no_ci` when the course has no
+usable CI) and lists a slide that repeats the cited CI wording as corroboration.
+Empty CI/CLO folders still cause missing-evidence abstention, even when slides
+state CLOs. Deck aspect cards
 scan pages 1-6 for outcome, overview, outline, agenda, and numbered topic headings,
 and trim trailing faculty/university footer lines. Room redaction requires an
 explicit room/office label with a colon or hash, or an MJIIT room identifier.
@@ -327,13 +327,11 @@ The integration test uses explicit model/retrieval doubles in a temporary
 folder. It checks all 108 cells, baseline call accounting and missing-category
 short-circuiting; it does not benchmark model quality or B200 latency.
 
-Index rebuilds recompute auxiliary CLO memberships from physical source levels,
-repairing legacy artifacts. Assessment documents can only enter Assessed or
-pooled retrieval. CLO accepts official CI sources and explicit embedded lecture
-CLOs when the CI folder is available; official outcome/synopsis pages rank first.
-This ranking policy does not yet enforce the CI authority and slide-corroboration
-policy in revised FR3.
-The new routing-policy version requires rebuilding older indexes. CI extraction
+Each page is evidence only for the folder it was supplied in: the CLO route holds
+CI pages alone, with official outcome/synopsis pages ranked first. Index rebuilds
+recompute the `restates_clo` flags and remove the routing fields of the earlier
+policy, which let slides support CLO. The routing-policy version
+(`ci_only_clo_v3`) requires rebuilding older indexes. CI extraction
 continues to use forced OCR plus native text and tables; the calibrated search
 representation focuses on the extracted outcome section instead of staff metadata.
 

@@ -44,13 +44,9 @@ def tokens(text: str) -> list[str]:
 
 
 def evidence_levels(chunk: dict) -> list[str]:
-    source = chunk.get("source_evidence_level", chunk["evidence_level"])
-    # Physical assessment provenance can never be overridden by auxiliary metadata.
-    if source == "Assessed":
-        return ["Assessed"]
-    if source == "Taught":
-        return ["Taught", *(["CLO"] if "CLO" in chunk.get("auxiliary_evidence_levels", []) else [])]
-    return [source]
+    # A page is evidence only for the folder it was supplied in. Slides that restate the
+    # CLOs stay Taught: the Course Information document alone decides CLO coverage (FR3).
+    return [chunk.get("source_evidence_level", chunk["evidence_level"])]
 
 
 def base_parser(description: str) -> argparse.ArgumentParser:

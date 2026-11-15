@@ -339,9 +339,9 @@ def test_catalog_scans_through_page_six_and_strips_footer(heading):
     assert card["outcome_source_pages"] == [6] and card["aspect_scan_pdf_pages"] == list(range(1, 7))
 
 
-def test_auxiliary_clo_routes_preserve_source_and_empty_folder_abstention(tmp_path):
+def test_slide_clo_pages_stay_taught_and_ci_alone_feeds_clo(tmp_path):
     data, output = tmp_path / "data", tmp_path / "outputs"
-    make_pdf(data / "courses/SAIA1013_Test/01_CI_CLO/ci.pdf", ["Course Information and intended learning objectives."])
+    make_pdf(data / "courses/SAIA1013_Test/01_CI_CLO/ci.pdf", ["Course Learning Outcomes CLO1: Explain how to clean missing data values."])
     make_pdf(data / "courses/SAIA1013_Test/02_Lecture_Slides_Taught/deck.pdf", [
         "CLO1: Explain methods to clean missing data values.", "This activity addresses CLO3 and requires a written report."])
     make_pdf(data / "courses/SAIA1013_Test/03_Assessments_Assessed/exam.pdf", [
@@ -351,21 +351,22 @@ def test_auxiliary_clo_routes_preserve_source_and_empty_folder_abstention(tmp_pa
     catalog = ingest(data, output, PDFExtractor(ExtractionConfig(enable_ocr=False)))
     chunks = read_json(output / "parsed_course_chunks.json")
     assert len(chunks) == len(read_json(output / "verbatim_lookup_store.json")) == 5
-    auxiliary = [c for c in chunks if c["auxiliary_evidence_levels"]]
-    assert {c["evidence_level"] for c in auxiliary} == {"Taught"} and len(auxiliary) == 1
-    assert len(catalog["courses"]["SAIA1013"]["auxiliary_clo_pages"]) == 1
+    flagged = [c for c in chunks if c["restates_clo"]]
+    assert {(c["course_code"], c["evidence_level"]) for c in flagged} == {("SAIA1013", "Taught"), ("SAIA2113", "Taught")}
+    assert [p["pdf_page_no"] for p in catalog["courses"]["SAIA1013"]["slide_clo_pages"]] == [1]
     assert not catalog["courses"]["SAIA2113"]["level_availability"]["CLO"]
     assert not explicit_clo_statement("This activity addresses CLO3 and requires a report.")
     build(output, lexical_only=True)
     retriever = Retriever(output)
-    clo = retriever.retrieve("SAIA1013", "clean missing data", "CLO")
-    assert {h["source_evidence_level"] for h in clo} == {"Taught"}
-    assert all(h["evidence_level"] == "CLO" and h["is_auxiliary_evidence"] for h in clo)
+    assert retriever.manifest["routing_policy"] == "ci_only_clo_v3"
+    assert {h["doc_id"] for h in retriever.retrieve("SAIA1013", "clean missing data", "CLO")} == {"ci.pdf"}
+    assert {h["doc_id"] for h in retriever.retrieve("SAIA1013", "clean missing data", "Taught")} == {"deck.pdf"}
+    # A course without a CI gets no CLO evidence, even though one of its slides states a CLO.
     assert retriever.retrieve("SAIA2113", "clean missing data", "CLO") == []
     assert len(retriever.manifest["partitions"]["pooled"]["SAIA1013"]) == 4
 
 
-def test_official_clo_ranks_before_embedded_lecture_and_repairs_legacy_exam(tmp_path):
+def test_build_removes_legacy_slide_clo_routing_fields(tmp_path):
     data, output = tmp_path / 'data', tmp_path / 'outputs'
     make_pdf(data / 'courses/SAIA1013_Test/01_CI_CLO/ci.pdf', ['CLO1: Explain data processing concepts.'])
     make_pdf(data / 'courses/SAIA1013_Test/02_Lecture_Slides_Taught/deck.pdf', [
@@ -373,17 +374,22 @@ def test_official_clo_ranks_before_embedded_lecture_and_repairs_legacy_exam(tmp_
     make_pdf(data / 'courses/SAIA1013_Test/03_Assessments_Assessed/exam.pdf', [
         'Course Learning Outcome 2: Clean data, handle missing values and remove duplicate data.'])
     ingest(data, output, PDFExtractor(ExtractionConfig(enable_ocr=False)))
-    chunks = read_json(output / 'parsed_course_chunks.json')
-    exam = next(c for c in chunks if c['evidence_level'] == 'Assessed')
-    exam['auxiliary_evidence_levels'] = ['CLO', 'Taught']  # Simulate an artifact from the old builder.
+    chunks, catalog = read_json(output / 'parsed_course_chunks.json'), read_json(output / 'course_catalog_manifest.json')
+    # Simulate artifacts from the earlier policy, which let slides (and once an exam) enter the CLO route.
+    for chunk in chunks:
+        chunk.pop('restates_clo')
+        chunk['auxiliary_evidence_levels'] = {'Taught': ['CLO'], 'Assessed': ['CLO', 'Taught']}.get(chunk['evidence_level'], [])
+    catalog['courses']['SAIA1013']['auxiliary_clo_pages'] = [{'doc_id': 'deck.pdf', 'pdf_page_no': 1}]
     write_json(output / 'parsed_course_chunks.json', chunks)
+    write_json(output / 'course_catalog_manifest.json', catalog)
     build(output, lexical_only=True)
     retriever = Retriever(output)
-    clo = retriever.retrieve('SAIA1013', 'clean missing data duplicate values', 'CLO')
-    assert clo[0]['doc_id'] == 'ci.pdf'
-    assert {h['doc_id'] for h in clo} == {'ci.pdf', 'deck.pdf'}
+    assert {h['doc_id'] for h in retriever.retrieve('SAIA1013', 'clean missing data duplicate values explain', 'CLO')} == {'ci.pdf'}
     assert {h['doc_id'] for h in retriever.retrieve('SAIA1013', 'clean data', 'Taught')} == {'deck.pdf'}
-    assert next(c for c in read_json(output / 'parsed_course_chunks.json') if c['doc_id'] == 'exam.pdf')['auxiliary_evidence_levels'] == []
+    repaired = read_json(output / 'parsed_course_chunks.json')
+    assert all('auxiliary_evidence_levels' not in c for c in repaired)
+    assert [c['doc_id'] for c in repaired if c['restates_clo']] == ['deck.pdf']
+    assert 'auxiliary_clo_pages' not in read_json(output / 'course_catalog_manifest.json')['courses']['SAIA1013']
 
 
 @pytest.fixture

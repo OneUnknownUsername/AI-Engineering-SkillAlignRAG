@@ -7,6 +7,7 @@ from pathlib import Path
 from time import perf_counter
 
 from src.common import COURSES, LEVELS, ROOT, fingerprint, md, read_json, write_json
+from src.clo_authority import compare_with_ci, corroborating_slides
 from src.config import AuditConfig
 from src.skill_hypotheses import atomic_hypotheses
 from src.scope_and_abstention_control import check_scope, missing_document, safety_report
@@ -25,13 +26,47 @@ def citation_cell(result: dict) -> str:
     status = result['final_classification']
     citation = result.get('verified_citation')
     if citation:
-        return f"**{status}**<br>{md(citation['doc_id'])}, p{citation['pdf_page_no']}: “{md(citation['verbatim_quote'])}”"
+        cell = f"**{status}**<br>{md(citation['doc_id'])}, p{citation['pdf_page_no']}: “{md(citation['verbatim_quote'])}”"
+        return cell + ''.join(f"<br>Also stated on slide: {md(s['doc_id'])}, p{s['pdf_page_no']}"
+                              for s in result.get('clo_corroboration', []))
     return status + ('<br>' + md(result['abstention_reason']) if result.get('abstention_reason') else '')
+
+
+SLIDE_STATUS = {'repeats_ci': 'Repeats the CI', 'differs_from_ci': 'Differs from the CI',
+                'not_in_ci': 'Not in the CI; not counted as a course CLO',
+                'no_ci': 'No CI to compare with; cannot establish CLO coverage'}
+
+
+def slide_comparison_lines(comparison: dict) -> list[str]:
+    lines = ['### Lecture slides that state learning outcomes', '',
+             'Only the Course Information (CI) document decides the CLO column. Slide statements are compared with it for review.'
+             if comparison['ci_available'] else
+             'This course has no usable CI, so every CLO cell is Insufficient Evidence. The slide statements below cannot fill that gap.', '']
+    pages = comparison['slide_pages']
+    rows = [(page, statement) for page in pages for statement in page['statements']]
+    if rows:
+        lines += ['| Slide | Statement | Compared with the CI |', '| --- | --- | --- |']
+        for page, statement in rows:
+            result = SLIDE_STATUS[statement['status']]
+            if 'ci_doc_id' in statement:
+                reference = f"{md(statement['ci_doc_id'])}, p{statement['ci_pdf_page_no']}"
+                result += f" {statement['ci_clo']} ({reference})" if statement.get('ci_clo') else f" ({reference})"
+                if statement['status'] == 'differs_from_ci':
+                    result += f": “{md(statement['ci_statement'])}”"
+            lines.append(f"| {md(page['doc_id'])}, p{page['pdf_page_no']} | “{md(statement['statement'])}” | {result} |")
+    elif not pages:
+        lines.append('No lecture slide states learning outcomes.')
+    empty = [page for page in pages if not page['statements']]
+    if empty:
+        lines += ['', 'Slides that mention learning outcomes without a numbered or listed statement to compare: ' +
+                  '; '.join(f"{md(page['doc_id'])}, p{page['pdf_page_no']}" for page in empty) + '.']
+    return lines + ['']
 
 
 def render_reports(output: Path, data: dict, config: AuditConfig) -> None:
     rows = data['cells']
-    lines = ['# Skill coverage audit', '', 'Supported decisions have passed canonical substring, level, pedagogical scope and NLI checks. Not Found means no accepted evidence in the Top-3, not proof that the curriculum lacks the skill.', '']
+    lines = ['# Skill coverage audit', '', 'Supported decisions have passed canonical substring, level, pedagogical scope and NLI checks. Not Found means no accepted evidence in the Top-3, not proof that the curriculum lacks the skill.',
+             'CLO cells are decided from the Course Information document only. A slide that repeats the cited CI wording is listed as corroboration.', '']
     for course in COURSES:
         lines += [f'## {course} — {COURSES[course]}', '', '| Skill ID & Name | CLO Status & Verified Citation | Taught Status & Verified Citation | Assessed Status & Verified Citation | NLI & Substring Verification |', '| --- | --- | --- | --- | --- |']
         for skill in data['skills']:
@@ -39,6 +74,7 @@ def render_reports(output: Path, data: dict, config: AuditConfig) -> None:
             checks = '<br>'.join(f"{r['level']}: 6A {r['routed'].get('gate_6a', 'not_run')}, 6B {r['routed'].get('gate_6b', 'not_run')}" + (f" (entailment {r['routed']['nli_scores']['entailment']:.3f})" if 'nli_scores' in r['routed'] else '') for r in group)
             lines.append('| ' + ' | '.join([md(skill['skill_id'] + ' ' + skill['skill_name']), *(citation_cell(r['routed']) for r in group), checks]) + ' |')
         lines.append('')
+        lines += slide_comparison_lines(data['clo_slide_comparison'][course])
     (output / 'skill_coverage_audit_report.md').write_text('\n'.join(lines)+'\n', encoding='utf-8')
     lines = ['# Routed vs single-pass pooled baseline', '', f"Index mode: {data['index_mode']}. Hardware: {md(data['hardware'])}.",
              f"Model startup: {data['startup_ms']:.1f} ms, excluded from warm query timing. No warm-up calls are excluded.",
@@ -102,6 +138,8 @@ def run(output: Path, config: AuditConfig) -> dict:
     # Fail early on absent artifacts, before loading multi-GB weights.
     catalog = read_json(output / 'course_catalog_manifest.json')
     skills = read_json(output / 'industry_skills_benchmark.json')
+    chunks = read_json(output / 'parsed_course_chunks.json')
+    lookup = read_json(output / 'verbatim_lookup_store.json')
     if len(skills)!=12 or {s['skill_id'] for s in skills}!={f'S{i:02d}' for i in range(1,13)}:
         raise ValueError('Expected exactly S01–S12')
     for skill in skills:
@@ -121,13 +159,15 @@ def run(output: Path, config: AuditConfig) -> dict:
     startup = perf_counter()
     retriever = Retriever(output, offline=config.offline)
     # NLI first so the LLM placement reserves its actual occupied GPU memory.
-    verifier = CitationSpanVerifier(read_json(output / 'verbatim_lookup_store.json'), NLIVerifier(config))
+    verifier = CitationSpanVerifier(lookup, NLIVerifier(config))
     llm = LLMJudgementService(config)
     data = {'schema_version': 1, 'skills': skills, 'config': vars(config), 'hardware': hardware,
             'index_mode': retriever.manifest['mode'], 'index_source_fingerprint': retriever.manifest['source_fingerprint'],
             'benchmark_fingerprint': fingerprint(skills), 'startup_ms': (perf_counter()-startup)*1000,
             'availability': {c: catalog['courses'][c]['level_availability'] for c in COURSES},
-            'safety': safety, 'cells': [], 'baseline_batches': []}
+            'safety': safety, 'cells': [], 'baseline_batches': [],
+            'clo_slide_comparison': {c: compare_with_ci(c, catalog['courses'][c]['level_availability']['CLO'], chunks, lookup)
+                                     for c in COURSES}}
     if retriever.catalog != catalog:
         raise ValueError('Retrieval catalog differs from current course manifest')
     for course in COURSES:
@@ -146,6 +186,9 @@ def run(output: Path, config: AuditConfig) -> dict:
                 drafts, telemetry = llm.judge(course, skill, hits, level)
                 routed[level] = {**telemetry, **verifier.verify(course, level, skill, drafts[level], hits),
                                  'draft': drafts[level], 'candidates': hits, 'latency_ms': (perf_counter()-start)*1000}
+                if level == 'CLO' and routed[level]['final_classification'] == 'Supported':
+                    routed[level]['clo_corroboration'] = corroborating_slides(
+                        routed[level]['verified_citation']['verbatim_quote'], course, chunks, lookup)
             start = perf_counter()
             pooled = retriever.retrieve(course, skill['retrieval_query'], top_k=3)
             drafts, telemetry = llm.judge(course, skill, pooled)

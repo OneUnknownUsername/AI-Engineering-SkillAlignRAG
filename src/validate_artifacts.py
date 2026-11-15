@@ -42,10 +42,9 @@ def validate(output_dir: Path) -> dict:
         require(key not in expected_lookup, f"Duplicate provenance key: {key}")
         expected_lookup[key] = union
         document_pages[(chunk["course_code"], chunk["doc_id"])].add(chunk["pdf_page_no"])
-        if chunk.get("auxiliary_evidence_levels"):
-            require(chunk["auxiliary_evidence_levels"] == ["CLO"] and chunk["evidence_level"] == "Taught" and
-                    catalog["courses"][chunk["course_code"]]["level_availability"]["CLO"] and
-                    explicit_clo_statement(chunk["verbatim_text_span"]), f"Invalid auxiliary CLO membership: {key}")
+        require("auxiliary_evidence_levels" not in chunk, f"Legacy CLO routing field; rerun build_indexes: {key}")
+        require(chunk["restates_clo"] == (chunk["evidence_level"] == "Taught" and
+                                          explicit_clo_statement(chunk["verbatim_text_span"])), f"Invalid slide CLO flag: {key}")
         if chunk["evidence_level"] == "CLO":
             require(chunk["ocr_forced"] and chunk["table_extraction_status"] == "completed", f"CI extraction not forced: {key}")
             if chunk["ocr_status"] != "disabled":
@@ -119,7 +118,7 @@ def validate(output_dir: Path) -> dict:
         "redaction_events": sum(len(c["redaction_events"]) for c in chunks),
         "dropped_page_reasons": dict(Counter(c["skip_reason"] for c in chunks if c["skip_reason"])),
         "potential_dilution_queries": sum(bool(q["pooled_missing_candidate_levels"]) for q in queries),
-        "auxiliary_clo_pages": sum("CLO" in c.get("auxiliary_evidence_levels", []) for c in chunks),
+        "slide_clo_pages": sum(c["restates_clo"] for c in chunks),
     }
     write_json(output_dir / "artifact_validation_report.json", summary)
     print(f"Artifact validation passed: {len(chunks)} course pages, {len(skills)} skills, {len(queries)} queries")

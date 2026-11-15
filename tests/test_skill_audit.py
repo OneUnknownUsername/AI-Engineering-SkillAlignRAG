@@ -109,11 +109,13 @@ class ControlTests(unittest.TestCase):
         self.hit['course_code'] = 'SAIA2113'
         self.assertEqual(self.verify()['gate_6a'], 'rejected')
 
-    def test_auxiliary_clo_is_valid(self):
-        self.hit['auxiliary_evidence_levels'] = ['CLO']
-        self.hit['slide_or_section_title'] = 'Course Learning Outcomes'
+    def test_slide_stating_clos_cannot_support_clo(self):
+        self.hit.update(restates_clo=True, slide_or_section_title='Course Learning Outcomes',
+                        auxiliary_evidence_levels=['CLO'])  # Legacy routing metadata is ignored.
         result = self.verifier.verify('SAIA2143', 'CLO', self.skill, self.draft, [self.hit])
-        self.assertEqual(result['final_classification'], 'Supported')
+        self.assertEqual(result['gate_6a'], 'rejected')
+        self.assertIsNone(result['verified_citation'])
+        self.assertEqual(self.nli.calls, 0)
 
     def test_nli_rejection(self):
         self.nli.probability = .19
@@ -204,7 +206,7 @@ class ControlTests(unittest.TestCase):
         self.assertEqual(self.verify()['final_classification'], 'Not Found')
 
     def test_assessment_metadata_cannot_override_physical_source(self):
-        self.hit.update(evidence_level='CLO', source_evidence_level='Assessed', auxiliary_evidence_levels=['CLO', 'Taught'])
+        self.hit.update(evidence_level='CLO', source_evidence_level='Assessed')
         self.assertEqual(self.verify()['gate_6a'], 'rejected')
         result = self.verifier.verify('SAIA2143', 'CLO', self.skill, self.draft, [self.hit])
         self.assertEqual(result['gate_6a'], 'rejected')
@@ -257,8 +259,8 @@ class ControlTests(unittest.TestCase):
                 self.verifier.lookup['SAIA2143::a.pdf::1'] = self.hit['verbatim_text_span'] = self.draft['verbatim_quote'] = quote
                 self.assertEqual(self.verify()['final_classification'], 'Supported')
 
-    def test_embedded_clo_heading_can_appear_outside_quote(self):
-        self.hit.update(slide_or_section_title='COURSE OVERVIEW', auxiliary_evidence_levels=['CLO'],
+    def test_ci_clo_heading_can_appear_outside_quote(self):
+        self.hit.update(evidence_level='CLO', slide_or_section_title='COURSE INFORMATION',
                         verbatim_text_span='CLO1: ' + QUOTE)
         result = self.verifier.verify('SAIA2143', 'CLO', self.skill, self.draft, [self.hit])
         self.assertEqual(result['final_classification'], 'Supported')
@@ -436,6 +438,7 @@ class ControlTests(unittest.TestCase):
             (output/'course_catalog_manifest.json').write_text(json.dumps(catalog))
             (output/'industry_skills_benchmark.json').write_text(json.dumps(skills))
             (output/'verbatim_lookup_store.json').write_text('{}')
+            (output/'parsed_course_chunks.json').write_text('[]')
             with patch.dict('sys.modules', {'torch': types.SimpleNamespace(cuda=cuda), 'src.build_indexes': types.SimpleNamespace(Retriever=RetrieverDouble)}), patch('src.citation_span_verifier.NLIVerifier', FakeNLI), patch('src.llm_judgement_service.LLMJudgementService', LLMDouble):
                 data = run(output, AuditConfig())
             self.assertEqual(len(data['cells']), 108)
@@ -447,6 +450,52 @@ class ControlTests(unittest.TestCase):
             for name in ('skill_coverage_audit_results.json', 'skill_coverage_audit_report.md', 'routed_vs_baseline_comparison_report.md', 'scope_and_abstention_safety_report.md'):
                 self.assertTrue((output/name).exists())
 
+
+    def test_runner_lists_slides_that_repeat_the_cited_ci_wording(self):
+        catalog = {'courses': {c: {'level_availability': {l: True for l in LEVELS.values()}} for c in COURSES}}
+        ci_text = 'Course Learning Outcomes CLO1: ' + QUOTE
+        slide_text = 'Course Overview. Course Learning Outcomes CLO1: ' + QUOTE.replace('  ', ' ')
+        ci_hit = {'course_code': 'SAIA2143', 'doc_id': 'ci.pdf', 'pdf_page_no': 1, 'evidence_level': 'CLO',
+                  'source_evidence_level': 'CLO', 'slide_or_section_title': 'Course Information', 'verbatim_text_span': ci_text}
+        chunks = [{'course_code': 'SAIA2143', 'doc_id': 'ci.pdf', 'pdf_page_no': 1, 'evidence_level': 'CLO',
+                   'tables_markdown': '| CLO1 | ' + QUOTE + ' |', 'restates_clo': False},
+                  {'course_code': 'SAIA2143', 'doc_id': 'deck.pdf', 'pdf_page_no': 2, 'evidence_level': 'Taught',
+                   'tables_markdown': '', 'restates_clo': True}]
+        lookup = {'SAIA2143::ci.pdf::1': ci_text, 'SAIA2143::deck.pdf::2': slide_text}
+        class RetrieverDouble:
+            def __init__(self, *args, **kwargs):
+                self.catalog = catalog
+                self.manifest = {'mode': 'TEST DOUBLE', 'source_fingerprint': 'fixture'}
+            def retrieve(self, course, query, level=None, **kwargs):
+                return [ci_hit] if (course, level) == ('SAIA2143', 'CLO') else []
+        class LLMDouble:
+            def __init__(self, *args):
+                pass
+            def judge(self, course, skill, hits, level=None):
+                supported = {'draft_classification': 'Supported', 'candidate_rank_selected': 1, 'doc_id': 'ci.pdf',
+                             'pdf_page_no': 1, 'verbatim_quote': QUOTE, 'rationale': ''}
+                none = {'draft_classification': 'Not Found', 'candidate_rank_selected': None, 'doc_id': None,
+                        'pdf_page_no': None, 'verbatim_quote': None, 'rationale': ''}
+                return {l: copy.deepcopy(supported if hits and l == 'CLO' else none) for l in ([level] if level else LEVELS.values())}, {
+                    'latency_ms': 1, 'llm_called': True, 'prompt_tokens': 1, 'completion_tokens': 1, 'tokens_used': 2}
+        cuda = types.SimpleNamespace(is_available=lambda: True, mem_get_info=lambda i: (1, 1), get_device_name=lambda i: 'TEST DOUBLE')
+        with tempfile.TemporaryDirectory() as directory:
+            output = Path(directory)
+            skills = [{'skill_id': f'S{i:02d}', 'skill_name': 'Test cleaning', 'retrieval_query': 'clean data', 'nli_hypothesis_template': 'clean data'} for i in range(1,13)]
+            for name, value in [('course_catalog_manifest.json', catalog), ('industry_skills_benchmark.json', skills),
+                                ('verbatim_lookup_store.json', lookup), ('parsed_course_chunks.json', chunks)]:
+                (output/name).write_text(json.dumps(value))
+            with patch.dict('sys.modules', {'torch': types.SimpleNamespace(cuda=cuda), 'src.build_indexes': types.SimpleNamespace(Retriever=RetrieverDouble)}), patch('src.citation_span_verifier.NLIVerifier', FakeNLI), patch('src.llm_judgement_service.LLMJudgementService', LLMDouble):
+                data = run(output, AuditConfig())
+            cell = next(r['routed'] for r in data['cells'] if (r['course_code'], r['skill_id'], r['level']) == ('SAIA2143', 'S01', 'CLO'))
+            self.assertEqual(cell['final_classification'], 'Supported')
+            self.assertEqual(cell['verified_citation']['doc_id'], 'ci.pdf')
+            self.assertEqual([(s['doc_id'], s['pdf_page_no']) for s in cell['clo_corroboration']], [('deck.pdf', 2)])
+            comparison = data['clo_slide_comparison']['SAIA2143']['slide_pages'][0]['statements']
+            self.assertEqual([(s['status'], s['ci_clo']) for s in comparison], [('repeats_ci', 'CLO1')])
+            report = (output/'skill_coverage_audit_report.md').read_text()
+            self.assertIn('Also stated on slide: deck.pdf, p2', report)
+            self.assertIn('Lecture slides that state learning outcomes', report)
 
 if __name__ == '__main__':
     unittest.main()
