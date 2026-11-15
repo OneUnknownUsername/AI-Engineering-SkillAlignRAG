@@ -26,7 +26,9 @@ Implementation references: [ingestion](../src/pipeline_a_course_ingestion.py),
 [CLO routing](../src/curriculum_scope.py), and
 [scope/abstention](../src/scope_and_abstention_control.py).
 
-The demonstration dashboard will be viewed in a laptop browser using localhost
+The dashboard will use a FastAPI backend, which checks sign-in and the user's
+role on every request so that direct backend requests cannot bypass FR6, and a
+React front end. The demonstration dashboard will be viewed in a laptop browser using localhost
 or cloud hosting. Model inference will run on the university B200 allocation
 accessed through Open OnDemand. The remaining integration work is to connect the
 application backend to that environment; the laptop does not need to run the
