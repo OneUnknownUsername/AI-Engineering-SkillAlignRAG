@@ -27,18 +27,25 @@ def normalize_with_offsets(text: str) -> tuple[str, list[int]]:
     return ''.join(chars), offsets
 
 
+def fold(text: str) -> str:
+    """Lowercase without changing the length, so match offsets still point at the page's characters."""
+    return ''.join(char.lower() if len(char.lower()) == 1 else char for char in text)
+
+
 def canonical_span(quote: str, page: str) -> tuple[str | None, bool]:
+    """Find the quote on the page apart from letter case; the returned span is the page's own text."""
     normalized, offsets = normalize_with_offsets(page)
+    haystack = fold(normalized)
     needle, _ = normalize_with_offsets(quote)
-    if len(needle) >= 20 and needle in normalized:
-        start = normalized.index(needle)
+    if len(needle) >= 20 and fold(needle) in haystack:
+        start = haystack.index(fold(needle))
         return page[offsets[start]:offsets[start + len(needle) - 1] + 1], False
     if re.search(r'\.{3}|…', quote):
         segments = sorted(re.split(r'\.{3}|…', quote), key=lambda s: len(normalize_with_offsets(s)[0]), reverse=True)
         # Only the longest contiguous segment is eligible for snapping.
         segment, _ = normalize_with_offsets(segments[0])
-        if len(segment) >= 35 and segment in normalized:
-            start = normalized.index(segment)
+        if len(segment) >= 35 and fold(segment) in haystack:
+            start = haystack.index(fold(segment))
             return page[offsets[start]:offsets[start + len(segment) - 1] + 1], True
     return None, False
 
@@ -60,7 +67,7 @@ def expand_short_quote(quote: str, page: str, chunk: str) -> str | None:
         hard.add(boundary.start())
         if '\n' in boundary.group():
             hard.add(boundary.end())
-    for match in re.finditer(re.escape(needle), normalized):
+    for match in re.finditer(re.escape(fold(needle)), fold(normalized)):
         left, right = offsets[match.start()], offsets[match.end()-1] + 1
         block_start = max(b for b in hard if b <= left)
         block_end = min(b for b in hard if b >= right)

@@ -80,6 +80,15 @@ class ControlTests(unittest.TestCase):
         self.assertIn(canonical, page)
         self.assertFalse(snapped)
 
+    def test_letter_case_is_ignored_but_the_page_text_is_returned(self):
+        page = 'CLO2 Interpret the results of a regression model for stakeholders.'
+        canonical, _ = canonical_span('interpret the RESULTS of a regression model', page)
+        self.assertEqual(canonical, 'Interpret the results of a regression model')
+        self.assertEqual(canonical_span('interpret the outputs of a regression model', page), (None, False))
+        self.verifier.lookup['SAIA2143::a.pdf::1'] = self.hit['verbatim_text_span']
+        self.draft['verbatim_quote'] = QUOTE.lower()
+        self.assertEqual(self.verify()['verified_citation']['verbatim_quote'], QUOTE)
+
     def test_ellipsis_snap_and_short_quote_rejection(self):
         canonical, snapped = canonical_span(QUOTE + ' ... invented additional bullet', QUOTE)
         self.assertEqual(canonical, QUOTE)

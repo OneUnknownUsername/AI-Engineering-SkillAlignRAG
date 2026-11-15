@@ -335,7 +335,8 @@ policy, which let slides support CLO. The routing-policy version
 continues to use forced OCR plus native text and tables; the calibrated search
 representation focuses on the extracted outcome section instead of staff metadata.
 
-Gate 6A accepts normalized verbatim quote matches of at least 20 characters.
+Gate 6A accepts normalized verbatim quote matches of at least 20 characters,
+ignoring letter case only; the accepted citation is always the page's own text.
 For 20–44 character seeds it prefers an enclosing sentence/bullet of at least
 45 characters, but retains the exact seed if no suitable expansion exists.
 The 45-character target is not a rejection threshold. It never pads a short
