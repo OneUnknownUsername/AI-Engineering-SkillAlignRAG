@@ -11,7 +11,8 @@ from src.curriculum_scope import clo_evidence_window, has_official_commitment, m
 from src.common import COURSES, LEVELS, base_parser, evidence_levels, fingerprint, read_json, tokens, write_json
 
 DEFAULT_MODEL = "BAAI/bge-small-en-v1.5"
-STOPWORDS = set("a an the and or to of in on for with by is are be as how this that from at it its".split())  # Used by Pipeline B.
+STOPWORDS = set("a an the and or to of in on for with by is are be as how this that from at it its".split())  # Used by BM25 and Pipeline B.
+LEXICAL_TOKENIZER = "lowercase_alnum_without_stopwords_v1"
 FUSION = "reciprocal_rank_fusion"
 ROUTING_POLICY = "ci_only_clo_v3"  # The CI alone feeds the CLO route (FR3).
 RRF_K0 = 60  # Smoothing constant from Cormack, Clarke and Buttcher (2009); not tuned on course data.
@@ -23,6 +24,11 @@ def search_text(chunk: dict) -> str:
         # Rank on the commitment, rather than staff metadata and duplicate OCR prefixes.
         text = clo_evidence_window(text)[:3000]
     return "\n".join(filter(None, [text, chunk.get("visual_diagram_summary", "")]))
+
+
+def lexical_terms(text: str) -> list[str]:
+    """BM25 terms: function words are dropped so they cannot make a page count as a keyword match."""
+    return [t for t in tokens(text) if t not in STOPWORDS]
 
 
 def ranking(scores: np.ndarray) -> dict[int, int]:
@@ -85,7 +91,7 @@ def build(output_dir: Path, model_name: str = DEFAULT_MODEL, *, lexical_only: bo
         "embedding_shape": list(embeddings.shape), "partitions": partitions,
         "embedding_sha256": hashlib.sha256((directory / "embeddings.npy").read_bytes()).hexdigest(),
         "fusion": FUSION, "rrf_k0": RRF_K0,
-        "lexical_algorithm": "BM25Plus", "embedding_file": "embeddings.npy",
+        "lexical_algorithm": "BM25Plus", "lexical_tokenizer": LEXICAL_TOKENIZER, "embedding_file": "embeddings.npy",
     }
     write_json(directory / "manifest.json", manifest)
     print(f"Built {manifest['mode']} indexes over {len(chunks)} identical chunks")
@@ -100,6 +106,8 @@ class Retriever:
             raise ValueError("Index routing policy is stale; rerun build_indexes")
         if self.manifest.get("fusion") != FUSION:
             raise ValueError("Index fusion settings are stale; rerun build_indexes")
+        if self.manifest.get("lexical_tokenizer") != LEXICAL_TOKENIZER:
+            raise ValueError("Index lexical tokenizer is stale; rerun build_indexes")
         self.chunks = read_json(directory / "chunks.json")
         self.catalog = read_json(directory / "catalog.json")
         current = {"chunks": read_json(output_dir / "parsed_course_chunks.json"),
@@ -118,7 +126,7 @@ class Retriever:
         self.bm25 = {}
         for kind, partitions in self.manifest["partitions"].items():
             for key, rows in partitions.items():
-                corpus = [tokens(search_text(self.chunks[i])) or ["emptydocument"] for i in rows]
+                corpus = [lexical_terms(search_text(self.chunks[i])) or ["emptydocument"] for i in rows]
                 self.bm25[(kind, key)] = BM25Plus(corpus) if corpus else None
         self.query_vectors = {}
 
@@ -131,11 +139,11 @@ class Retriever:
             raise ValueError("Wrong-level source in index partition; rebuild indexes")
         if not rows:
             return []
-        terms = tokens(query)
+        terms = lexical_terms(query)
         lexical = np.maximum(0, np.asarray(self.bm25[(kind, key)].get_scores(terms)))
         # BM25Plus adds a query-dependent constant to every row. Remove the
         # nonmatching floor so rows without a query term are not ranked by BM25.
-        term_sets = [set(tokens(search_text(self.chunks[i]))) for i in rows]
+        term_sets = [set(lexical_terms(search_text(self.chunks[i]))) for i in rows]
         matching = np.array([bool(set(terms) & terms_in_doc) for terms_in_doc in term_sets])
         lexical[~matching] = 0
         lexical = lexical / lexical.max() if lexical.max() > 0 else lexical

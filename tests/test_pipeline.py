@@ -430,6 +430,22 @@ def test_routing_pooling_missing_levels_and_all_36_queries(indexed):
     assert "lexical_only_diagnostic" in (indexed / "retrieval_smoke_test_report.md").read_text()
 
 
+def test_function_words_alone_do_not_make_a_bm25_match(indexed):
+    retriever = Retriever(indexed)
+    # Every indexed page contains "and" or "the"; only real keyword overlap may rank a page.
+    assert retriever.retrieve("SAIA1013", "and the to of", "Taught") == []
+    hits = retriever.retrieve("SAIA1013", "choosing an imputation method and the", "Taught")
+    assert [h["pdf_page_no"] for h in hits] == [3]
+
+
+def test_index_built_with_old_tokenizer_is_rejected(indexed):
+    manifest = read_json(indexed / "indexes/manifest.json")
+    manifest.pop("lexical_tokenizer")
+    write_json(indexed / "indexes/manifest.json", manifest)
+    with pytest.raises(ValueError, match="tokenizer is stale"):
+        Retriever(indexed)
+
+
 def test_stale_index_is_rejected(indexed):
     chunks = read_json(indexed / "parsed_course_chunks.json")
     chunks[0]["verbatim_text_span"] = "changed"

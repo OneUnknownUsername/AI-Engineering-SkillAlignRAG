@@ -184,7 +184,10 @@ do not describe it as hybrid retrieval. Both retrieval configurations use the
 same page chunks and dense vectors. Routed Top-3 is per level; pooled Top-3 is
 per course. Dense and BM25 rankings are fused with Reciprocal Rank Fusion
 (k0 = 60, from Cormack, Clarke and Buttcher, 2009), so no fusion weights are tuned
-on course data. Rebuild older indexes after this change. Index manifests persist corpus fingerprints and reject stale
+on course data. BM25 drops common function words ("and", "the", "to", ...) from
+pages and queries, so a page is ranked lexically only when it shares a content word
+with the query; the manifest records this tokenizer and indexes built with the
+older one are rejected. Rebuild older indexes after this change. Index manifests persist corpus fingerprints and reject stale
 source artifacts. Embedding models may truncate pages beyond their token limit.
 
 The lookup stores the whitespace-normalized, PII-redacted native/OCR union,
