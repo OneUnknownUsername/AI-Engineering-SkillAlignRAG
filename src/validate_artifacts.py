@@ -28,7 +28,7 @@ def validate(output_dir: Path) -> dict:
     indexed_chunks = read_json(output_dir / "indexes/chunks.json")
     indexed_catalog = read_json(output_dir / "indexes/catalog.json")
     log = read_json(output_dir / "retrieval_smoke_test_log.json")
-    require(set(catalog["courses"]) == set(COURSES), "Catalog must contain all three courses")
+    require(set(catalog["courses"]) == set(COURSES), "Catalog courses differ from config/courses.json")
     require(len({c["chunk_id"] for c in chunks}) == len(chunks), "Duplicate chunk IDs")
     expected_lookup, document_pages = {}, defaultdict(set)
     chunk_by_id = {c["chunk_id"]: c for c in indexed_chunks}
@@ -86,8 +86,8 @@ def validate(output_dir: Path) -> dict:
     require(log["benchmark_fingerprint"] == fingerprint(skills), "Retrieval log refers to a different skill benchmark")
     expected_pairs = {(code, s["skill_id"]) for code in COURSES for s in skills}
     skill_queries = {s["skill_id"]: s["retrieval_query"] for s in skills}
-    require(len(queries) == 36 and {(q["course_code"], q["skill_id"]) for q in queries} == expected_pairs,
-            "Smoke test must contain exactly all 36 course/skill pairs")
+    require(len(queries) == len(expected_pairs) and {(q["course_code"], q["skill_id"]) for q in queries} == expected_pairs,
+            f"Smoke test must contain exactly all {len(expected_pairs)} course/skill pairs")
     for query in queries:
         require(query["query"] == skill_queries[query["skill_id"]], "Retrieval query differs from the locked benchmark")
         course = catalog["courses"][query["course_code"]]

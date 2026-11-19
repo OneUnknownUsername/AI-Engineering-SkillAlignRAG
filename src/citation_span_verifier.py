@@ -5,7 +5,7 @@ import math
 from src.common import evidence_levels
 from src.config import AuditConfig
 from src.curriculum_scope import explicit_clo_statement
-from src.skill_hypotheses import atomic_hypotheses, CORE_DOMAIN_TERMS
+from src.skill_hypotheses import atomic_hypotheses, domain_terms as skill_domain_terms
 
 PUNCTUATION = str.maketrans({'“': '"', '”': '"', '‘': "'", '’': "'", '–': '-', '—': '-', '−': '-'})
 
@@ -242,7 +242,7 @@ class CitationSpanVerifier:
         # All probabilities used by the fallback must come from this same winning pair.
         winner = max(trials, key=lambda trial: trial['entailment'])
         quote_terms = set(re.findall(r'[a-z][a-z0-9]+', canonical.lower()))
-        domain_terms = sorted(quote_terms & set(CORE_DOMAIN_TERMS[skill['skill_id']].split()))
+        domain_terms = sorted(quote_terms & skill_domain_terms(skill))
         maximum = winner['entailment']
         strong = maximum >= .40
         domain_fallback = (maximum >= .20 and winner['contradiction'] < .15

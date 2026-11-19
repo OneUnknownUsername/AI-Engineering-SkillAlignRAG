@@ -8,7 +8,7 @@ from pathlib import Path
 from time import perf_counter
 from typing import Any
 
-from src.common import COURSES, GENERATION_ERROR, LEVELS, ROOT, code_version, evidence_levels, fingerprint, md, read_json, write_json
+from src.common import COURSES, GENERATION_ERROR, LEVELS, ROOT, code_version, evidence_levels, fingerprint, load_skill_definitions, md, read_json, write_json
 from src.clo_authority import compare_with_ci, corroborating_slides
 from src.config import AuditConfig
 from src.skill_hypotheses import atomic_hypotheses
@@ -134,14 +134,14 @@ def render_reports(output: Path, data: dict, config: AuditConfig) -> None:
     supported = [r for r in rows if r['baseline']['final_classification']=='Supported']
     wrong = sum(r['baseline_audit'].get('gate_6a')=='rejected' for r in supported)
     unverified = sum(r['baseline_audit']['final_classification']!='Supported' for r in supported)
-    absent = [r for r in rows if r['course_code']=='SAIA2113' and r['level']=='CLO' and not data['availability']['SAIA2113']['CLO']]
+    absent = [r for r in rows if not data['availability'][r['course_code']][r['level']]]
     conflation = sum(r['baseline']['final_classification']!='Insufficient Evidence' for r in absent)
     positives = [r for r in rows if r['routed']['final_classification']=='Supported']
     misses = [r for r in positives if r['baseline']['final_classification']!='Supported' and not r['pooled_has_level']]
     def ratio(n, d):
         return f'{n}/{d} ({n/d:.1%})' if d else 'N/A (zero denominator)'
     lines += ['', f"Baseline unverified citation rate: {ratio(unverified,len(supported))}; substring/identity/wrong-level rejection rate: {ratio(wrong,len(supported))}.",
-              f"SAIA2113 CLO missing-document conflation: {ratio(conflation,len(absent))}.",
+              f"Missing-document conflation (cells whose level has no usable documents): {ratio(conflation,len(absent))}.",
               f"Level-dilution miss proxy: {ratio(len(misses),len(positives))} of verified routed positives were baseline non-support with no matching-level pooled candidate. This measures observed omission, not ground-truth recall or causal attribution.",
               f"Baseline retrospective audit time: {sum(r['baseline_audit']['latency_ms'] for r in rows):.1f} ms.", '',
               '| Course / skill / level | Routed | Pooled baseline | Observed difference |', '| --- | --- | --- | --- |']
@@ -171,8 +171,9 @@ def prepare_audit(output: Path, config: AuditConfig) -> tuple[AuditContext, dict
     skills = read_json(output / 'industry_skills_benchmark.json')
     chunks = read_json(output / 'parsed_course_chunks.json')
     lookup = read_json(output / 'verbatim_lookup_store.json')
-    if len(skills)!=12 or {s['skill_id'] for s in skills}!={f'S{i:02d}' for i in range(1,13)}:
-        raise ValueError('Expected exactly S01–S12')
+    configured = [s['skill_id'] for s in load_skill_definitions()]
+    if sorted(s['skill_id'] for s in skills) != sorted(configured):
+        raise ValueError(f'Compiled skills differ from config ({", ".join(configured)}); rerun Pipeline B')
     for skill in skills:
         atomic_hypotheses(skill)
         if not all(isinstance(skill.get(k), str) and skill[k].strip() for k in ('skill_name', 'retrieval_query', 'nli_hypothesis_template')):
@@ -262,14 +263,15 @@ def audit_pair(ctx: AuditContext, course: str, skill: dict) -> tuple[list[dict],
 
 
 def run(output: Path, config: AuditConfig) -> dict:
-    """Audit all 36 course–skill pairs (108 cells) and write the results and reports."""
+    """Audit every configured course–skill pair (3 × 12 = 108 cells on main) and write the results and reports."""
     ctx, data = prepare_audit(output, config)
+    total = len(COURSES) * len(data['skills']) * len(LEVELS)
     for course in COURSES:
         for skill in sorted(data['skills'], key=lambda s: s['skill_id']):
             cells, batch = audit_pair(ctx, course, skill)
             data['baseline_batches'].append(batch)
             data['cells'].extend(cells)
-            logging.info('Completed %s / %s (%d/108 cells)', course, skill['skill_id'], len(data['cells']))
+            logging.info('Completed %s / %s (%d/%d cells)', course, skill['skill_id'], len(data['cells']), total)
             write_json(output / 'skill_coverage_audit_checkpoint.json', data)
     write_json(output / 'skill_coverage_audit_results.json', data)
     render_reports(output, data, config)

@@ -1,7 +1,7 @@
 """Score a saved audit run against hand-made ground-truth labels.
 
 Two commands:
-  template  write a blank 108-row CSV to fill in (levels with missing documents are
+  template  write a blank CSV to fill in, 108 rows on main (levels with missing documents are
             pre-filled as Insufficient Evidence; the system's answers are not shown)
   score     compare a results file with the filled-in CSV and write
             evaluation_scores.json and evaluation_scores.md
@@ -18,7 +18,7 @@ import csv
 import hashlib
 from pathlib import Path
 
-from src.common import COURSES, GENERATION_ERROR, LEVELS, ROOT, md, read_json, write_json
+from src.common import COURSES, GENERATION_ERROR, LEVELS, ROOT, load_skill_definitions, md, read_json, write_json
 from src.run_skill_audit_pipeline import version_text
 
 LABELS = ("Supported", "Not Found", "Insufficient Evidence")
@@ -229,7 +229,7 @@ def main() -> None:
     commands = parser.add_subparsers(dest="command", required=True)
     template = commands.add_parser("template", help="Write the blank ground-truth CSV")
     template.add_argument("--catalog", type=Path, default=ROOT / "outputs" / "course_catalog_manifest.json")
-    template.add_argument("--skills", type=Path, default=ROOT / "config" / "benchmark_skills.json")
+    template.add_argument("--skills", type=Path, help="Skill file to use instead of the configured skills")
     template.add_argument("--out", type=Path, default=DEFAULT_GROUND_TRUTH)
     scoring = commands.add_parser("score", help="Score a results file against the filled-in CSV")
     scoring.add_argument("--results", type=Path, default=ROOT / "outputs" / "skill_coverage_audit_results.json")
@@ -238,7 +238,8 @@ def main() -> None:
     args = parser.parse_args()
     try:
         if args.command == "template":
-            count = write_template(args.out, read_json(args.catalog), read_json(args.skills))
+            skills = read_json(args.skills) if args.skills else load_skill_definitions()
+            count = write_template(args.out, read_json(args.catalog), skills)
             print(f"Wrote {count} rows to {args.out}")
         else:
             report = run_score(args.results, args.ground_truth, args.output_dir)

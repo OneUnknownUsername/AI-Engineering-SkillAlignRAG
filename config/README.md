@@ -1,5 +1,23 @@
 # Locked benchmark input
 
+`courses.json` lists the supported course codes and titles. `benchmark_skills.json`
+holds the locked S01-S12 skills. Every pipeline step, count and check reads these
+two files, so they define what can be audited (FR4).
+
+Two optional files add an extension set without changing the locked core. Neither
+exists on `main`, so SkillAlignRAG audits exactly 3 courses and 12 skills:
+
+- `courses_extension.json`: more course codes and titles, in the same shape as
+  `courses.json`. It may not repeat a core course.
+- `benchmark_skills_extension.json`: a JSON list of extra skills numbered S13
+  onwards, in the same shape as the core entries. Each must also give
+  `atomic_hypotheses` (2-4 statements) and `core_domain_terms` (a space-separated
+  keyword list), because the verifier's built-in lists cover only S01-S12. The
+  bucket is free text.
+
+After adding or changing either file, rerun Pipeline A (for courses) or Pipeline B
+(for skills), then the index build.
+
 `benchmark_skills.json` contains the locked S01-S12 definitions. Pipeline B uses
 the skill names, queries and SFIA labels to retrieve evidence automatically from
 Stage B1 records. Input `indsf_provenance` fields are optional and ignored;

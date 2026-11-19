@@ -9,11 +9,7 @@ from uuid import uuid4
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-COURSES = {
-    "SAIA1013": "Responsible AI and Ethics",
-    "SAIA2113": "Machine Learning",
-    "SAIA2143": "Data Wrangling and Visualization",
-}
+CONFIG_DIR = ROOT / "config"
 # The model's output could not be read, so the cell has no answer and needs manual review.
 GENERATION_ERROR = "Generation Error"
 LEVELS = {
@@ -27,11 +23,36 @@ def read_json(path: Path):
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+def load_courses(config_dir: Path = CONFIG_DIR) -> dict[str, str]:
+    """Course codes and titles: config/courses.json plus the optional courses_extension.json."""
+    courses = dict(read_json(config_dir / "courses.json"))
+    extension = config_dir / "courses_extension.json"
+    if extension.is_file():
+        added = read_json(extension)
+        repeated = sorted(set(courses) & set(added))
+        if repeated:
+            raise ValueError(f"courses_extension.json repeats core courses: {repeated}")
+        courses.update(added)
+    if not courses or any(not isinstance(v, str) or not k.strip() or not v.strip() for k, v in courses.items()):
+        raise ValueError("Course config must map course codes to course titles")
+    return courses
+
+
+def load_skill_definitions(config_dir: Path = CONFIG_DIR) -> list[dict]:
+    """The locked core skills (benchmark_skills.json), then the optional extension set."""
+    extension = config_dir / "benchmark_skills_extension.json"
+    return read_json(config_dir / "benchmark_skills.json") + (read_json(extension) if extension.is_file() else [])
+
+
 def write_json(path: Path, value) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     temporary = path.with_name(path.name + "." + uuid4().hex + ".tmp")
     temporary.write_text(json.dumps(value, indent=2, ensure_ascii=False), encoding="utf-8")
     temporary.replace(path)
+
+
+# Read once at import; on main there are no extension files, so this is the three V1 courses.
+COURSES = load_courses()
 
 
 def fingerprint(value) -> str:

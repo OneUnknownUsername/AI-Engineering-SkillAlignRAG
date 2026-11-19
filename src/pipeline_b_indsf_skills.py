@@ -10,7 +10,7 @@ import numpy as np
 
 from src.skill_hypotheses import atomic_hypotheses
 from src.build_indexes import DEFAULT_MODEL, STOPWORDS, load_model
-from src.common import ROOT, base_parser, extraction_options, fingerprint, md, read_json, tokens, write_json
+from src.common import ROOT, base_parser, extraction_options, fingerprint, load_skill_definitions, md, read_json, tokens, write_json
 from src.extraction import extractor_from_args, unique_lines
 from src.indsf_extraction import SECTIONS, extract_all_skills
 
@@ -23,17 +23,31 @@ MATCH_WEIGHTS = {"semantic": .60, "keyword": .35, "sfia": .05}
 SECTION_WEIGHTS = {'job_description_tasks': 1.15, 'competencies': 1.0, 'essential_skills': 0.90, 'common_tools': 0.70}
 
 
+CORE_SKILL_IDS = {f"S{i:02d}" for i in range(1, 13)}
+
+
 def validate_skills(skills: list[dict]) -> None:
-    if not isinstance(skills, list) or any(not isinstance(s, dict) for s in skills) or {s.get("skill_id") for s in skills} != {f"S{i:02d}" for i in range(1, 13)} or len(skills) != 12:
+    """The locked core S01-S12 must all be present once; extension skills (S13 onwards) are optional."""
+    if not isinstance(skills, list) or any(not isinstance(s, dict) for s in skills):
+        raise ValueError("The skill benchmark must be a list of skill objects")
+    ids = [s.get("skill_id") for s in skills]
+    if len(ids) != len(set(ids)) or not CORE_SKILL_IDS <= set(ids):
         raise ValueError("Locked benchmark must contain exactly S01-S12 once each")
     for skill in skills:
+        core = skill["skill_id"] in CORE_SKILL_IDS
+        if not core and not re.fullmatch(r"S(?:1[3-9]|[2-9]\d)", str(skill["skill_id"])):
+            raise ValueError(f"{skill['skill_id']}: extension skills are numbered S13 onwards")
         for field in ("skill_name", "bucket", "retrieval_query", "nli_hypothesis_template"):
             if not isinstance(skill.get(field), str) or not skill[field].strip():
                 raise ValueError(f"{skill['skill_id']}: missing {field}")
         atomic_hypotheses(skill)
-        bucket = skill["bucket"].removeprefix("Bucket ").split(":")[0].strip()
-        if bucket not in BUCKETS or int(skill["skill_id"][1:]) not in BUCKETS[bucket]:
-            raise ValueError(f"{skill['skill_id']}: incorrect bucket")
+        if core:
+            bucket = skill["bucket"].removeprefix("Bucket ").split(":")[0].strip()
+            if bucket not in BUCKETS or int(skill["skill_id"][1:]) not in BUCKETS[bucket]:
+                raise ValueError(f"{skill['skill_id']}: incorrect bucket")
+        elif not isinstance(skill.get("core_domain_terms"), str) or len(skill["core_domain_terms"].split()) < 2:
+            # The verifier's built-in keyword lists cover only S01-S12.
+            raise ValueError(f"{skill['skill_id']}: extension skills need core_domain_terms (at least two words)")
         if not isinstance(skill.get("sfia_codes"), list) or not skill["sfia_codes"] or any(
             not isinstance(code, str) or not re.fullmatch(r"[A-Z]{4,6}", code) for code in skill["sfia_codes"]
         ):
@@ -240,7 +254,7 @@ def write_quality_report(output_dir: Path, raw: list[dict], items: list[dict], c
                f"Other exclusions: {reasons['framework_definition'] + reasons['nontechnical']}.", "",
                "| Decision | Items |", "| --- | --- |"]
     report.extend(f"| {reason} | {count} |" for reason, count in sorted(reasons.items()))
-    report += ["", "## Automated S01-S12 mapping", ""]
+    report += ["", "## Automated skill mapping", ""]
     if compiled is None:
         report.append("Stage B2 has not completed. Stage B1 records are available; --extract-only intentionally stops here.")
     else:
@@ -292,7 +306,7 @@ def extract_indsf(data_dir: Path, output_dir: Path, extractor) -> list[dict]:
 def main() -> None:
     parser = base_parser(__doc__)
     extraction_options(parser)
-    parser.add_argument("--skills-config", type=Path, default=ROOT / "config/benchmark_skills.json")
+    parser.add_argument("--skills-config", type=Path, help="One skill file to use instead of config/benchmark_skills.json and its extension")
     parser.add_argument("--extract-only", action="store_true", help="Run B1 and its quality report without semantic compilation")
     parser.add_argument("--reuse-extraction", action="store_true", help="Compile existing extracted pages without rerunning OCR")
     parser.add_argument("--model", default=DEFAULT_MODEL, help="Local sentence-transformers semantic encoder")
@@ -312,9 +326,10 @@ def main() -> None:
     if not items:
         raise ValueError("Stage B1 extracted no structured records; inspect indsf_raw_extracted.json and indsf_quality_report.md")
     if not args.extract_only:
-        if not args.skills_config.is_file():
+        if args.skills_config and not args.skills_config.is_file():
             parser.error(f"Locked S01-S12 mapping required: {args.skills_config}; see config/README.md")
-        compiled = compile_benchmark(read_json(args.skills_config), items, model_name=args.model,
+        skills = read_json(args.skills_config) if args.skills_config else load_skill_definitions()
+        compiled = compile_benchmark(skills, items, model_name=args.model,
                                      model_dir=args.output_dir / "models", offline=args.offline,
                                      top_k=args.top_k, min_score=args.min_match_score)
         verify_benchmark(compiled, raw, items)
@@ -322,7 +337,7 @@ def main() -> None:
         write_quality_report(args.output_dir, raw, items, compiled)
         unmatched = [s["skill_id"] for s in compiled if s["mapping_status"] == "no_match"]
         print(f"B1: {len(items)} records; B2: {len(filter_graduate_items(items))} eligible; "
-              f"{len(compiled) - len(unmatched)}/12 clusters mapped. Unmatched: {unmatched}")
+              f"{len(compiled) - len(unmatched)}/{len(compiled)} clusters mapped. Unmatched: {unmatched}")
     else:
         print(f"B1: extracted {len(items)} unique records")
 

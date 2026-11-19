@@ -63,6 +63,11 @@ CORE_DOMAIN_TERMS = {
 }
 
 
+def domain_terms(skill: dict) -> set[str]:
+    """Core vocabulary for the weak-NLI rule; extension skills carry their own in the skill file."""
+    return set((skill.get('core_domain_terms') or CORE_DOMAIN_TERMS[skill['skill_id']]).split())
+
+
 def atomic_hypotheses(skill: dict) -> list[str]:
     values = skill.get('atomic_hypotheses', ATOMIC_HYPOTHESES.get(skill['skill_id']))
     if not isinstance(values, list) or not 2 <= len(values) <= 4 or any(not isinstance(v, str) or not v.strip() for v in values):

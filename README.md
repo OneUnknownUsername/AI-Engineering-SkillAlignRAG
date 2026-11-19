@@ -113,7 +113,8 @@ stale conversion is logged and excluded, rather than treated as an empty folder.
 The command writes all successfully parsed pages before returning a nonzero exit
 code for document failures; `--allow-partial` explicitly permits a partial run.
 
-The supplied locked 12-skill mapping is in `config/benchmark_skills.json`.
+The supported courses are in `config/courses.json` and the locked 12-skill mapping
+is in `config/benchmark_skills.json`; see the [configuration contract](config/README.md).
 Pipeline B now runs two stages: B1 detects career roles and extracts tasks,
 essential skills, competencies with SFIA levels, tools and Appendix A definitions
 into `outputs/indsf_all_extracted_skills.json`. B2 filters senior/management and
