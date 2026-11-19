@@ -219,6 +219,27 @@ level dilution. Retrieval candidates do not establish curriculum coverage.
 Precision/recall/F1 and true retrieval accuracy require manually labeled
 relevance judgements and are intentionally not fabricated by this smoke test.
 
+### Scoring an audit run against ground truth
+
+`src.evaluate_ground_truth` compares a saved audit run with hand-made labels.
+`template` writes a blank 108-row CSV (one row per course, skill and level) to
+`outputs/ground_truth/ground_truth_levels.csv`. Levels whose documents are missing
+are pre-filled as Insufficient Evidence. The file never shows the system's
+answers and is never overwritten. Fill in `label` and `evidence_pages`, then run
+`score`:
+
+```bash
+.venv/bin/python -m src.evaluate_ground_truth template
+.venv/bin/python -m src.evaluate_ground_truth score
+```
+
+`score` refuses files with missing, duplicate or misspelt rows. It writes
+`outputs/evaluation_scores.json` and `.md` with per-level Precision, Recall and
+F1, Macro-F1 and its gain over the baseline, confusion tables, failed outputs
+and missing-document handling for configurations B, B+V, P and P+V. Scoring
+follows the F1 definition in the [evaluation criteria](docs/week2_evaluation_criteria.md).
+The ground-truth file stays local with the other outputs.
+
 ## Week 3 data pipeline
 
 The Week 3 pipeline prepares both document branches and records their lineage,
