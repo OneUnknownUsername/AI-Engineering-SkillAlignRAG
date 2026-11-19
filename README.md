@@ -318,7 +318,8 @@ selection validation through the planned dashboard and backend.
 
 A checkpoint JSON is written after every completed course–skill pair for
 inspection if interrupted; it is not automatically resumed. Malformed model
-responses produce an explicit generation-error flag and no accepted citation.
+responses are labelled Generation Error, with no accepted citation and a
+manual-review reason, rather than Not Found.
 Model execution failures stop the run rather than produce completed reports.
 Gate 6B batches 2–4 atomic hypotheses per skill against both quote-only and
 title-plus-quote premises. Both carry the factual `Course material:` source label

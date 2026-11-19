@@ -6,7 +6,7 @@ from collections import Counter
 from pathlib import Path
 from time import perf_counter
 
-from src.common import COURSES, LEVELS, ROOT, code_version, fingerprint, md, read_json, write_json
+from src.common import COURSES, GENERATION_ERROR, LEVELS, ROOT, code_version, fingerprint, md, read_json, write_json
 from src.clo_authority import compare_with_ci, corroborating_slides
 from src.config import AuditConfig
 from src.skill_hypotheses import atomic_hypotheses
@@ -22,6 +22,12 @@ def percentile(values: list[float], fraction: float) -> float:
     return values[low] + (values[min(low+1, len(values)-1)]-values[low])*(position-low)
 
 
+def generation_failure(telemetry: dict) -> dict:
+    """A cell whose model output could not be read: no answer, no citation, manual review."""
+    return {'gate_6a': 'not_run', 'gate_6b': 'not_run', 'final_classification': GENERATION_ERROR, 'verified_citation': None,
+            'failure_reason': 'The model output could not be read; manual review required.'}
+
+
 def citation_cell(result: dict) -> str:
     status = result['final_classification']
     citation = result.get('verified_citation')
@@ -29,7 +35,8 @@ def citation_cell(result: dict) -> str:
         cell = f"**{status}**<br>{md(citation['doc_id'])}, p{citation['pdf_page_no']}: “{md(citation['verbatim_quote'])}”"
         return cell + ''.join(f"<br>Also stated on slide: {md(s['doc_id'])}, p{s['pdf_page_no']}"
                               for s in result.get('clo_corroboration', []))
-    return status + ('<br>' + md(result['abstention_reason']) if result.get('abstention_reason') else '')
+    reason = result.get('abstention_reason') or result.get('failure_reason')
+    return status + ('<br>' + md(reason) if reason else '')
 
 
 SLIDE_STATUS = {'repeats_ci': 'Repeats the CI', 'differs_from_ci': 'Differs from the CI',
@@ -111,12 +118,12 @@ def render_reports(output: Path, data: dict, config: AuditConfig) -> None:
     batches = data['baseline_batches']
     lines += ['', f"Measured pooled batch p50 / p90: {percentile([b['latency_ms'] for b in batches], .5):.1f} / {percentile([b['latency_ms'] for b in batches], .9):.1f} ms.",
               'Cloud rates are configurable comparison assumptions in USD/million tokens, not a live price quote. Local API charge excludes university compute and electricity costs.', '',
-              '| Architecture | Course | Level | Supported | Not Found | Insufficient Evidence |', '| --- | --- | --- | --- | --- | --- |']
+              '| Architecture | Course | Level | Supported | Not Found | Insufficient Evidence | Generation Error |', '| --- | --- | --- | --- | --- | --- | --- |']
     for architecture in ('routed', 'baseline'):
         for course in COURSES:
             for level in LEVELS.values():
                 counts = Counter(r[architecture]['final_classification'] for r in rows if r['course_code']==course and r['level']==level)
-                lines.append(f"| {architecture} | {course} | {level} | {counts['Supported']} | {counts['Not Found']} | {counts['Insufficient Evidence']} |")
+                lines.append(f"| {architecture} | {course} | {level} | {counts['Supported']} | {counts['Not Found']} | {counts['Insufficient Evidence']} | {counts[GENERATION_ERROR]} |")
     lines += ['', '| Architecture verification | Gate | Passed | Rejected | Not run |', '| --- | --- | --- | --- | --- |']
     for architecture in ('routed', 'baseline_audit'):
         for gate in ('gate_6a', 'gate_6b'):
@@ -197,7 +204,8 @@ def run(output: Path, config: AuditConfig) -> dict:
                     continue
                 hits = retriever.retrieve(course, skill['retrieval_query'], level, top_k=3)
                 drafts, telemetry = llm.judge(course, skill, hits, level)
-                routed[level] = {**telemetry, **verifier.verify(course, level, skill, drafts[level], hits),
+                verdict = generation_failure(telemetry) if 'generation_error' in telemetry else verifier.verify(course, level, skill, drafts[level], hits)
+                routed[level] = {**telemetry, **verdict,
                                  'draft': drafts[level], 'candidates': hits, 'latency_ms': (perf_counter()-start)*1000}
                 if level == 'CLO' and routed[level]['final_classification'] == 'Supported':
                     routed[level]['clo_corroboration'] = corroborating_slides(
@@ -210,9 +218,10 @@ def run(output: Path, config: AuditConfig) -> dict:
             from src.common import evidence_levels
             for level in LEVELS.values():
                 start = perf_counter()
-                audit = verifier.verify(course, level, skill, drafts[level], pooled)
+                failed = 'generation_error' in telemetry
+                audit = generation_failure(telemetry) if failed else verifier.verify(course, level, skill, drafts[level], pooled)
                 audit['latency_ms'] = (perf_counter()-start)*1000
-                baseline = {**telemetry, 'final_classification': drafts[level]['draft_classification'], 'draft': drafts[level],
+                baseline = {**telemetry, 'final_classification': GENERATION_ERROR if failed else drafts[level]['draft_classification'], 'draft': drafts[level],
                             'latency_ms': batch_latency/3,
                             'prompt_tokens': telemetry['prompt_tokens']/3, 'completion_tokens': telemetry['completion_tokens']/3,
                             'tokens_used': telemetry['tokens_used']/3}

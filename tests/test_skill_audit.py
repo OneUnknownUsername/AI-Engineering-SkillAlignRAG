@@ -460,6 +460,53 @@ class ControlTests(unittest.TestCase):
                 self.assertTrue((output/name).exists())
 
 
+    def test_unreadable_model_output_becomes_generation_error_never_not_found(self):
+        catalog = {'courses': {c: {'level_availability': {l: True for l in LEVELS.values()}} for c in COURSES}}
+        hit = {'course_code': 'SAIA1013', 'doc_id': 'deck.pdf', 'pdf_page_no': 1, 'evidence_level': 'Taught',
+               'source_evidence_level': 'Taught', 'slide_or_section_title': '', 'verbatim_text_span': QUOTE}
+        class RetrieverDouble:
+            def __init__(self, *args, **kwargs):
+                self.catalog = catalog
+                self.manifest = {'mode': 'TEST DOUBLE', 'source_fingerprint': 'fixture'}
+            def retrieve(self, course, query, level=None, **kwargs):
+                return [hit]
+        class LLMDouble:
+            def __init__(self, *args):
+                pass
+            def judge(self, course, skill, hits, level=None):
+                # A broken output whose fallback even claims Supported must never yield a citation.
+                broken = (course, skill['skill_id'], level) in {('SAIA1013', 'S01', 'Taught'), ('SAIA2143', 'S02', None)}
+                decision = {'draft_classification': 'Supported' if broken else 'Not Found', 'candidate_rank_selected': 1 if broken else None,
+                            'doc_id': 'deck.pdf' if broken else None, 'pdf_page_no': 1 if broken else None,
+                            'verbatim_quote': QUOTE if broken else None, 'rationale': ''}
+                telemetry = {'latency_ms': 1, 'llm_called': True, 'prompt_tokens': 1, 'completion_tokens': 1, 'tokens_used': 2}
+                if broken:
+                    telemetry['generation_error'] = 'Invalid classification JSON'
+                return {l: copy.deepcopy(decision) for l in ([level] if level else LEVELS.values())}, telemetry
+        cuda = types.SimpleNamespace(is_available=lambda: True, mem_get_info=lambda i: (1, 1), get_device_name=lambda i: 'TEST DOUBLE')
+        with tempfile.TemporaryDirectory() as directory:
+            output = Path(directory)
+            skills = [{'skill_id': f'S{i:02d}', 'skill_name': 'Test cleaning', 'retrieval_query': 'clean data', 'nli_hypothesis_template': 'clean data'} for i in range(1,13)]
+            for name, value in [('course_catalog_manifest.json', catalog), ('industry_skills_benchmark.json', skills),
+                                ('verbatim_lookup_store.json', {'SAIA1013::deck.pdf::1': QUOTE}), ('parsed_course_chunks.json', [])]:
+                (output/name).write_text(json.dumps(value))
+            with patch.dict('sys.modules', {'torch': types.SimpleNamespace(cuda=cuda), 'src.build_indexes': types.SimpleNamespace(Retriever=RetrieverDouble)}), patch('src.citation_span_verifier.NLIVerifier', FakeNLI), patch('src.llm_judgement_service.LLMJudgementService', LLMDouble):
+                data = run(output, AuditConfig())
+            cells = {(r['course_code'], r['skill_id'], r['level']): r for r in data['cells']}
+            routed = cells[('SAIA1013', 'S01', 'Taught')]['routed']
+            self.assertEqual((routed['final_classification'], routed['verified_citation']), ('Generation Error', None))
+            self.assertIn('manual review', routed['failure_reason'])
+            for level in LEVELS.values():
+                cell = cells[('SAIA2143', 'S02', level)]
+                self.assertEqual(cell['baseline']['final_classification'], 'Generation Error')
+                self.assertEqual((cell['baseline_audit']['final_classification'], cell['baseline_audit']['verified_citation']), ('Generation Error', None))
+            others = [r for k, r in cells.items() if k != ('SAIA1013', 'S01', 'Taught')]
+            self.assertNotIn('Generation Error', {r['routed']['final_classification'] for r in others})
+            self.assertEqual(sum(r['baseline']['final_classification'] == 'Generation Error' for r in data['cells']), 3)
+            self.assertIn('Generation Error<br>The model output could not be read; manual review required.',
+                          (output/'skill_coverage_audit_report.md').read_text())
+            self.assertIn('| Insufficient Evidence | Generation Error |', (output/'routed_vs_baseline_comparison_report.md').read_text())
+
     def test_runner_lists_slides_that_repeat_the_cited_ci_wording(self):
         catalog = {'courses': {c: {'level_availability': {l: True for l in LEVELS.values()}} for c in COURSES}}
         ci_text = 'Course Learning Outcomes CLO1: ' + QUOTE

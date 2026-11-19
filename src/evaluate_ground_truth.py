@@ -18,7 +18,7 @@ import csv
 import hashlib
 from pathlib import Path
 
-from src.common import COURSES, LEVELS, ROOT, md, read_json, write_json
+from src.common import COURSES, GENERATION_ERROR, LEVELS, ROOT, md, read_json, write_json
 from src.run_skill_audit_pipeline import version_text
 
 LABELS = ("Supported", "Not Found", "Insufficient Evidence")
@@ -105,9 +105,11 @@ def read_ground_truth(path: Path, results: dict) -> tuple[dict, list[str]]:
 
 
 def predictions(cell: dict) -> dict[str, tuple[str, bool]]:
-    """(label, failed) for each configuration. A failed output keeps its stored label for reference."""
+    """(label, failed) for each configuration. Runs made before the Generation Error label
+    stored Not Found for a failed output, so the telemetry flag is checked as well."""
     routed, baseline = cell["routed"], cell["baseline"]
-    routed_failed, baseline_failed = "generation_error" in routed, "generation_error" in baseline
+    routed_failed = "generation_error" in routed or routed["final_classification"] == GENERATION_ERROR
+    baseline_failed = "generation_error" in baseline or baseline["final_classification"] == GENERATION_ERROR
     draft = routed.get("draft")
     routed_draft = draft["draft_classification"] if draft else routed["final_classification"]
     return {"B": (baseline["final_classification"], baseline_failed),
@@ -130,7 +132,7 @@ def score(results: dict, truth: dict) -> dict:
             for cell in (c for c in results["cells"] if c["level"] == level):
                 gold = truth[(cell["course_code"], cell["skill_id"], level)]["label"]
                 label, failed = predictions(cell)[name]
-                if label not in LABELS:
+                if label not in LABELS and not failed:
                     raise ValueError(f"Unknown label {label!r} in results for {name}")
                 predicted_yes = label == "Supported" and not failed
                 gold_yes = gold == "Supported"

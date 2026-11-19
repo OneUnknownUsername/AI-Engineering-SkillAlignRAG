@@ -86,6 +86,17 @@ class ScorerTest(unittest.TestCase):
         self.assertEqual(s["P+V"]["confusion"]["Assessed"]["Supported"]["Failed output"], 1)
         self.assertEqual(s["P+V"]["failed_outputs"], 1)
 
+    def test_generation_error_label_counts_as_failed_output(self):
+        key = ("SAIA1013", "S02", "Taught")
+        run = results()
+        cell = next(c for c in run["cells"] if (c["course_code"], c["skill_id"], c["level"]) == key)
+        cell["routed"]["final_classification"] = "Generation Error"  # New runs carry the label itself.
+        cell["baseline"]["final_classification"] = cell["baseline_audit"]["final_classification"] = "Generation Error"
+        s = self.scores(run, truth_rows({key: "Supported"}))
+        for name in ("B", "B+V", "P+V"):
+            level = s[name]["levels"]["Taught"]
+            self.assertEqual((level["fn"], level["failed"]), (1, 1), name)
+
     def test_level_without_supported_cells_has_no_f1_and_is_left_out(self):
         key = ("SAIA1013", "S01", "Taught")
         s = self.scores(results({key: {"routed": "Supported"}}), truth_rows({key: "Supported"}))

@@ -14,6 +14,8 @@ COURSES = {
     "SAIA2113": "Machine Learning",
     "SAIA2143": "Data Wrangling and Visualization",
 }
+# The model's output could not be read, so the cell has no answer and needs manual review.
+GENERATION_ERROR = "Generation Error"
 LEVELS = {
     "01_CI_CLO": "CLO",
     "02_Lecture_Slides_Taught": "Taught",
