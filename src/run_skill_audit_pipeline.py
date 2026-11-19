@@ -6,7 +6,7 @@ from collections import Counter
 from pathlib import Path
 from time import perf_counter
 
-from src.common import COURSES, LEVELS, ROOT, fingerprint, md, read_json, write_json
+from src.common import COURSES, LEVELS, ROOT, code_version, fingerprint, md, read_json, write_json
 from src.clo_authority import compare_with_ci, corroborating_slides
 from src.config import AuditConfig
 from src.skill_hypotheses import atomic_hypotheses
@@ -63,6 +63,15 @@ def slide_comparison_lines(comparison: dict) -> list[str]:
     return lines + ['']
 
 
+def version_text(version: dict | None) -> str:
+    if not version or version.get('commit') == 'not recorded':
+        return 'commit not recorded'
+    text = f"commit {version['commit'][:12]}"
+    if version.get('uncommitted_code_changes'):
+        text += ' with uncommitted changes to ' + ', '.join(version['changed_paths'])
+    return text
+
+
 def render_reports(output: Path, data: dict, config: AuditConfig) -> None:
     rows = data['cells']
     lines = ['# Skill coverage audit', '', 'Supported decisions have passed canonical substring, level, pedagogical scope and NLI checks. Not Found means no accepted evidence in the Top-3, not proof that the curriculum lacks the skill.',
@@ -77,6 +86,7 @@ def render_reports(output: Path, data: dict, config: AuditConfig) -> None:
         lines += slide_comparison_lines(data['clo_slide_comparison'][course])
     (output / 'skill_coverage_audit_report.md').write_text('\n'.join(lines)+'\n', encoding='utf-8')
     lines = ['# Routed vs single-pass pooled baseline', '', f"Index mode: {data['index_mode']}. Hardware: {md(data['hardware'])}.",
+             f"Code: {version_text(data.get('code_version'))}.",
              f"Model startup: {data['startup_ms']:.1f} ms, excluded from warm query timing. No warm-up calls are excluded.",
              'Routed latency includes guard, retrieval, generation and verification. Baseline latency includes pooled retrieval and one three-level generation; retrospective verification is timed separately. Its per-cell latency is the batch latency divided by three, not independently measured level latency.',
              'Baseline classifications below are the unfiltered model decisions. Audit failures do not change them. Model-output errors are explicit review flags in JSON.', '',
@@ -161,7 +171,10 @@ def run(output: Path, config: AuditConfig) -> dict:
     # NLI first so the LLM placement reserves its actual occupied GPU memory.
     verifier = CitationSpanVerifier(lookup, NLIVerifier(config))
     llm = LLMJudgementService(config)
-    data = {'schema_version': 1, 'skills': skills, 'config': vars(config), 'hardware': hardware,
+    version = code_version()
+    if version['uncommitted_code_changes']:
+        logging.warning('Uncommitted code changes will be recorded in the results: %s', version['changed_paths'])
+    data = {'schema_version': 1, 'code_version': version, 'skills': skills, 'config': vars(config), 'hardware': hardware,
             'index_mode': retriever.manifest['mode'], 'index_source_fingerprint': retriever.manifest['source_fingerprint'],
             'benchmark_fingerprint': fingerprint(skills), 'startup_ms': (perf_counter()-startup)*1000,
             'availability': {c: catalog['courses'][c]['level_availability'] for c in COURSES},

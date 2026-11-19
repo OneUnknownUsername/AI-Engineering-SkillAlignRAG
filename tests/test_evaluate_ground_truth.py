@@ -156,3 +156,38 @@ class ScorerTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class CodeVersionTest(unittest.TestCase):
+    def test_commit_and_uncommitted_code_edits_are_recorded(self):
+        import subprocess
+        from src.common import code_version
+        repo = Path(tempfile.mkdtemp())
+        self.assertEqual(code_version(repo)["commit"], "not recorded")
+        git = lambda *a: subprocess.run(["git", *a], cwd=repo, check=True, capture_output=True)
+        git("init", "-q")
+        (repo / "src").mkdir()
+        (repo / "src" / "a.py").write_text("x = 1\n")
+        git("add", ".")
+        git("-c", "user.name=t", "-c", "user.email=t@t", "commit", "-qm", "init")
+        clean = code_version(repo)
+        self.assertEqual((len(clean["commit"]), clean["uncommitted_code_changes"]), (40, False))
+        (repo / "notes.txt").write_text("not code\n")  # Files outside src/ and config/ are ignored.
+        self.assertFalse(code_version(repo)["uncommitted_code_changes"])
+        (repo / "src" / "a.py").write_text("x = 2\n")
+        dirty = code_version(repo)
+        self.assertEqual((dirty["uncommitted_code_changes"], dirty["changed_paths"]), (True, ["src/a.py"]))
+
+    def test_scorer_warns_about_unknown_or_edited_code(self):
+        import json
+        tmp = Path(tempfile.mkdtemp())
+        truth = write_csv(tmp / "gt.csv", truth_rows())
+        cases = {"predates": {}, "uncommitted code changes": {"code_version": {
+            "commit": "a" * 40, "uncommitted_code_changes": True, "changed_paths": ["src/x.py"]}}}
+        for message, extra in cases.items():
+            path = tmp / f"{len(message)}.json"
+            path.write_text(json.dumps({**results(), **extra}), encoding="utf-8")
+            report = run_score(path, truth, tmp / "out")
+            with self.subTest(message):
+                self.assertIn(message, report["warnings"][0])
+        self.assertIn("uncommitted changes to src/x.py", (tmp / "out" / "evaluation_scores.md").read_text(encoding="utf-8"))

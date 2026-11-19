@@ -4,6 +4,7 @@ import argparse
 import hashlib
 import json
 import re
+import subprocess
 from uuid import uuid4
 from pathlib import Path
 
@@ -33,6 +34,22 @@ def write_json(path: Path, value) -> None:
 
 def fingerprint(value) -> str:
     return hashlib.sha256(json.dumps(value, sort_keys=True).encode()).hexdigest()
+
+
+def code_version(root: Path = ROOT) -> dict:
+    """The commit that produced an output, and any uncommitted edits to code or configuration."""
+    def git(*args: str) -> str | None:
+        try:
+            result = subprocess.run(["git", *args], cwd=root, capture_output=True, text=True, check=False, timeout=10)
+        except (OSError, subprocess.TimeoutExpired):
+            return None
+        return result.stdout if result.returncode == 0 else None
+
+    commit = git("rev-parse", "HEAD")
+    if commit is None:
+        return {"commit": "not recorded", "uncommitted_code_changes": None, "changed_paths": []}
+    changed = sorted(line[3:] for line in (git("status", "--porcelain", "--", "src", "config") or "").splitlines() if line.strip())
+    return {"commit": commit.strip(), "uncommitted_code_changes": bool(changed), "changed_paths": changed}
 
 
 def normalize(text: str) -> str:

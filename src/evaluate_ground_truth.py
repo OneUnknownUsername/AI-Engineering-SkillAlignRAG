@@ -19,6 +19,7 @@ import hashlib
 from pathlib import Path
 
 from src.common import COURSES, LEVELS, ROOT, md, read_json, write_json
+from src.run_skill_audit_pipeline import version_text
 
 LABELS = ("Supported", "Not Found", "Insufficient Evidence")
 FAILED = "Failed output"
@@ -193,7 +194,7 @@ def render(report: dict) -> str:
     lines += ["## Inputs", "", f"- Results file: `{md(ident['results_path'])}` (SHA-256 `{ident['results_sha256'][:16]}`)",
               f"- Ground truth: `{md(ident['ground_truth_path'])}` (SHA-256 `{ident['ground_truth_sha256'][:16]}`)",
               f"- Lecturer-checked rows: {ident['lecturer_checked_rows']} of {ident['ground_truth_rows']}",
-              f"- GPU: {md(ident['hardware'])}", f"- Benchmark fingerprint: `{ident['benchmark_fingerprint'][:16]}`"]
+              f"- GPU: {md(ident['hardware'])}", f"- Code that produced the run: {md(version_text(ident['code_version']))}", f"- Benchmark fingerprint: `{ident['benchmark_fingerprint'][:16]}`"]
     if report["warnings"]:
         lines += ["", "## Warnings", ""] + [f"- {md(w)}" for w in report["warnings"]]
     return "\n".join(lines) + "\n"
@@ -202,12 +203,18 @@ def render(report: dict) -> str:
 def run_score(results_path: Path, truth_path: Path, output_dir: Path) -> dict:
     results = read_json(results_path)
     truth, warnings = read_ground_truth(truth_path, results)
+    version = results.get("code_version") or {}
+    if version.get("uncommitted_code_changes"):
+        warnings.insert(0, "The run was produced with uncommitted code changes: " + ", ".join(version["changed_paths"]))
+    elif not version:
+        warnings.insert(0, "The run predates code-version recording, so its commit is unknown")
     report = {"schema_version": 1, "scores": score(results, truth), "warnings": warnings, "inputs": {
         "results_path": str(results_path), "results_sha256": file_sha256(results_path),
         "ground_truth_path": str(truth_path), "ground_truth_sha256": file_sha256(truth_path),
         "ground_truth_rows": len(truth),
         "lecturer_checked_rows": sum((r.get("lecturer_checked") or "").strip().lower() in ("yes", "y", "true", "1") for r in truth.values()),
         "hardware": results.get("hardware", {}).get("device", "not recorded"),
+        "code_version": results.get("code_version"),
         "benchmark_fingerprint": results.get("benchmark_fingerprint", "")}}
     output_dir.mkdir(parents=True, exist_ok=True)
     write_json(output_dir / "evaluation_scores.json", report)
