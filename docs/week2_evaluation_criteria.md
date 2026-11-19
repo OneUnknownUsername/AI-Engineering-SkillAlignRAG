@@ -37,9 +37,9 @@ not by F1.
 all three levels; cost per 100 audits therefore covers 300 cells. Report measured
 per-level and full-audit inference latency separately from full 108-cell refresh,
 model startup, document processing, dashboard loading, and filter response times.
-Evaluation will use the university B200 GPU allocation, with the dashboard
-viewed in a laptop browser via localhost or cloud hosting. Record the GPU
-allocation and the application-to-inference connection used for the run;
+Evaluation will use the university B200 GPU allocation; the dashboard runs on
+the same GPU node and is viewed in a laptop browser through VS Code tunnel port
+forwarding. Record the GPU allocation (MIG slice) used for the run;
 Open OnDemand provides access to the university compute environment. The current backend report's cost per 100 cells requires conversion
 or a revised report before comparison with the cost acceptance threshold.
 

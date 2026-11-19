@@ -28,12 +28,15 @@ Implementation references: [ingestion](../src/pipeline_a_course_ingestion.py),
 
 The dashboard will use a FastAPI backend, which checks sign-in and the user's
 role on every request so that direct backend requests cannot bypass FR6, and a
-React front end. The demonstration dashboard will be viewed in a laptop browser using localhost
-or cloud hosting. Model inference will run on the university B200 allocation
-accessed through Open OnDemand. The remaining integration work is to connect the
-application backend to that environment; the laptop does not need to run the
-models. Open OnDemand access and the application/model connection are distinct:
-the chosen connection must be reflected in the deployment instructions.
+React front end. The backend and front end will run on the
+university GPU node next to model inference (B200 allocation, inside a Slurm job
+started through Open OnDemand), so the backend reaches the models over localhost,
+as the existing localhost-only model client requires. The dashboard is viewed in
+a laptop browser through VS Code tunnel port forwarding, which only the signed-in
+developer can open; the traffic is encrypted and relayed by Microsoft's tunnel
+service. Lecturers see the dashboard in on-screen demonstrations rather than
+through their own access. It is reachable only while the job runs, and the
+laptop does not need to run the models.
 
 Latency and cost must distinguish a single evidence-level evaluation from a full
 three-level course–skill audit and a full 108-cell refresh. The current comparison

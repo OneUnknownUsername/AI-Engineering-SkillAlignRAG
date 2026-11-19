@@ -56,11 +56,13 @@ will process them and refresh affected audit results. Filters will change the
 displayed results without rerunning the models. There is no planned free-text
 query interface.
 
-For the demonstration, the dashboard will be viewed in a laptop browser through
-localhost or cloud hosting. Inference will run on the university B200 GPU
-allocation accessed through Open OnDemand; connecting the application backend
-to that environment is part of the planned integration. The laptop is not
-required to run the models. The evaluation table defines tests for a later stage.
+For the demonstration, the dashboard backend and front end will run on the
+university GPU node next to model inference, inside a Slurm job on the B200
+allocation accessed through Open OnDemand. The dashboard is viewed in a laptop
+browser through VS Code tunnel port forwarding, which only the signed-in
+developer can open; the traffic is encrypted and relayed by Microsoft's tunnel
+service. The dashboard is reachable only while the job runs, and the laptop is
+not required to run the models. The evaluation table defines tests for a later stage.
 
 - [Requirements](docs/week2_requirements.md)
 - [Evaluation criteria](docs/week2_evaluation_criteria.md)
