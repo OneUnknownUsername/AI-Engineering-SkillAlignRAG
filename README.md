@@ -222,6 +222,27 @@ level dilution. Retrieval candidates do not establish curriculum coverage.
 Precision/recall/F1 and true retrieval accuracy require manually labeled
 relevance judgements and are intentionally not fabricated by this smoke test.
 
+### Withheld-level cases
+
+`src.run_withheld_level_cases` tests missing-document handling on real data. Each
+case copies the course files to a work folder, withholds one evidence level
+(`missing`: its folder is deleted; `unprocessable`: its files are replaced by one
+unreadable file), re-runs ingestion, indexing and the audit for that course, and
+checks that every withheld routed cell is Insufficient Evidence with the matching
+reason and no model call. It also records the baseline's labels and whether the
+course's other routed cells changed from the reference run. `data/courses` and
+the main outputs are never modified.
+
+```bash
+.venv/bin/python -m src.run_withheld_level_cases run --offline
+```
+
+The default 11 cases withhold every available level as missing and every level of
+SAIA2143 as unprocessable; `--case COURSE:LEVEL:MODE` picks individual cases. Each
+takes about 80 seconds on the B200 slice. Results, including the missing-document
+conflation rate with the SAIA2113 CI already missing, go to
+`outputs/withheld_level_runs/summary.md`; finished cases are skipped on a rerun.
+
 ### Scoring an audit run against ground truth
 
 `src.evaluate_ground_truth` compares a saved audit run with hand-made labels.
