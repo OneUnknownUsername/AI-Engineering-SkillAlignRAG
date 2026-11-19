@@ -3,10 +3,12 @@ from __future__ import annotations
 import argparse
 import logging
 from collections import Counter
+from dataclasses import dataclass
 from pathlib import Path
 from time import perf_counter
+from typing import Any
 
-from src.common import COURSES, GENERATION_ERROR, LEVELS, ROOT, code_version, fingerprint, md, read_json, write_json
+from src.common import COURSES, GENERATION_ERROR, LEVELS, ROOT, code_version, evidence_levels, fingerprint, md, read_json, write_json
 from src.clo_authority import compare_with_ci, corroborating_slides
 from src.config import AuditConfig
 from src.skill_hypotheses import atomic_hypotheses
@@ -151,7 +153,19 @@ def render_reports(output: Path, data: dict, config: AuditConfig) -> None:
     (output / 'routed_vs_baseline_comparison_report.md').write_text('\n'.join(lines)+'\n', encoding='utf-8')
 
 
-def run(output: Path, config: AuditConfig) -> dict:
+@dataclass
+class AuditContext:
+    """Everything an audit call needs, loaded once and reused for every cell."""
+    catalog: dict
+    chunks: list
+    lookup: dict
+    retriever: Any
+    verifier: Any
+    llm: Any
+
+
+def prepare_audit(output: Path, config: AuditConfig) -> tuple[AuditContext, dict]:
+    """Load the course artifacts and models once; return the context and an empty results record."""
     # Fail early on absent artifacts, before loading multi-GB weights.
     catalog = read_json(output / 'course_catalog_manifest.json')
     skills = read_json(output / 'industry_skills_benchmark.json')
@@ -190,44 +204,71 @@ def run(output: Path, config: AuditConfig) -> dict:
                                      for c in COURSES}}
     if retriever.catalog != catalog:
         raise ValueError('Retrieval catalog differs from current course manifest')
+    return AuditContext(catalog, chunks, lookup, retriever, verifier, llm), data
+
+
+def audit_level(ctx: AuditContext, course: str, skill: dict, level: str, query: str | None = None) -> dict:
+    """One routed cell: missing-document check, retrieval, model, then citation check or Generation Error.
+
+    `query` replaces the skill's retrieval query for this search only; the model is still
+    shown the skill itself. Without it, the skill's own retrieval query is used.
+    """
+    start = perf_counter()
+    abstention = missing_document(ctx.catalog, course, level)
+    if abstention:
+        return {**abstention, 'candidates': []}
+    hits = ctx.retriever.retrieve(course, query or skill['retrieval_query'], level, top_k=3)
+    drafts, telemetry = ctx.llm.judge(course, skill, hits, level)
+    verdict = generation_failure(telemetry) if 'generation_error' in telemetry else ctx.verifier.verify(course, level, skill, drafts[level], hits)
+    result = {**telemetry, **verdict, 'draft': drafts[level], 'candidates': hits, 'latency_ms': (perf_counter()-start)*1000}
+    if query is not None:
+        result['retrieval_query_used'] = query
+    if level == 'CLO' and result['final_classification'] == 'Supported':
+        result['clo_corroboration'] = corroborating_slides(result['verified_citation']['verbatim_quote'], course, ctx.chunks, ctx.lookup)
+    return result
+
+
+def audit_pooled(ctx: AuditContext, course: str, skill: dict) -> tuple[dict, dict[str, dict]]:
+    """The single-pass baseline for one pair: one pooled search and one model call for all three levels."""
+    start = perf_counter()
+    pooled = ctx.retriever.retrieve(course, skill['retrieval_query'], top_k=3)
+    drafts, telemetry = ctx.llm.judge(course, skill, pooled)
+    batch_latency = (perf_counter()-start)*1000
+    batch = {'course_code': course, 'skill_id': skill['skill_id'], **telemetry, 'latency_ms': batch_latency, 'candidates': pooled}
+    failed = 'generation_error' in telemetry
+    levels = {}
+    for level in LEVELS.values():
+        start = perf_counter()
+        audit = generation_failure(telemetry) if failed else ctx.verifier.verify(course, level, skill, drafts[level], pooled)
+        audit['latency_ms'] = (perf_counter()-start)*1000
+        baseline = {**telemetry, 'final_classification': GENERATION_ERROR if failed else drafts[level]['draft_classification'], 'draft': drafts[level],
+                    'latency_ms': batch_latency/3,
+                    'prompt_tokens': telemetry['prompt_tokens']/3, 'completion_tokens': telemetry['completion_tokens']/3,
+                    'tokens_used': telemetry['tokens_used']/3}
+        levels[level] = {'pooled_has_level': any(level in evidence_levels(h) for h in pooled), 'baseline': baseline, 'baseline_audit': audit}
+    return batch, levels
+
+
+def audit_pair(ctx: AuditContext, course: str, skill: dict) -> tuple[list[dict], dict]:
+    """The three finished cells of one course–skill pair (routed and baseline) and the baseline batch record."""
+    if not check_scope(f"Audit {course} skill {skill['skill_id']} coverage: {skill['skill_name']}")['allowed']:
+        raise ValueError('Audit request refused by scope control')
+    routed = {level: audit_level(ctx, course, skill, level) for level in LEVELS.values()}
+    batch, pooled = audit_pooled(ctx, course, skill)
+    cells = [{'course_code': course, 'skill_id': skill['skill_id'], 'level': level, 'pooled_has_level': pooled[level]['pooled_has_level'],
+              'routed': routed[level], 'baseline': pooled[level]['baseline'], 'baseline_audit': pooled[level]['baseline_audit']}
+             for level in LEVELS.values()]
+    return cells, batch
+
+
+def run(output: Path, config: AuditConfig) -> dict:
+    """Audit all 36 course–skill pairs (108 cells) and write the results and reports."""
+    ctx, data = prepare_audit(output, config)
     for course in COURSES:
-        for skill in sorted(skills, key=lambda s: s['skill_id']):
-            query = f"Audit {course} skill {skill['skill_id']} coverage: {skill['skill_name']}"
-            if not check_scope(query)['allowed']:
-                raise ValueError('Audit request refused by scope control')
-            routed = {}
-            for level in LEVELS.values():
-                start = perf_counter()
-                abstention = missing_document(catalog, course, level)
-                if abstention:
-                    routed[level] = {**abstention, 'candidates': []}
-                    continue
-                hits = retriever.retrieve(course, skill['retrieval_query'], level, top_k=3)
-                drafts, telemetry = llm.judge(course, skill, hits, level)
-                verdict = generation_failure(telemetry) if 'generation_error' in telemetry else verifier.verify(course, level, skill, drafts[level], hits)
-                routed[level] = {**telemetry, **verdict,
-                                 'draft': drafts[level], 'candidates': hits, 'latency_ms': (perf_counter()-start)*1000}
-                if level == 'CLO' and routed[level]['final_classification'] == 'Supported':
-                    routed[level]['clo_corroboration'] = corroborating_slides(
-                        routed[level]['verified_citation']['verbatim_quote'], course, chunks, lookup)
-            start = perf_counter()
-            pooled = retriever.retrieve(course, skill['retrieval_query'], top_k=3)
-            drafts, telemetry = llm.judge(course, skill, pooled)
-            batch_latency = (perf_counter()-start)*1000
-            data['baseline_batches'].append({'course_code': course, 'skill_id': skill['skill_id'], **telemetry, 'latency_ms': batch_latency, 'candidates': pooled})
-            from src.common import evidence_levels
-            for level in LEVELS.values():
-                start = perf_counter()
-                failed = 'generation_error' in telemetry
-                audit = generation_failure(telemetry) if failed else verifier.verify(course, level, skill, drafts[level], pooled)
-                audit['latency_ms'] = (perf_counter()-start)*1000
-                baseline = {**telemetry, 'final_classification': GENERATION_ERROR if failed else drafts[level]['draft_classification'], 'draft': drafts[level],
-                            'latency_ms': batch_latency/3,
-                            'prompt_tokens': telemetry['prompt_tokens']/3, 'completion_tokens': telemetry['completion_tokens']/3,
-                            'tokens_used': telemetry['tokens_used']/3}
-                data['cells'].append({'course_code': course, 'skill_id': skill['skill_id'], 'level': level,
-                                      'pooled_has_level': any(level in evidence_levels(h) for h in pooled),
-                                      'routed': routed[level], 'baseline': baseline, 'baseline_audit': audit})
+        for skill in sorted(data['skills'], key=lambda s: s['skill_id']):
+            cells, batch = audit_pair(ctx, course, skill)
+            data['baseline_batches'].append(batch)
+            data['cells'].extend(cells)
             logging.info('Completed %s / %s (%d/108 cells)', course, skill['skill_id'], len(data['cells']))
             write_json(output / 'skill_coverage_audit_checkpoint.json', data)
     write_json(output / 'skill_coverage_audit_results.json', data)

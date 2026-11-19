@@ -13,7 +13,7 @@ from src.config import AuditConfig
 from src.scope_and_abstention_control import check_scope, missing_document, safety_report, IN_SCOPE, OUT_OF_SCOPE
 from src.citation_span_verifier import CitationSpanVerifier, canonical_span, expand_short_quote, pedagogical_boundary
 from src.llm_judgement_service import validate_decision, LLMJudgementService, prompt_candidate, expand_decision, json_object_complete
-from src.run_skill_audit_pipeline import run, percentile
+from src.run_skill_audit_pipeline import AuditContext, audit_level, audit_pair, run, percentile
 
 QUOTE = 'Students implement data cleaning methods to handle missing values and remove duplicates.'
 
@@ -506,6 +506,40 @@ class ControlTests(unittest.TestCase):
             self.assertIn('Generation Error<br>The model output could not be read; manual review required.',
                           (output/'skill_coverage_audit_report.md').read_text())
             self.assertIn('| Insufficient Evidence | Generation Error |', (output/'routed_vs_baseline_comparison_report.md').read_text())
+
+    def test_single_cells_and_pairs_can_be_audited_on_their_own(self):
+        # The dashboard re-audits affected cells and the FYP's follow-up search re-runs one level
+        # with a rewritten query, so both must work without the 108-cell loop.
+        catalog = {'courses': {'SAIA2113': {'level_availability': {'CLO': False, 'Taught': True, 'Assessed': True}}}}
+        searches, judged = [], []
+        class RetrieverDouble:
+            def retrieve(self, course, query, level=None, **kwargs):
+                searches.append((course, level, query))
+                return []
+        class LLMDouble:
+            def judge(self, course, skill, hits, level=None):
+                judged.append((level, skill['retrieval_query']))
+                none = {'draft_classification': 'Not Found', 'candidate_rank_selected': None, 'doc_id': None,
+                        'pdf_page_no': None, 'verbatim_quote': None, 'rationale': ''}
+                return {l: dict(none) for l in ([level] if level else LEVELS.values())}, {
+                    'latency_ms': 1, 'llm_called': True, 'prompt_tokens': 3, 'completion_tokens': 1, 'tokens_used': 4}
+        ctx = AuditContext(catalog, [], {}, RetrieverDouble(), CitationSpanVerifier({}, FakeNLI()), LLMDouble())
+        skill = {'skill_id': 'S05', 'skill_name': 'Model training', 'retrieval_query': 'train supervised models'}
+
+        missing = audit_level(ctx, 'SAIA2113', skill, 'CLO')
+        self.assertEqual((missing['final_classification'], searches, judged), ('Insufficient Evidence', [], []))
+
+        rewritten = audit_level(ctx, 'SAIA2113', skill, 'Taught', query='gradient descent lab')
+        self.assertEqual(searches[-1], ('SAIA2113', 'Taught', 'gradient descent lab'))
+        self.assertEqual(judged[-1], ('Taught', 'train supervised models'))  # The model still sees the skill itself.
+        self.assertEqual((rewritten['final_classification'], rewritten['retrieval_query_used']), ('Not Found', 'gradient descent lab'))
+        self.assertNotIn('retrieval_query_used', audit_level(ctx, 'SAIA2113', skill, 'Assessed'))
+
+        cells, batch = audit_pair(ctx, 'SAIA2113', skill)
+        self.assertEqual([c['level'] for c in cells], ['CLO', 'Taught', 'Assessed'])
+        self.assertEqual([c['routed']['final_classification'] for c in cells], ['Insufficient Evidence', 'Not Found', 'Not Found'])
+        self.assertEqual({c['baseline']['final_classification'] for c in cells}, {'Not Found'})
+        self.assertEqual((batch['course_code'], batch['skill_id']), ('SAIA2113', 'S05'))
 
     def test_runner_lists_slides_that_repeat_the_cited_ci_wording(self):
         catalog = {'courses': {c: {'level_availability': {l: True for l in LEVELS.values()}} for c in COURSES}}
