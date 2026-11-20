@@ -1,12 +1,10 @@
 import { STATUS_INFO } from '../api.js';
 
-export default function StatusBadge({ status, onClick, label }) {
+// A cell result. Its meaning (and `detail`, such as why evidence is insufficient) is in the tooltip.
+export default function StatusBadge({ status, onClick, label, detail }) {
   const info = STATUS_INFO[status] || { tone: 'neutral', text: status };
-  const content = <span className={`badge ${info.tone}`}>{status}</span>;
-  if (!onClick) return content;
-  return (
-    <button className="badge-button" onClick={onClick} title={`${info.text} Click to inspect.`} aria-label={label}>
-      {content}
-    </button>
-  );
+  const title = detail ? `${info.text} ${detail}` : info.text;
+  const className = `badge badge-${info.tone}`;
+  if (!onClick) return <span className={className} title={title}>{status}</span>;
+  return <button className={className} onClick={onClick} title={title} aria-label={label}>{status}</button>;
 }

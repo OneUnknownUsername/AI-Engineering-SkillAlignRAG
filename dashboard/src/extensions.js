@@ -4,7 +4,8 @@
 //
 // overviewColumns: [{ key, header, render: (row) => node }]   extra columns in the matrix
 // drawerSections:  [(detail) => node | null]                  extra sections in the evidence drawer
-// pages:           [{ key, label, render: (props) => node }]  extra navigation pages
+// pages:           [{ key, label, render: (props) => node }]  extra navigation pages; props.title is
+//                                                             the label, for the page's <PageHeader> (components/ui.jsx)
 export const overviewColumns = [];
 export const drawerSections = [];
 export const pages = [];

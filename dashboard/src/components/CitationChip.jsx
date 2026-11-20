@@ -85,7 +85,7 @@ export default function CitationChip({ course, skill, level, item, sourceFile, p
       onBlur={(e) => !wrapper.current?.contains(e.relatedTarget) && hideSoon()}
     >
       <button
-        className="citation-chip"
+        className="btn btn-outline btn-xs"
         ref={button}
         onFocus={show}
         onClick={show}
@@ -96,14 +96,14 @@ export default function CitationChip({ course, skill, level, item, sourceFile, p
       </button>
       {open && (
         <span className="citation-popover" role="tooltip" ref={popover} style={position || undefined} onMouseEnter={show}>
-          <span className="muted small popover-file">{sourceFile}, {label}</span>
+          <span className="text-muted text-xs">{sourceFile}, {label}</span>
           {error && (
-            <span className="error small">
+            <span className="text-danger">
               {error}{' '}
-              <button className="link" onClick={load}>Try again</button>
+              <button className="btn btn-link" onClick={load}>Try again</button>
             </span>
           )}
-          {!source && !error && <span className="muted small">Loading…</span>}
+          {!source && !error && <span className="text-muted">Loading…</span>}
           {preview && (
             <span className="popover-text">
               {preview.before}
@@ -111,10 +111,10 @@ export default function CitationChip({ course, skill, level, item, sourceFile, p
               {preview.after}
             </span>
           )}
-          {source && !source.highlight && <span className="muted small">The quote could not be located on this page.</span>}
+          {source && !source.highlight && <span className="text-warning">The quote could not be located on this page.</span>}
           {source && (
-            <button className="link popover-action" onClick={() => { setOpen(false); onOpenSource(item); }}>
-              Show source text →
+            <button className="btn btn-link" onClick={() => { setOpen(false); onOpenSource(item); }}>
+              Show source text
             </button>
           )}
         </span>

@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { api } from '../api.js';
+import { ThemeToggle } from './ui.jsx';
 
+// Accounts are created by an administrator; there is no self-registration.
 export default function SignIn({ onSignedIn }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -22,19 +24,23 @@ export default function SignIn({ onSignedIn }) {
 
   return (
     <div className="signin">
+      <ThemeToggle className="signin-theme" />
       <form onSubmit={submit} className="card">
-        <h1>SkillAlignRAG</h1>
-        <p className="muted">Sign in with the account your administrator created. There is no self-registration.</p>
-        <label>
-          Username
-          <input value={username} onChange={(e) => setUsername(e.target.value)} autoComplete="username" required autoFocus />
-        </label>
-        <label>
-          Password
-          <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} autoComplete="current-password" required />
-        </label>
-        {error && <p className="error" role="alert">{error}</p>}
-        <button type="submit" className="primary" disabled={busy}>{busy ? 'Signing in…' : 'Sign in'}</button>
+        <div className="card-header">
+          <h1 className="card-title">SkillAlignRAG</h1>
+        </div>
+        <div className="card-content form">
+          <label className="field">
+            <span>Username</span>
+            <input className="input" value={username} onChange={(e) => setUsername(e.target.value)} autoComplete="username" required autoFocus />
+          </label>
+          <label className="field">
+            <span>Password</span>
+            <input className="input" type="password" value={password} onChange={(e) => setPassword(e.target.value)} autoComplete="current-password" required />
+          </label>
+          {error && <div className="alert alert-danger" role="alert">{error}</div>}
+          <button type="submit" className="btn btn-primary" disabled={busy}>{busy ? 'Signing in…' : 'Sign in'}</button>
+        </div>
       </form>
     </div>
   );

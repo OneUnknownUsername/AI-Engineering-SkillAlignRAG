@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 import useApi from '../useApi.js';
 import LoadError from './LoadError.jsx';
 import { pageLabel } from '../sourceText.js';
+import { Badge, CloseButton } from './ui.jsx';
 
 // Part of the page text, with the part inside the highlighted quote marked.
 // The first mark gets `markRef`, so the panel can scroll the quote into view.
@@ -48,7 +49,7 @@ function PageBody({ page, highlight, markRef }) {
     else if (block.kind === 'heading') out.push(<h4 key={i} className="page-heading">{frag(block)}</h4>);
     else out.push(<p key={i} className={className}>{frag(block)}</p>);
   });
-  if (!page.text.trim()) return <p className="muted">(no text on this page)</p>;
+  if (!page.text.trim()) return <p className="text-muted">(no text on this page)</p>;
   return out.map((item, i) => (item.items
     ? (item.kind === 'numbered'
       ? <ul key={`list-${i}`} className="numbered-list">{item.items}</ul>
@@ -56,8 +57,9 @@ function PageBody({ page, highlight, markRef }) {
     : item));
 }
 
-// The whole extracted text of a cited document, page by page, opened from the left.
-// The cited page is marked and the quote is highlighted and scrolled into view.
+// The whole extracted text of a cited document, page by page, opened from the left: native text,
+// then text read from images, exactly as the citation verifier checked it, laid out from the page's
+// line breaks. The cited page is marked and the quote is highlighted and scrolled into view.
 export default function SourcePanel({ course, skill, level, item, onClose, onSignedOut }) {
   const { data: doc, error, retry } = useApi(
     `/api/cells/${course}/${skill}/${level}/document?item=${encodeURIComponent(item)}`, onSignedOut);
@@ -71,38 +73,32 @@ export default function SourcePanel({ course, skill, level, item, onClose, onSig
   const unit = doc && (pageLabel(doc.source_file, 1).startsWith('slide') ? 'slides' : 'pages');
 
   return (
-    <aside className="source-panel" role="dialog" aria-label="Source text">
-      <div className="drawer-head">
+    <aside className="sheet sheet-left" role="dialog" aria-label="Source text">
+      <div className="sheet-header">
         <div>
-          <div className="muted small">Source text</div>
-          <h2>{doc ? <code>{doc.source_file}</code> : error ? 'Could not load' : 'Loading…'}</h2>
-          {doc && <div className="muted small">{doc.pages.length} {unit} · cited on {pageLabel(doc.source_file, doc.page_or_slide)}</div>}
+          <h2 className="sheet-title">{doc ? <code>{doc.source_file}</code> : error ? 'Could not load the source text' : 'Loading…'}</h2>
+          {doc && <p className="sheet-description">{doc.pages.length} {unit} · cited on {pageLabel(doc.source_file, doc.page_or_slide)}</p>}
         </div>
-        <button className="link" onClick={onClose} aria-label="Close source text">Close ✕</button>
+        <CloseButton onClick={onClose} label="Close source text" />
       </div>
-      {error && <LoadError message={error} onRetry={retry} />}
-      {doc && (
-        <>
-          <p className="muted small">
-            The text extracted from each page (native text, then text read from images), exactly as the citation verifier
-            checked it, laid out from the page's line breaks.
-            {!doc.highlight && ' The quote could not be located on the cited page.'}
-          </p>
-          {doc.pages.map((page) => {
-            const cited = page.page === doc.page_or_slide;
-            return (
-              <section key={page.page} className={cited ? 'source-page cited' : 'source-page'} ref={cited ? citedPage : undefined}>
-                <div className="source-page-label">
-                  {pageLabel(doc.source_file, page.page).replace(/^./, (c) => c.toUpperCase())}{cited && ' · cited'}
-                </div>
-                <div className="source-text">
-                  <PageBody page={page} highlight={cited ? doc.highlight : null} markRef={mark} />
-                </div>
-              </section>
-            );
-          })}
-        </>
-      )}
+      <div className="sheet-body">
+        {error && <LoadError message={error} onRetry={retry} />}
+        {doc && !doc.highlight && <p className="text-warning">The quote could not be located on the cited page.</p>}
+        {doc && doc.pages.map((page) => {
+          const cited = page.page === doc.page_or_slide;
+          return (
+            <section key={page.page} className={cited ? 'source-page cited' : 'source-page'} ref={cited ? citedPage : undefined}>
+              <div className="source-page-label">
+                {pageLabel(doc.source_file, page.page).replace(/^./, (c) => c.toUpperCase())}
+                {cited && <Badge tone="info">Cited</Badge>}
+              </div>
+              <div className="source-text">
+                <PageBody page={page} highlight={cited ? doc.highlight : null} markRef={mark} />
+              </div>
+            </section>
+          );
+        })}
+      </div>
     </aside>
   );
 }

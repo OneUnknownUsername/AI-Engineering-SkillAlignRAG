@@ -1,9 +1,9 @@
 // An error message with a button to try the request again.
 export default function LoadError({ message, onRetry }) {
   return (
-    <div className="load-error" role="alert">
-      <span className="error">{message}</span>
-      {onRetry && <button onClick={onRetry}>Try again</button>}
+    <div className="alert alert-danger" role="alert">
+      <span>{message}</span>
+      {onRetry && <button className="btn btn-outline btn-sm" onClick={onRetry}>Try again</button>}
     </div>
   );
 }
