@@ -69,6 +69,20 @@ def test_letter_spaced_contact_pii():
     assert clean("Room: MJIIT 060601 (Level 6)")[0] == "[REDACTED_PII] (Level 6)"
 
 
+def test_landline_country_code_and_ocr_letter_o_phone_numbers_are_redacted():
+    # Formats seen unredacted in course CI staff tables during the Week 4 audit (synthetic values).
+    for private in ["03-12345678", "07-5551234", "60312345678", "+603-1234 5678", "O123456789", "Tel: 03-1234 5678."]:
+        text, events = clean(private)
+        assert not any(ch.isdigit() for ch in text.replace("Tel:", "")), private
+        assert [e["kind"] for e in events] == ["phone"], private
+
+
+def test_phone_pattern_keeps_numbers_in_teaching_content():
+    for ordinary in ["090 890 300", "60500 44142", "60000 43141", "ISBN : 978-3-030-72187-9",
+                     "2023-01-05 2.295015", "35.0 053.1000 3", "6000 5000 4000 3000", "$105,072 1.00 11"]:
+        assert clean(ordinary, boilerplate=False) == (ordinary, []), ordinary
+
+
 def test_room_redaction_requires_explicit_office_identifiers():
     ordinary = "Booking.com: 1 room\n1 nights, 2 adults. Room size 22 square metres. Office 365."
     assert clean(ordinary) == (ordinary, [])

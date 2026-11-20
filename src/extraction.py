@@ -27,7 +27,14 @@ BOILERPLATE = re.compile(
 )
 PII = {
     "email": re.compile(r"[\w.+-]+@[\w.-]+(?:\.[A-Za-z]{2,})?"),
-    "phone": re.compile(r"(?<!\w)(?:\+?60[- .]?|0)1\d(?:[- .]?\d){7,8}(?!\d)"),
+    # Malaysian numbers: mobile 01x (any separators); landline 0 + area code; the
+    # 60 / +60 country code with or without "+"; and OCR reading the leading 0 as
+    # the letter O. Landline and country-code forms allow at most two separators,
+    # so chart axes, dates, ISBNs and decimals in slides are not matched.
+    "phone": re.compile(
+        r"(?<!\w)(?:\+?60[- .]?|0)1\d(?:[- .]?\d){7,8}(?!\d)"
+        r"|(?<![\w$/+-])(?<!\d[.,])(?:\+?60[- ]?|[0Oo])(?:1\d|[3-9]\d?)[- ]?\d{3,4}[- ]?\d{4}(?![\w%]|[.,]\d)"
+    ),
     "office_room": re.compile(
         r"\b(?:(?:office(?:\s+room)?|room|bilik)(?:\s+(?:no\.?|number))?\s*[:#]\s*"
         r"(?:[A-Z]{1,12}\s+)?(?=[\w.-]*\d)[\w]+(?:[.-][\w]+)*|MJIIT\s*\d+)\b", re.IGNORECASE
