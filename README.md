@@ -39,6 +39,21 @@ University course lecturers and programme coordinators teaching or overseeing co
 | W1 | System map + project scope | README + docs | ✅ |
 | W2 | Requirements + eval + architecture | Requirements + evaluation criteria + v1 architecture + ADR | ✅ |
 | W3 | V1 data pipeline, lineage and workflow | [Notebook](notebooks/week3_pipeline.ipynb) + [data inventory](docs/week3_data_inventory.md) + [pipeline diagram](docs/week3_pipeline_diagram.png) + [pipeline decisions](docs/week3_pipeline_decisions.md) + [lineage manifest](data/week3_manifest.json) + [pipeline manifests](data/pipeline_v1/) | ✅ |
+| W4 | Data quality and responsible data audit | [Data Quality & Bias Report](docs/week4_data_quality_report.md) + [audit checks](src/week4_audit_checks.py) | ✅ |
+
+### Week 4 quality gate: GO WITH CONDITIONS
+
+The [Week 4 report](docs/week4_data_quality_report.md) audits the Week 3 course-document
+output (Pathway A, 1,407 page records) against FR3/RAI1 and RAI2. Both validation rules
+pass. The one undocumented defect it found, 5 staff phone numbers missed by redaction,
+is fixed and revalidated. Rerun the checks with `python -m src.week4_audit_checks`.
+
+Unresolved actions:
+
+- Rebuild the Pipeline A artefacts in `outputs/` from the fixed extraction before the next evaluation run.
+- Obtain the SAIA2113 Course Information document; until then its 12 CLO cells stay Insufficient Evidence.
+- Confirm which SAIA1013 Course Information document applies to the 2025/26 offering.
+- During evaluation, report Taught recall separately for the Malay module (SRC07).
 
 ## Current implementation and planned V1
 

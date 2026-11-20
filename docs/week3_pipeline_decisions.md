@@ -88,7 +88,7 @@ The cause has not been established. The two runs differ in operating system and 
 - **Code version:** manifests record commit `7ffc49d` on `main`, which contains the code that produced these results. Commit IDs from before 6 November 2026 changed when the history was rewritten to correct the commit author, so older references to `8507604`, `9891716` or `bbc85db` correspond to `3428c16`, `96dc6b5` and `e30631b`.
 - **Saved notebook output:** repeated ONNX Runtime thread warnings were removed from the saved output. This does not affect any result.
 - **What hashes do not show:** data quality, source authority or permission to share. Source version and access rights are marked as not verified in the manifests. Fuller review belongs to Topic 4.
-- **Privacy:** redaction is regex-based and does not detect names. Prepared course records stay out of the public repository, and the [data inventory](week3_data_inventory.md) records where each dataset is stored.
+- **Privacy:** redaction is regex-based and does not detect names. A "0 matches" validation result only covers what the patterns describe: the Week 4 audit found phone formats the original pattern missed, which were fixed on 2026-11-20. Prepared course records stay out of the public repository, and the [data inventory](week3_data_inventory.md) records where each dataset is stored.
 
 ## Later measures this affects
 

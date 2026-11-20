@@ -25,7 +25,7 @@ All sources are real project data, not the synthetic practice pack.
 | Prepared IndSF records | `data/processed/prepared_indsf_*.jsonl`, `data/pipeline_v1/indsf_documents/` | Yes |
 | Manifests | `data/week3_manifest.json`, `data/pipeline_v1/*/pipeline_manifest.json` | Yes: hashes, counts and file names only |
 
-File names of course documents appear in the public manifests. Earlier commits with these files remain reachable on GitHub by direct hash; the project owner accepted this.
+File names of course documents appear in the public manifests. Earlier commits that held these files were removed from GitHub through GitHub Support; on 2026-11-13 their hashes returned "No commit found".
 
 ## Known gaps and limits
 
@@ -33,6 +33,7 @@ File names of course documents appear in the public manifests. Earlier commits w
 - **Version and date:** not verified for any source. Dates in file names were not checked against the documents. A hash identifies the exact file, not its version or authority.
 - **Permission:** a hash says nothing about permission to share. Permission to use the course materials was given in person by the Head of the Intelligence and Informatics Department.
 - **Names:** redaction covers email addresses, phone numbers and office rooms by regex. It does not detect names, so prepared course text must stay local.
+- **Phone numbers (updated 2026-11-20):** the Week 4 audit found that the phone pattern matched only mobile numbers. It missed 5 staff numbers in two CI staff tables: landlines, the 60 country code without "+", and an OCR'd letter O for the leading zero. The pattern was widened and the outputs regenerated; see the [Week 4 report](week4_data_quality_report.md).
 - **Office files:** SRC07 (PPTX) and SRC09 (DOCX) were read through PDFs converted earlier on Windows, because LibreOffice was not yet installed on this node when the pipeline ran. The PDF hashes are recorded in the manifest.
 
 ## Inventory

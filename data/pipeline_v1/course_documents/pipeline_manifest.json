@@ -1,7 +1,7 @@
 {
   "pipeline_version": "week3-v1",
-  "generated_at_utc": "2026-11-06T11:12:32.374931+00:00",
-  "git_commit": "7ffc49d5164fe253f3d5c0508a2f3ba265302c84",
+  "generated_at_utc": "2026-11-20T15:38:50.989441+00:00",
+  "git_commit": "ad9b154cd9723cc6d0f35e8aa08ec0394ad17d26",
   "data_type": "course_documents",
   "stages": [
     "source",
@@ -444,7 +444,7 @@
     "redaction_events": {
       "email": 129,
       "office_room": 13,
-      "phone": 9
+      "phone": 23
     }
   },
   "validation": {
@@ -453,10 +453,10 @@
       "data/pipeline_v1/course_documents/prepared_text.jsonl"
     ],
     "output_sha256": [
-      "77a78dddca462c90d28e762a081ee696a18697c98f8bdcf04e625724b915b2a5"
+      "9518eea9313ac759f9588b562d4a28b3a2f3aee35d39a77efbfb4c2293d0f278"
     ],
     "output_bytes": [
-      2108318
+      2108351
     ],
     "output_records": [
       1407
@@ -477,7 +477,7 @@
   "source_version": "Not verified",
   "access_rights": "Internal UTM course material; redistribution permission not verified; do not publish",
   "runtime": {
-    "seconds": 400.9,
+    "seconds": 398.3,
     "python": "3.12.3",
     "platform": "Linux",
     "packages": {

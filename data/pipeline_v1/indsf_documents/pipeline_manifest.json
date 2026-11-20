@@ -1,7 +1,7 @@
 {
   "pipeline_version": "week3-v1",
-  "generated_at_utc": "2026-11-06T11:13:08.066131+00:00",
-  "git_commit": "7ffc49d5164fe253f3d5c0508a2f3ba265302c84",
+  "generated_at_utc": "2026-11-20T15:39:26.367712+00:00",
+  "git_commit": "ad9b154cd9723cc6d0f35e8aa08ec0394ad17d26",
   "data_type": "indsf_documents",
   "stages": [
     "source",
@@ -69,7 +69,8 @@
     "ocr_pages": 32,
     "empty_text_pages": 0,
     "redaction_events": {
-      "email": 2
+      "email": 2,
+      "phone": 2
     }
   },
   "validation": {
@@ -79,7 +80,7 @@
       "data/pipeline_v1/indsf_documents/prepared_indsf_items.jsonl"
     ],
     "output_sha256": [
-      "15331fb3633234bb296ea48f0b1663feaafd04d9a1b186046263e862445362de",
+      "9f1ac01fb5250590f68db3fb81ac199b7fc342f82ec92a13702c328b0f87fb8e",
       "9bcc7c5fa510f249d63c64ab7db8f060fa4ff1fdc47230088583b0a6959f5fd3"
     ],
     "output_bytes": [
@@ -100,7 +101,7 @@
   "source_version": "Not verified",
   "access_rights": "HRD Corp publication; licence terms not verified",
   "runtime": {
-    "seconds": 35.7,
+    "seconds": 35.3,
     "python": "3.12.3",
     "platform": "Linux",
     "packages": {
