@@ -44,9 +44,10 @@ University course lecturers and programme coordinators teaching or overseeing co
 
 The current implementation provides command-line course ingestion, HRD Corp
 IndSF benchmark preparation, routed retrieval, local model judgement, citation
-verification, and Markdown/JSON audit reports. Sign-in, staff-only uploads,
-automatic processing from the interface, and the interactive dashboard are
-planned requirements; they are not implemented yet.
+verification, Markdown/JSON audit reports, and a signed-in dashboard over a saved
+audit run (phase A). Staff-only uploads, automatic processing from the interface
+and Pending/Processing states (phase B), and per-level incremental indexing
+(phase C) are planned and not implemented yet.
 
 The agreed V1 covers **SAIA1013, SAIA2113, and SAIA2143**, **S01–S12**, and
 **CLO / Taught / Assessed**: 36 course–skill rows and 108 coverage cells.
@@ -63,6 +64,39 @@ browser through VS Code tunnel port forwarding, which only the signed-in
 developer can open; the traffic is encrypted and relayed by Microsoft's tunnel
 service. The dashboard is reachable only while the job runs, and the laptop is
 not required to run the models. The evaluation table defines tests for a later stage.
+
+### Dashboard (phase A)
+
+The dashboard shows a saved audit run, by default the 2026-11-19 reference run:
+the 36-row matrix with CLO, Taught and Assessed side by side, course and skill
+filters, an evidence drawer (verified quote, source file, page or slide, NLI
+entailment, CI corroboration and the CI–slide comparison; hovering over the page
+or slide previews the quote in its page text, and "Show source text" opens the
+whole extracted text of the cited document, page by page, laid out from the
+page's line breaks as a title, sub-headings, paragraphs and bullet points, with
+text read from images in its own section, and the quote highlighted and scrolled
+into view. Only documents a cell cites are served), the 12 skills with
+their IndSF sources, and each course's document availability. Every page needs
+sign-in. Accounts are created only from the command line; the `approved_staff`
+role will be required to upload (phase B).
+
+```bash
+# Once: build the front end (Node.js 18+) and create an account.
+cd dashboard && npm ci && npm run build && cd ..
+.venv/bin/python -m src.dashboard.accounts add yourname --role approved_staff
+# Each session, on the GPU node:
+.venv/bin/python -m src.dashboard
+```
+
+Stop it with Ctrl+C, not Ctrl+Z: Ctrl+Z only pauses it, so it keeps the port and
+its pages never load. The server listens on 127.0.0.1 port 8050 only. In VS Code, forward port 8050 in
+the PORTS tab and open it in the browser. Ports 8000-8002 are often used by other
+people on the shared GPU node; if 8050 is busy too, the dashboard says so and
+`--port` picks another. `--results` shows another saved run. Accounts are
+kept in `outputs/dashboard/accounts.json`, which git ignores. The front end has
+empty extension points in `dashboard/src/extensions.js`, and `create_app` accepts
+backend extensions, so other projects can add features without editing the shared
+files.
 
 - [Requirements](docs/week2_requirements.md)
 - [Evaluation criteria](docs/week2_evaluation_criteria.md)

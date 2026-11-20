@@ -18,3 +18,7 @@ outputs/
 data/processed/prepared_text.jsonl
 data/pipeline_v1/course_documents/prepared_text.jsonl
 
+
+# Dashboard front end: installed packages and the build are recreated with npm ci && npm run build.
+dashboard/node_modules/
+dashboard/dist/
