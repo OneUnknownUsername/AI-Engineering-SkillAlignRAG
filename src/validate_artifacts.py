@@ -1,12 +1,10 @@
 """Audit generated provenance, privacy, corpus parity and all 36 retrieval logs."""
 from __future__ import annotations
 
-import hashlib
 from collections import Counter, defaultdict
 from pathlib import Path
 
-import numpy as np
-
+from src.build_indexes import load_embeddings
 from src.common import COURSES, LEVELS, base_parser, evidence_levels, fingerprint, normalize, read_json, write_json
 from src.extraction import clean
 from src.pipeline_b_indsf_skills import verify_benchmark
@@ -69,10 +67,10 @@ def validate(output_dir: Path) -> dict:
     require(index["index_fingerprint"] == fingerprint({"chunks": indexed_chunks, "catalog": indexed_catalog}), "Stale index snapshot")
     require([c for c in chunks if c["indexable"] and (c["verbatim_text_span"] or c["visual_diagram_summary"])] == indexed_chunks,
             "Indexed corpus differs from eligible chunks")
-    embedding_file = output_dir / "indexes/embeddings.npy"
-    require(hashlib.sha256(embedding_file.read_bytes()).hexdigest() == index["embedding_sha256"], "Embedding checksum mismatch")
-    embeddings = np.load(embedding_file, allow_pickle=False)
-    require(list(embeddings.shape) == index["embedding_shape"] and np.isfinite(embeddings).all(), "Invalid embedding matrix")
+    try:  # Checks every store's checksum, page list and values, and that each indexed page has one vector.
+        load_embeddings(output_dir / "indexes", index, indexed_chunks)
+    except ValueError as error:
+        require(False, f"Invalid embedding stores: {error}")
     for code in COURSES:
         pooled = index["partitions"]["pooled"][code]
         routed = [i for level in LEVELS.values() for i in index["partitions"]["routed"][f"{code}::{level}"]]

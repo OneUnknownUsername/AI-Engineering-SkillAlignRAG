@@ -143,3 +143,4 @@ mark { background: #ffe58a; color: #1d2330; border-radius: 2px; padding: 0 1px; 
 .documents { margin: 10px 0; }
 .documents summary { cursor: pointer; padding: 4px 0; font-weight: 500; }
 .documents .matrix { min-width: 0; margin: 6px 0 10px; }
+.job-detail { margin: 4px 0 0 4px; }

@@ -45,8 +45,8 @@ University course lecturers and programme coordinators teaching or overseeing co
 The current implementation provides command-line course ingestion, HRD Corp
 IndSF benchmark preparation, routed retrieval, local model judgement, citation
 verification, Markdown/JSON audit reports, and a signed-in dashboard over a saved
-audit run with staff uploads and automatic re-auditing (phases A and B).
-Per-level incremental indexing (phase C) is planned and not implemented yet.
+audit run with staff uploads, automatic re-auditing and incremental index updates
+(phases A, B and C).
 
 The agreed V1 covers **SAIA1013, SAIA2113, and SAIA2143**, **S01–S12**, and
 **CLO / Taught / Assessed**: 36 course–skill rows and 108 coverage cells.
@@ -83,9 +83,11 @@ Accounts with the `approved_staff` role can upload PDF, PPTX or DOCX files for a
 course and category, through the Upload button on the coverage overview, after
 confirming they are approved course materials with no student submissions; other
 accounts are told access is denied. The Courses page lists each course's
-processed documents. Each upload is processed in the background (about 70
-seconds on the B200 slice): the workspace's documents are re-read and re-indexed,
-and only that course and category are re-audited on the GPU. Its cells show
+processed documents. Each upload is processed in the background (about 55
+seconds on the B200 slice): only that course is re-read, only the index stores
+whose pages changed are rebuilt, and only that course and category are
+re-audited on the GPU. Each upload lists the stores it rebuilt, the page vectors
+it computed and the time each stage took. Its cells show
 Pending, then Processing, with the old result hidden, or Update failed if
 processing fails. Uploads change only `outputs/dashboard/workspace`, never
 `data/courses` or the reference run; `--reset-workspace` starts it again from the
@@ -310,6 +312,22 @@ run `score`:
 claims made), the unsupported-claim rate, claims whose quote is not on the cited
 page, and the automatic citation and span presence rate. Neither file is
 overwritten, and the sheet stays local.
+
+### Incremental updates (NFR4)
+
+The index keeps one embedding store per course and evidence level
+(`outputs/indexes/stores/<course>/<level>.npy`, with its page list in `.json`).
+`build_indexes` rewrites only the stores whose pages changed and computes vectors
+only for page text it has not seen before; every other store's files are left
+untouched, and `manifest.json` records the rebuild under `last_build`. An index
+in the earlier single-file layout is converted on the next build, reusing its
+vectors exactly. `--course CODE` makes Pipeline A re-read only that course and keep
+the other courses' records; the result equals reading every course.
+
+```bash
+.venv/bin/python -m src.pipeline_a_course_ingestion --course SAIA2143
+.venv/bin/python -m src.build_indexes --offline
+```
 
 ### Scoring an audit run against ground truth
 

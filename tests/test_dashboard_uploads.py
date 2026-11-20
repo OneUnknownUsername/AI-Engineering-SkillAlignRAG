@@ -19,9 +19,11 @@ SKILLS = [{"skill_id": s, "skill_name": f"Skill {s}", "retrieval_query": f"Do {s
 QUOTE = "Students clean the data."
 
 
-def fake_pipeline(fail_at=None):
+def fake_pipeline(fail_at=None, calls=None):
     """Stands in for Pipeline A, the index build and the re-audit, writing what each would write."""
     def run(args, log):
+        if calls is not None:
+            calls.append(list(args))
         module = args[0]
         if module == fail_at:
             raise RuntimeError(f"{module} failed in the test")
@@ -42,6 +44,7 @@ def fake_pipeline(fail_at=None):
                 catalog["courses"][code] = {"documents": docs, "level_availability":
                                             {l: any(d["evidence_level"] == l and d["status"] == "ready" for d in docs) for l in LEVELS.values()}}
             write_json(out / "course_catalog_manifest.json", catalog)
+            write_json(out / "course_ingestion_events.json", [])
         elif module == "src.dashboard.reaudit":
             course, level = args[args.index("--course") + 1], args[args.index("--level") + 1]
             catalog = read_json(out / "course_catalog_manifest.json")
@@ -67,6 +70,7 @@ def make_sources(tmp: Path) -> tuple[Path, Path, Path]:
     write_json(outputs / "parsed_course_chunks.json", [])
     write_json(outputs / "verbatim_lookup_store.json", {})
     write_json(outputs / "industry_skills_benchmark.json", SKILLS)
+    write_json(outputs / "course_ingestion_events.json", [])
     reference = tmp / "reference" / "results.json"
     reference.parent.mkdir()
     write_json(reference, {"skills": SKILLS, "availability": {c: {l: True for l in LEVELS.values()} for c in COURSES},
@@ -170,6 +174,23 @@ class UploadTest(unittest.TestCase):
         self.upload([("new.pdf", b"%PDF newer")])
         self.workspace.process_next()
         self.assertEqual({c["state"] for c in self.taught_cells()}, {"complete"})
+
+    def test_only_the_uploaded_course_is_read_again(self):
+        calls = []
+        self.workspace.runner = fake_pipeline(calls=calls)
+        self.sign_in()
+        self.upload([("new.pdf", b"%PDF new")])
+        self.workspace.process_next()
+        reading = next(c for c in calls if c[0] == "src.pipeline_a_course_ingestion")
+        self.assertEqual(reading[-2:], ["--course", "SAIA2143"])
+        # A workspace made before single-course reading has no ingestion events, so it is read in full once.
+        (self.workspace.outputs / "course_ingestion_events.json").unlink()
+        calls.clear()
+        self.upload([("newer.pdf", b"%PDF newer")])
+        self.workspace.process_next()
+        reading = next(c for c in calls if c[0] == "src.pipeline_a_course_ingestion")
+        self.assertNotIn("--course", reading)
+        self.assertEqual(self.workspace.jobs()[0]["state"], "completed")
 
     def test_jobs_left_unfinished_by_a_stopped_dashboard_are_marked_failed(self):
         self.sign_in()

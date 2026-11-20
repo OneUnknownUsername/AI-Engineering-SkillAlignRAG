@@ -4,7 +4,7 @@ The workspace starts as a copy of data/courses and of the reference run, so the 
 data is never touched. Each upload becomes a job; jobs run one at a time in the background:
 
   1. move the uploaded files into the workspace's course folder (same name = replaced)
-  2. re-read the workspace's documents (Pipeline A) and rebuild the indexes
+  2. re-read that course's documents (Pipeline A) and rebuild only the index stores that changed
   3. re-audit only the uploaded course and level (src.dashboard.reaudit, on the GPU)
   4. merge the new cells into the workspace results
 
@@ -17,6 +17,7 @@ import queue
 import shutil
 import threading
 import uuid
+from time import monotonic
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Callable
@@ -30,8 +31,8 @@ ACCEPTED = {".pdf", ".pptx", ".docx"}
 ACCEPTED_TEXT = "PDF, PPTX or DOCX"
 MAX_BYTES = 100 * 1024 * 1024
 COPIED_OUTPUTS = ("course_catalog_manifest.json", "parsed_course_chunks.json", "verbatim_lookup_store.json",
-                  "normalization_manifest.json", "industry_skills_benchmark.json", "indexes", "normalized_pdf",
-                  "extraction_cache")
+                  "course_ingestion_events.json", "normalization_manifest.json", "industry_skills_benchmark.json",
+                  "indexes", "normalized_pdf", "extraction_cache")
 LINKED_OUTPUTS = ("models", "tools")  # Read-only: the embedding model and LibreOffice.
 DEFAULT_WORKSPACE = ROOT / "outputs" / "dashboard" / "workspace"
 DEFAULT_REFERENCE = ROOT / "outputs" / "reference_run_2026-11-19_22659c7" / "skill_coverage_audit_results.json"
@@ -199,9 +200,14 @@ class Workspace:
                     shutil.move(str(incoming / entry["name"]), folder / entry["name"])
             shutil.rmtree(incoming, ignore_errors=True)
 
+            timings, started = {}, monotonic()
             self._update_job(job_id, files=files, stage="Reading the documents")
+            # Only this course is read again; the other courses keep their records (NFR4). A workspace
+            # made before single-course reading lacks the records that needs, so it is read in full once.
+            scope = ["--course", course] if (self.outputs / "course_ingestion_events.json").exists() else []
             self.runner(["src.pipeline_a_course_ingestion", "--data-dir", str(self.data), "--output-dir", str(self.outputs),
-                         "--allow-partial"], log)
+                         "--allow-partial", *scope], log)
+            timings["reading"] = round(monotonic() - started, 1)
             catalog = read_json(self.outputs / "course_catalog_manifest.json")
             documents = {Path(d["source_relative_path"]).name: d for d in catalog["courses"][course]["documents"]
                          if Path(d["source_relative_path"]).parent.name == LEVEL_FOLDERS[level]}
@@ -215,14 +221,20 @@ class Workspace:
                     entry.update(outcome="failed", reason=(document or {}).get("error") or "The file could not be read.")
 
             self._update_job(job_id, files=files, stage="Updating the search indexes")
+            started = monotonic()
             self.runner(["src.build_indexes", "--output-dir", str(self.outputs), "--offline"], log)
+            timings["indexing"] = round(monotonic() - started, 1)
+            manifest = self.outputs / "indexes" / "manifest.json"
+            index_update = read_json(manifest).get("last_build") if manifest.exists() else None
 
-            self._update_job(job_id, stage="Re-auditing the affected cells")
+            self._update_job(job_id, stage="Re-auditing the affected cells", timings=timings, index_update=index_update)
+            started = monotonic()
             result_path = self.path / "logs" / f"{job_id}.result.json"
             self.runner(["src.dashboard.reaudit", "--output-dir", str(self.outputs), "--course", course, "--level", level,
                          "--result", str(result_path), "--offline"], log)
+            timings["re_auditing"] = round(monotonic() - started, 1)
             self._merge(job_id, course, level, read_json(result_path))
-            self._update_job(job_id, state="completed", stage="Done", finished_at=now())
+            self._update_job(job_id, state="completed", stage="Done", finished_at=now(), timings=timings)
         except Exception as exc:  # Any failure is shown on the job and its cells, never hidden.
             message = str(exc) or type(exc).__name__
             if "CUDA" in message or "GPU" in message:

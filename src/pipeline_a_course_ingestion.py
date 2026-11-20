@@ -8,7 +8,7 @@ from pathlib import Path
 import pymupdf as fitz
 
 from src.curriculum_scope import explicit_clo_statement, mark_slide_clo_pages
-from src.common import COURSES, LEVELS, base_parser, extraction_options, md, normalize, write_json
+from src.common import COURSES, LEVELS, base_parser, extraction_options, md, normalize, read_json, write_json
 from src.extraction import PDFExtractor, extractor_from_args
 from src.step0_normalize_formats import normalize_formats
 
@@ -80,15 +80,56 @@ def extract_in_worker(path: str, force_ocr: bool = False) -> list[dict]:
     return list(_worker_extractor.extract(Path(path), force_ocr=force_ocr))
 
 
-def ingest(data_dir: Path, output_dir: Path, extractor, workers: int = 1) -> dict:
+def previous_outputs(output_dir: Path) -> dict:
+    """The last ingestion's records, which a one-course update keeps for the other courses."""
+    paths = {name: output_dir / f"{name}.json" for name in
+             ("course_catalog_manifest", "parsed_course_chunks", "verbatim_lookup_store", "course_ingestion_events")}
+    missing = [p.name for p in paths.values() if not p.exists()]
+    if missing:
+        raise ValueError(f"Updating single courses needs a full ingestion first; missing {missing}")
+    return {name: read_json(path) for name, path in paths.items()}
+
+
+def merge_courses(previous: dict, catalog: dict, chunks: list, lookup: dict, quality: list, selected: list[str]):
+    """New records for the re-read courses, previous records for the rest, in the usual course order,
+    so the result is the same as reading every course again."""
+    old_catalog = previous["course_catalog_manifest"]
+    if set(old_catalog["courses"]) != set(COURSES):
+        raise ValueError("The previous ingestion covers different courses; run a full ingestion")
+    merged_catalog = {**catalog, "courses": {code: catalog["courses"][code] if code in selected else old_catalog["courses"][code]
+                                             for code in COURSES}}
+    by_course = lambda rows: {code: [r for r in rows if r["course_code"] == code] for code in COURSES}
+    new_chunks, old_chunks = by_course(chunks), by_course(previous["parsed_course_chunks"])
+    merged_chunks = [c for code in COURSES for c in (new_chunks if code in selected else old_chunks)[code]]
+    old_lookup = previous["verbatim_lookup_store"]
+    merged_lookup = {}
+    for code in COURSES:
+        source = lookup if code in selected else old_lookup
+        merged_lookup.update((k, v) for k, v in source.items() if k.split("::", 1)[0] == code)
+    new_quality, old_quality = by_course(quality), by_course(previous["course_ingestion_events"])
+    merged_quality = [r for code in COURSES for r in (new_quality if code in selected else old_quality)[code]]
+    return merged_catalog, merged_chunks, merged_lookup, merged_quality
+
+
+def ingest(data_dir: Path, output_dir: Path, extractor, workers: int = 1, courses: list[str] | None = None) -> dict:
+    """Read the course folders into the catalog, page chunks and verbatim lookup.
+
+    With `courses`, only those courses are read again; every other course keeps the records of
+    the previous ingestion unchanged, so an update to one course rebuilds nothing else (NFR4).
+    """
     if workers < 1:
         raise ValueError("workers must be positive")
+    unknown = sorted(set(courses or []) - set(COURSES))
+    if unknown:
+        raise ValueError(f"Unsupported course(s): {unknown}")
+    selected = [code for code in COURSES if not courses or code in courses]
+    previous = previous_outputs(output_dir) if courses else None
     records = normalize_formats(data_dir, output_dir)
     extracted, extraction_errors = {}, {}
     if workers > 1:
         ready = {r["pdf_path"]: Path(r["source_relative_path"]).parts[1] == "01_CI_CLO"
                  for r in records if r["status"] == "ready" and
-                 any(Path(r["source_relative_path"]).parts[0].startswith(code) for code in COURSES) and
+                 any(Path(r["source_relative_path"]).parts[0].startswith(code) for code in selected) and
                  len(Path(r["source_relative_path"]).parts) >= 3 and
                  Path(r["source_relative_path"]).parts[1] in LEVELS}
         with ProcessPoolExecutor(max_workers=workers, initializer=initialize_worker,
@@ -104,6 +145,8 @@ def ingest(data_dir: Path, output_dir: Path, extractor, workers: int = 1) -> dic
     catalog = {"schema_version": 1, "courses": {}, "normalization_manifest": "normalization_manifest.json"}
     chunks, lookup, quality = [], {}, []
     for code, title in COURSES.items():
+        if code not in selected:
+            continue
         folders = sorted(p for p in (data_dir / "courses").glob(code + "*") if p.is_dir())
         course = {"course_code": code, "course_title": title,
                   "course_folders": [p.name for p in folders],
@@ -165,6 +208,8 @@ def ingest(data_dir: Path, output_dir: Path, extractor, workers: int = 1) -> dic
                 else "available" if course["level_availability"][level]
                 else "processing_failed" if docs else "folder_empty_or_missing"
             )
+    if previous:
+        catalog, chunks, lookup, quality = merge_courses(previous, catalog, chunks, lookup, quality, selected)
     mark_slide_clo_pages(chunks, catalog)
     if len(lookup) != len(chunks) or len({c["chunk_id"] for c in chunks}) != len(chunks):
         raise ValueError("Document IDs collided; refusing to overwrite provenance")
@@ -224,8 +269,9 @@ def main() -> None:
     extraction_options(parser)
     parser.add_argument("--allow-partial", action="store_true", help="Exit successfully with recorded document failures")
     parser.add_argument("--workers", type=int, default=1, help="Separate extraction processes; 2 is useful on multicore CPUs")
+    parser.add_argument("--course", action="append", help="Re-read only this course (repeatable); the others keep their previous records")
     args = parser.parse_args()
-    catalog = ingest(args.data_dir, args.output_dir, extractor_from_args(args), args.workers)
+    catalog = ingest(args.data_dir, args.output_dir, extractor_from_args(args), args.workers, args.course)
     failures = [d for c in catalog["courses"].values() for d in c["documents"] if d["status"] != "ready"]
     print(f"Course ingestion complete; {len(failures)} document failures")
     if failures and not args.allow_partial:

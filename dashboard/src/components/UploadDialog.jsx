@@ -127,6 +127,13 @@ function Jobs({ jobs }) {
               </li>
             ))}
           </ul>
+          {job.index_update && (
+            <p className="muted small job-detail">
+              Index: {job.index_update.stores_rebuilt.length} of {job.index_update.stores_total} stores rebuilt
+              ({job.index_update.stores_rebuilt.join(', ') || 'none changed'}), {job.index_update.vectors_computed} page vectors computed.
+              {job.timings && <> Reading {job.timings.reading} s, indexing {job.timings.indexing} s{job.timings.re_auditing != null && <>, re-auditing {job.timings.re_auditing} s</>}.</>}
+            </p>
+          )}
           {job.error && <p className="error small">{job.error}</p>}
         </li>
       ))}
