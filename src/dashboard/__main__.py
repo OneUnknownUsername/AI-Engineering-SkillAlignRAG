@@ -1,6 +1,11 @@
 """Start the dashboard on this machine only; open it through VS Code port forwarding.
 
-  python -m src.dashboard [--port 8050] [--results PATH]
+  python -m src.dashboard [--port 8050]                 uploads change the dashboard's workspace
+  python -m src.dashboard --reset-workspace             start the workspace again from the reference run
+  python -m src.dashboard --read-only --results PATH    show a saved run, without uploads
+
+The workspace (outputs/dashboard/workspace) is a copy of data/courses and of the reference run,
+made the first time; uploads never change data/courses or the reference run.
 """
 import argparse
 import json
@@ -14,6 +19,7 @@ from src.common import ROOT
 from src.dashboard.accounts import DEFAULT_ACCOUNTS, AccountStore
 from src.dashboard.app import APP_NAME, COOKIE, create_app
 from src.dashboard.data import AuditView
+from src.dashboard.workspace import DEFAULT_REFERENCE, DEFAULT_WORKSPACE, Workspace
 
 DEFAULT_PORT = 8050  # 8000-8002 are often taken by other users on the shared GPU node.
 
@@ -65,12 +71,15 @@ def busy_port_message(port: int) -> str | None:
     return None
 
 
-DEFAULT_RESULTS = ROOT / "outputs" / "reference_run_2026-11-19_22659c7" / "skill_coverage_audit_results.json"
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("--results", type=Path, default=DEFAULT_RESULTS, help="Saved audit run to show")
+    parser.add_argument("--workspace", type=Path, default=DEFAULT_WORKSPACE, help="Folder that uploads change")
+    parser.add_argument("--reset-workspace", action="store_true", help="Discard uploads and start again from --results")
+    parser.add_argument("--read-only", action="store_true", help="Show --results without a workspace or uploads")
+    parser.add_argument("--results", type=Path, default=DEFAULT_REFERENCE,
+                        help="Saved audit run the workspace starts from, or the run shown with --read-only")
     parser.add_argument("--catalog", type=Path, default=ROOT / "outputs" / "course_catalog_manifest.json")
     parser.add_argument("--lookup", type=Path, default=ROOT / "outputs" / "verbatim_lookup_store.json",
                         help="Verbatim page text, for showing cited pages")
@@ -91,9 +100,17 @@ def main() -> None:
         hint = f" Port {free} is free: python -m src.dashboard --port {free}" if free else ""
         parser.exit(1, f"Port {args.port} is already in use, perhaps by another user on this node.{hint}\n")
     import uvicorn
-    view = AuditView(args.results, args.catalog, args.lookup, args.chunks)
+    workspace, view = None, None
+    if args.read_only:
+        view = AuditView(args.results, args.catalog, args.lookup, args.chunks)
+    else:
+        if args.reset_workspace or not (args.workspace / "results.json").exists():
+            print(f"Creating the dashboard workspace from {args.results.parent.name} (a copy; data/courses is not changed)…")
+            Workspace.create(args.workspace, ROOT / "data", ROOT / "outputs", args.results)
+        workspace = Workspace(args.workspace).open()
+        workspace.start()
     # A cookie per port: browsers share cookies across ports, so two dashboards would sign each other out.
-    app = create_app(view, AccountStore(args.accounts), args.static, cookie_name=f"{COOKIE}_{args.port}")
+    app = create_app(view, AccountStore(args.accounts), args.static, cookie_name=f"{COOKIE}_{args.port}", workspace=workspace)
     # 127.0.0.1 only: other users of the node cannot reach it; VS Code forwards it to the laptop.
     uvicorn.run(app, host="127.0.0.1", port=args.port)
 

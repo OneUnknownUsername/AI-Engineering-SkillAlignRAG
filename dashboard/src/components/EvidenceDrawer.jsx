@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import useApi from '../useApi.js';
+import { cellLabel } from '../api.js';
+import useApi, { usePolling } from '../useApi.js';
 import LoadError from './LoadError.jsx';
 import { drawerSections } from '../extensions.js';
 import StatusBadge from './StatusBadge.jsx';
@@ -8,7 +9,8 @@ import CitationChip from './CitationChip.jsx';
 import SourcePanel from './SourcePanel.jsx';
 
 export default function EvidenceDrawer({ course, skill, level, onClose, onSignedOut }) {
-  const { data: detail, error, retry } = useApi(`/api/cells/${course}/${skill}/${level}`, onSignedOut);
+  const { data: detail, error, retry, refresh } = useApi(`/api/cells/${course}/${skill}/${level}`, onSignedOut);
+  usePolling(detail?.state === 'pending' || detail?.state === 'processing', refresh);
   const [source, setSource] = useState(null); // which cited source the left panel shows: 'citation' or 'corroboration-N'
 
   useEffect(() => setSource(null), [course, skill, level]);
@@ -44,7 +46,8 @@ export default function EvidenceDrawer({ course, skill, level, onClose, onSigned
       {!detail ? !error && <p className="loading">Loading…</p> : (
         <div className="drawer-body">
           <p className="muted">{detail.skill_description}</p>
-          <p><StatusBadge status={detail.status} /></p>
+          <p><StatusBadge status={cellLabel(detail)} /></p>
+          {detail.updated_by && <p className="muted small">Re-audited after upload {detail.updated_by}.</p>}
           {detail.reason && <p>{detail.reason}</p>}
           {detail.note && <p className="muted">{detail.note}</p>}
 

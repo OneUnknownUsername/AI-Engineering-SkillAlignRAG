@@ -47,6 +47,7 @@ class AuditView:
         self.layout = {f"{c['course_code']}::{c['doc_id']}::{c['pdf_page_no']}":
                        (c.get("native_text") or "", c.get("ocr_extracted_text") or "", c.get("slide_or_section_title") or "")
                        for c in chunks}
+        self.states = {}  # (course, level) -> {state, message} while an upload changes that level
         self.files = {(course, d["doc_id"]): d.get("source_relative_path", d["doc_id"])
                       for course, info in (catalog or {}).get("courses", {}).items() for d in info["documents"]}
 
@@ -65,8 +66,14 @@ class AuditView:
                 "commit": version.get("commit"), "uncommitted_code_changes": version.get("uncommitted_code_changes"),
                 "gpu": self.results.get("hardware", {}).get("device")}
 
-    @staticmethod
-    def _summary(routed: dict) -> dict:
+    def set_states(self, states: dict) -> None:
+        self.states = dict(states)
+
+    def _summary(self, course: str, level: str, routed: dict) -> dict:
+        pending = self.states.get((course, level))
+        if pending:
+            # The result from before the upload is not current, so it is not shown.
+            return {"status": None, "state": pending["state"], "reason": pending["message"]}
         status = routed["final_classification"]
         reason = routed.get("abstention_reason") or (GENERATION_NOTE if status == GENERATION_ERROR else None)
         return {"status": status, "state": "complete", "reason": reason}
@@ -80,7 +87,7 @@ class AuditView:
             for skill_id, definition in self.skills.items():
                 if skill and skill_id != skill:
                     continue
-                levels = {level: self._summary(self.cells[(code, skill_id, level)]["routed"])
+                levels = {level: self._summary(code, level, self.cells[(code, skill_id, level)]["routed"])
                           for level in LEVEL_ORDER if (code, skill_id, level) in self.cells}
                 rows.append({"course_code": code, "course_title": title, "skill_id": skill_id,
                              "skill_name": definition["skill_name"], "levels": levels})
@@ -91,7 +98,10 @@ class AuditView:
         routed = self.cells[(course, skill, level)]["routed"]
         detail = {"course_code": course, "course_title": COURSES[course], "skill_id": skill,
                   "skill_name": self.skills[skill]["skill_name"], "skill_description": self.skills[skill]["retrieval_query"],
-                  "level": level, **self._summary(routed), "citation": None, "nli": None, "corroboration": [], "note": None}
+                  "level": level, **self._summary(course, level, routed), "citation": None, "nli": None, "corroboration": [],
+                  "note": None, "updated_by": self.cells[(course, skill, level)].get("updated_by")}
+        if detail["state"] != "complete":
+            return detail
         if detail["status"] == "Not Found":
             detail["note"] = NOT_FOUND_NOTE
         citation = routed.get("verified_citation")
@@ -113,6 +123,8 @@ class AuditView:
         """(doc_id, page, quote) of a source this cell cites: its verified citation or one corroborating slide."""
         self.check(course=course, skill=skill, level=level)
         routed = self.cells[(course, skill, level)]["routed"]
+        if (course, level) in self.states:
+            raise NoSource("This cell is being re-audited after an upload.")
         if routed["final_classification"] != "Supported":
             raise NoSource("This cell cites no source.")
         if item == "citation":

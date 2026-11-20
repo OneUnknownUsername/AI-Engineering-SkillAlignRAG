@@ -9,4 +9,5 @@ pytest>=8,<10
 # Dashboard backend (tests use httpx through FastAPI's TestClient).
 fastapi>=0.115,<1
 uvicorn>=0.30,<1
+python-multipart>=0.0.9,<1  # receives uploaded files
 httpx>=0.27,<1

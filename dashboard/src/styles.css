@@ -118,3 +118,28 @@ mark { background: #ffe58a; color: #1d2330; border-radius: 2px; padding: 0 1px; 
 .source-page.cited .source-page-label { color: var(--accent); }
 .source-page.cited .source-text { border-left: 3px solid var(--accent); }
 .load-error { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; padding: 10px 12px; margin: 8px 0; border: 1px solid var(--danger); border-radius: 8px; background: var(--danger-bg); }
+
+/* Uploads */
+.toolbar-end { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+.updating { font-size: 0.85em; color: var(--info); background: var(--info-bg); border-radius: 999px; padding: 3px 10px; }
+.modal-backdrop { position: fixed; inset: 0; z-index: 30; background: rgba(10, 14, 22, 0.45); display: grid; place-items: center; padding: 16px; }
+.modal { width: min(560px, 100%); max-height: calc(100vh - 32px); overflow-y: auto; background: var(--surface); border: 1px solid var(--border); border-radius: 12px; box-shadow: 0 20px 48px rgba(0, 0, 0, 0.3); padding: 18px 20px; outline: none; }
+.modal-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 8px; }
+.modal-head h2 { margin: 0; font-size: 1.1em; }
+.modal-section { font-size: 0.95em; margin: 18px 0 6px; padding-top: 12px; border-top: 1px solid var(--border); }
+.upload-form { display: flex; flex-direction: column; gap: 12px; }
+.upload-form label { display: flex; flex-direction: column; gap: 4px; font-weight: 500; font-size: 0.92em; }
+.upload-form .checkbox { flex-direction: row; align-items: flex-start; gap: 8px; font-weight: 400; }
+.upload-form .checkbox input { margin-top: 3px; }
+.upload-form button[type="submit"] { align-self: flex-start; }
+.success-note { margin: 0; padding: 8px 12px; border-radius: 8px; background: var(--supported-bg); color: var(--supported); font-size: 0.9em; }
+.form-row { display: flex; flex-wrap: wrap; gap: 12px; }
+.form-row label { flex: 1 1 220px; }
+.jobs, .job-files { list-style: none; padding: 0; margin: 0; }
+.job { padding: 10px 0; border-top: 1px solid var(--border); }
+.job:first-child { border-top: none; padding-top: 0; }
+.job-head { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; margin-bottom: 6px; }
+.job-files li { margin: 4px 0 4px 4px; font-size: 0.9em; }
+.documents { margin: 10px 0; }
+.documents summary { cursor: pointer; padding: 4px 0; font-weight: 500; }
+.documents .matrix { min-width: 0; margin: 6px 0 10px; }

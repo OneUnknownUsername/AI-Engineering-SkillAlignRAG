@@ -7,7 +7,7 @@ import time
 from pathlib import Path
 from typing import Callable, Iterable
 
-from fastapi import Depends, FastAPI, HTTPException, Request, Response
+from fastapi import Depends, FastAPI, File, Form, HTTPException, Request, Response, UploadFile
 from fastapi.middleware.gzip import GZipMiddleware
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
@@ -15,6 +15,7 @@ from pydantic import BaseModel
 
 from src.dashboard.accounts import STAFF_ROLE, AccountStore
 from src.dashboard.data import AuditView, NoSource, ScopeError
+from src.dashboard.workspace import MAX_BYTES, UploadError, Workspace
 
 COOKIE = "skillalign_session"
 APP_NAME = "skillalignrag-dashboard"  # Reported by /api/health, so a second start can recognise a running copy.
@@ -49,10 +50,15 @@ class Sessions:
         self.tokens.pop(token or "", None)
 
 
-def create_app(view: AuditView, accounts: AccountStore, static_dir: Path | None = None,
-               extensions: Iterable[Callable] = (), cookie_name: str = COOKIE) -> FastAPI:
-    """`extensions` are functions called as extension(app, current_user) to add more /api routes
+def create_app(view: AuditView | None, accounts: AccountStore, static_dir: Path | None = None,
+               extensions: Iterable[Callable] = (), cookie_name: str = COOKIE, workspace: Workspace | None = None) -> FastAPI:
+    """Shows `workspace` (which uploads change) or, without one, the saved run in `view` (read-only).
+    `extensions` are functions called as extension(app, current_user) to add more /api routes
     (for example the FYP's review features) before the catch-all route and the front end."""
+    def current_view() -> AuditView:
+        # A workspace replaces its view after each upload, so look it up on every request.
+        return workspace.view if workspace else view
+
     app = FastAPI(title="SkillAlignRAG dashboard", docs_url=None, redoc_url=None, openapi_url=None)
     # Compressed responses travel faster through the VS Code tunnel; small ones are not worth it.
     app.add_middleware(GZipMiddleware, minimum_size=1000)
@@ -101,31 +107,60 @@ def create_app(view: AuditView, accounts: AccountStore, static_dir: Path | None 
 
     @app.get("/api/run")
     def run(user: dict = Depends(current_user)):
-        return view.run_info()
+        return {**current_view().run_info(), "workspace": workspace.info() if workspace else None}
 
     @app.get("/api/courses")
     def courses(user: dict = Depends(current_user)):
-        return view.courses()
+        return current_view().courses()
 
     @app.get("/api/skills")
     def skills(user: dict = Depends(current_user)):
-        return view.skill_list()
+        return current_view().skill_list()
 
     @app.get("/api/overview")
     def overview(course: str | None = None, skill: str | None = None, user: dict = Depends(current_user)):
-        return view.rows(course=course or None, skill=skill or None)
+        return current_view().rows(course=course or None, skill=skill or None)
 
     @app.get("/api/cells/{course}/{skill}/{level}")
     def cell(course: str, skill: str, level: str, user: dict = Depends(current_user)):
-        return view.cell(course, skill, level)
+        return current_view().cell(course, skill, level)
 
     @app.get("/api/cells/{course}/{skill}/{level}/source")
     def source(course: str, skill: str, level: str, item: str = "citation", user: dict = Depends(current_user)):
-        return view.source(course, skill, level, item)
+        return current_view().source(course, skill, level, item)
 
     @app.get("/api/cells/{course}/{skill}/{level}/document")
     def document(course: str, skill: str, level: str, item: str = "citation", user: dict = Depends(current_user)):
-        return JSONResponse(view.document(course, skill, level, item), headers={"Cache-Control": "no-store"})
+        return JSONResponse(current_view().document(course, skill, level, item), headers={"Cache-Control": "no-store"})
+
+    def need_workspace() -> Workspace:
+        if not workspace:
+            raise HTTPException(404, "Uploads are not available while a saved run is shown read-only.")
+        return workspace
+
+    @app.post("/api/uploads")
+    async def upload(course: str = Form(...), level: str = Form(...), declaration: str = Form(""),
+                     files: list[UploadFile] = File(...), user: dict = Depends(current_user)):
+        # Checked on the server, so the upload screen cannot be bypassed by calling this directly (FR6).
+        if not user["can_upload"]:
+            raise HTTPException(403, "Access denied: only approved academic staff can upload course files.")
+        space = need_workspace()
+        current_view().check(course=course, level=level)
+        if declaration.strip().lower() not in ("true", "yes", "on", "1"):
+            raise HTTPException(400, "Confirm that the files are approved course materials and contain no student submissions.")
+        received = [(f.filename, await f.read(MAX_BYTES + 1)) for f in files]
+        try:
+            return space.submit(user["username"], course, level, received)
+        except UploadError as exc:
+            return JSONResponse({"detail": str(exc), "files": exc.files}, status_code=400)
+
+    @app.get("/api/uploads")
+    def uploads(user: dict = Depends(current_user)):
+        return need_workspace().jobs()
+
+    @app.get("/api/documents")
+    def documents(user: dict = Depends(current_user)):
+        return need_workspace().documents()
 
     for extension in extensions:
         extension(app, current_user)

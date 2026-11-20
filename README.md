@@ -45,9 +45,8 @@ University course lecturers and programme coordinators teaching or overseeing co
 The current implementation provides command-line course ingestion, HRD Corp
 IndSF benchmark preparation, routed retrieval, local model judgement, citation
 verification, Markdown/JSON audit reports, and a signed-in dashboard over a saved
-audit run (phase A). Staff-only uploads, automatic processing from the interface
-and Pending/Processing states (phase B), and per-level incremental indexing
-(phase C) are planned and not implemented yet.
+audit run with staff uploads and automatic re-auditing (phases A and B).
+Per-level incremental indexing (phase C) is planned and not implemented yet.
 
 The agreed V1 covers **SAIA1013, SAIA2113, and SAIA2143**, **S01–S12**, and
 **CLO / Taught / Assessed**: 36 course–skill rows and 108 coverage cells.
@@ -65,9 +64,10 @@ developer can open; the traffic is encrypted and relayed by Microsoft's tunnel
 service. The dashboard is reachable only while the job runs, and the laptop is
 not required to run the models. The evaluation table defines tests for a later stage.
 
-### Dashboard (phase A)
+### Dashboard (phases A and B)
 
-The dashboard shows a saved audit run, by default the 2026-11-19 reference run:
+The dashboard shows its workspace, which starts as a copy of the 2026-11-19
+reference run and of `data/courses`:
 the 36-row matrix with CLO, Taught and Assessed side by side, course and skill
 filters, an evidence drawer (verified quote, source file, page or slide, NLI
 entailment, CI corroboration and the CI–slide comparison; hovering over the page
@@ -77,8 +77,20 @@ page's line breaks as a title, sub-headings, paragraphs and bullet points, with
 text read from images in its own section, and the quote highlighted and scrolled
 into view. Only documents a cell cites are served), the 12 skills with
 their IndSF sources, and each course's document availability. Every page needs
-sign-in. Accounts are created only from the command line; the `approved_staff`
-role will be required to upload (phase B).
+sign-in. Accounts are created only from the command line.
+
+Accounts with the `approved_staff` role can upload PDF, PPTX or DOCX files for a
+course and category, through the Upload button on the coverage overview, after
+confirming they are approved course materials with no student submissions; other
+accounts are told access is denied. The Courses page lists each course's
+processed documents. Each upload is processed in the background (about 70
+seconds on the B200 slice): the workspace's documents are re-read and re-indexed,
+and only that course and category are re-audited on the GPU. Its cells show
+Pending, then Processing, with the old result hidden, or Update failed if
+processing fails. Uploads change only `outputs/dashboard/workspace`, never
+`data/courses` or the reference run; `--reset-workspace` starts it again from the
+reference run, and `--read-only --results PATH` shows any saved run without
+uploads. The dashboard must run inside a GPU job for uploads to be re-audited.
 
 ```bash
 # Once: build the front end (Node.js 18+) and create an account.

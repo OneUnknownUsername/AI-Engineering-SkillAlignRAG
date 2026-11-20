@@ -36,7 +36,8 @@ export default function App() {
 
   // A request that comes back 401 (session ended) returns the user to sign-in.
   const onSignedOut = () => setUser(null);
-  const current = PAGES.find((p) => p.key === page) || PAGES[0];
+  const pages = PAGES;
+  const current = pages.find((p) => p.key === page) || pages[0];
 
   return (
     <div className="app">
@@ -46,7 +47,7 @@ export default function App() {
           <span>Industry skill coverage across CLO, Taught and Assessed evidence</span>
         </div>
         <nav aria-label="Pages">
-          {PAGES.map((p) => (
+          {pages.map((p) => (
             <button key={p.key} className={p.key === current.key ? 'tab active' : 'tab'} onClick={() => setPage(p.key)}>
               {p.label}
             </button>
@@ -62,12 +63,15 @@ export default function App() {
       </header>
       {run && (
         <p className="run-info">
-          Showing saved run <code>{run.run_folder}</code>
+          {run.workspace
+            ? <>Dashboard workspace, started from <code>{run.workspace.started_from}</code>; {run.workspace.uploads_processed} upload{run.workspace.uploads_processed === 1 ? '' : 's'} processed since</>
+            : <>Showing saved run <code>{run.run_folder}</code> (read-only)</>}
           {run.commit && <> · code <code>{run.commit.slice(0, 7)}</code>{run.uncommitted_code_changes && ' (uncommitted changes)'}</>}
           {run.gpu && <> · {run.gpu}</>}
         </p>
       )}
-      <main>{current.render({ user, onSignedOut })}</main>
+      {/* workspace is null when a saved run is shown read-only; uploads then do not exist. */}
+      <main>{current.render({ user, workspace: run?.workspace || null, onSignedOut })}</main>
     </div>
   );
 }
