@@ -243,6 +243,28 @@ takes about 80 seconds on the B200 slice. Results, including the missing-documen
 conflation rate with the SAIA2113 CI already missing, go to
 `outputs/withheld_level_runs/summary.md`; finished cases are skipped on a rerun.
 
+### Citation check (CFR)
+
+`src.citation_check_sheet` prepares the human check behind the citation
+faithfulness rate. `sheet` collects every Supported claim of B, B+V, P and P+V
+from the reference run into `outputs/citation_check/citation_check_sheet.csv`,
+one row per distinct claim, with the source file, page or slide, quote and what
+the level requires. It hides NLI scores, verifier results and which configuration
+made each claim, and orders rows by a fixed shuffle; the separate
+`citation_check_key.json` maps claims to configurations. Open each cited page and
+answer `page_contains_quote` and `supports_skill_at_level` with yes or no, then
+run `score`:
+
+```bash
+.venv/bin/python -m src.citation_check_sheet sheet
+.venv/bin/python -m src.citation_check_sheet score
+```
+
+`score` reports, per configuration, the CFR (claims confirmed on both questions /
+claims made), the unsupported-claim rate, claims whose quote is not on the cited
+page, and the automatic citation and span presence rate. Neither file is
+overwritten, and the sheet stays local.
+
 ### Scoring an audit run against ground truth
 
 `src.evaluate_ground_truth` compares a saved audit run with hand-made labels.
