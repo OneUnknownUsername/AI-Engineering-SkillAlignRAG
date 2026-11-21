@@ -25,7 +25,7 @@ from src.common import ROOT, md, read_json, write_json
 from src.evaluate_ground_truth import file_sha256
 from src.run_skill_audit_pipeline import version_text
 
-DEFAULT_RESULTS = ROOT / "outputs" / "reference_run_2026-11-21_e0786ac" / "skill_coverage_audit_results.json"
+DEFAULT_RESULTS = ROOT / "outputs" / "reference_run_2026-11-21_8faf0bc" / "skill_coverage_audit_results.json"
 DEFAULT_DIR = ROOT / "outputs" / "citation_check"
 CONFIGURATIONS = ("B", "B+V", "P", "P+V")
 ANSWERS = ("page_contains_quote", "supports_skill_at_level")

@@ -35,7 +35,7 @@ COPIED_OUTPUTS = ("course_catalog_manifest.json", "parsed_course_chunks.json", "
                   "indexes", "normalized_pdf", "extraction_cache")
 LINKED_OUTPUTS = ("models", "tools")  # Read-only: the embedding model and LibreOffice.
 DEFAULT_WORKSPACE = ROOT / "outputs" / "dashboard" / "workspace"
-DEFAULT_REFERENCE = ROOT / "outputs" / "reference_run_2026-11-21_e0786ac" / "skill_coverage_audit_results.json"
+DEFAULT_REFERENCE = ROOT / "outputs" / "reference_run_2026-11-21_8faf0bc" / "skill_coverage_audit_results.json"
 
 
 def now() -> str:

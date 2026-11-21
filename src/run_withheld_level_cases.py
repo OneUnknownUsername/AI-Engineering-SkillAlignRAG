@@ -29,7 +29,7 @@ MODES = {"missing": ("folder_empty_or_missing", "folder is empty or missing"),
          "unprocessable": ("processing_failed", "could not be processed")}
 COPIED_OUTPUTS = ("normalized_pdf", "extraction_cache")  # Small caches the case may update.
 LINKED_OUTPUTS = ("models", "tools")  # Read-only: the embedding model and LibreOffice.
-DEFAULT_REFERENCE = ROOT / "outputs" / "reference_run_2026-11-21_e0786ac" / "skill_coverage_audit_results.json"
+DEFAULT_REFERENCE = ROOT / "outputs" / "reference_run_2026-11-21_8faf0bc" / "skill_coverage_audit_results.json"
 
 
 def default_cases(availability: dict) -> list[tuple[str, str, str]]:

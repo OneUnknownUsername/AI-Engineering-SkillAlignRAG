@@ -300,10 +300,10 @@ the main outputs are never modified.
 .venv/bin/python -m src.run_withheld_level_cases run --offline
 ```
 
-The default 11 cases withhold every available level as missing and every level of
+The default 12 cases withhold every available level as missing and every level of
 SAIA2143 as unprocessable; `--case COURSE:LEVEL:MODE` picks individual cases. Each
 takes about 80 seconds on the B200 slice. Results, including the missing-document
-conflation rate with the SAIA2113 CI already missing, go to
+conflation rate over all withheld cells, go to
 `outputs/withheld_level_runs/summary.md`; finished cases are skipped on a rerun.
 
 ### Citation check (CFR)
