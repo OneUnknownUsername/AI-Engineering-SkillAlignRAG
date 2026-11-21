@@ -74,7 +74,7 @@ Limits: the language label is a heuristic (31 records undetermined). Skill-level
 
 | Priority improvement | Who / when | Requirements | Remaining risk |
 | :--- | :--- | :--- | :--- |
-| 1. Rebuild the Pipeline A artefacts in `outputs/` (chunks, lookup, indexes, results, dashboard); they still hold the 5 numbers. Review office-location fragments at the same time. | Author, before the next evaluation run | RAI3, RAI1 | Names stay unredacted; the files stay local |
+| 1. Rebuild the Pipeline A artefacts in `outputs/` (chunks, lookup, indexes, results, dashboard); they still hold the 5 numbers. Review office-location fragments at the same time. | Author, before the next evaluation run (rebuild done 2026-11-21, Appendix C) | RAI3, RAI1 | Names stay unredacted; the files stay local |
 | 2. Obtain the SAIA2113 CI and confirm which SAIA1013 CI applies to 2025/26. | Author with course coordinators, before ground-truth evaluation | FR3, RAI2, FR2, NFR2 | The 12 SAIA2113 cells stay Insufficient Evidence until it arrives |
 
 Also during evaluation: the Malay coverage check (Section 5), and collapsing repeated outlines if they crowd top-k.
@@ -219,3 +219,12 @@ matches: 0 | records: 0
 - both Part C branches.
 
 All three course outputs now carry SHA-256 `9518eea9313a…`. The repeatability check passed. The IndSF branch also redacted 2 occurrences of the publisher's office phone number.
+
+**Follow-up: `outputs/` rebuilt (2026-11-21).**
+- **Rebuild:** Pipeline A, Pipeline B, the indexes, the retrieval smoke test and artifact validation were all re-run from the fixed extraction.
+  - No index store changed, because CI pages are indexed from their learning-outcomes heading onwards.
+  - The skill benchmark is byte-identical.
+- **New reference run** (`reference_run_2026-11-21_e0786ac`, same MIG 2g.45gb slice): labels, drafts and routed citations match the 2026-11-19 run in all 108 cells (Supported: B 23, B+V 18, P 29, P+V 26). The only difference is the redacted text of the two CI p1 pages.
+- **Withheld-level cases:** re-run with the same results; routed 144/144 correct, baseline 144/144 mislabelled.
+- **Dashboard workspace:** recreated from the new reference run.
+- **Search:** none of the 5 numbers remains outside the local `backup_*` folders.

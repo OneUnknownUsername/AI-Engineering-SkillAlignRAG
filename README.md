@@ -50,7 +50,7 @@ is fixed and revalidated. Rerun the checks with `python -m src.week4_audit_check
 
 Unresolved actions:
 
-- Rebuild the Pipeline A artefacts in `outputs/` from the fixed extraction before the next evaluation run.
+- Review the office-location fragments left in two Course Information staff tables. (`outputs/` was rebuilt on 2026-11-21; the new reference run `outputs/reference_run_2026-11-21_e0786ac` gives the same results as the 2026-11-19 run.)
 - Obtain the SAIA2113 Course Information document; until then its 12 CLO cells stay Insufficient Evidence.
 - Confirm which SAIA1013 Course Information document applies to the 2025/26 offering.
 - During evaluation, report Taught recall separately for the Malay module (SRC07).
@@ -81,7 +81,7 @@ not required to run the models. The evaluation table defines tests for a later s
 
 ### Dashboard (phases A and B)
 
-The dashboard shows its workspace, which starts as a copy of the 2026-11-19
+The dashboard shows its workspace, which starts as a copy of the 2026-11-21
 reference run and of `data/courses`:
 the 36-row matrix with CLO, Taught and Assessed side by side, course and skill
 filters, an evidence drawer (verified quote, source file, page or slide, NLI
