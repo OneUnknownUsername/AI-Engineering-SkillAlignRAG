@@ -8,19 +8,21 @@ Course lecturers struggle to manually verify whether specific industry skills ar
 
 ## Evidence of the Problem
 
-- Course learning outcomes, teaching activities, and assessments are distributed across separate university files, making curriculum alignment difficult to review consistently. [Source: Eberly Center, course alignment guidance](https://www.cmu.edu/teaching/assessment/basics/alignment.html)
-- Malaysia's National AI Action Plan 2026–2030 identifies curriculum quality and AI skills coverage as part of the national talent-development context. [Source: AI Nation 2030, Strategic Context and Foundational Enablers](https://ai.gov.my/aiactionplan2030/)
+References follow the SAIA3113 project proposal report; the full list is in [the Week 2 requirements](docs/week2_requirements.md#references).
+
+- A course develops a competency best when its intended outcomes, teaching and assessment are aligned ([Biggs, 1996](docs/week2_requirements.md#ref-biggs-1996); [Biggs and Tang, 2011](docs/week2_requirements.md#ref-biggs-tang-2011)), yet constructive alignment is time-consuming to apply even to one course (Cobb, 2015, cited in [Lawrence, 2023](docs/week2_requirements.md#ref-lawrence-2023)) and manual curriculum mapping is labour-intensive and prone to bias ([Jayalath et al., 2026](docs/week2_requirements.md#ref-jayalath-2026)). In the three V1 SAIAH courses, the evidence is spread over 39 files and 1,411 pages, of which only 11 are Course Information pages ([Week 3 data inventory](docs/week3_data_inventory.md)).
+- The Malaysia Higher Education Blueprint 2026–2035 identifies the gap in future-ready skills as a main challenge for higher learning institutions ([Ministry of Higher Education, 2026, p. 9](docs/week2_requirements.md#ref-mohe-2026)), and Enabler E2 of AI Nation 2030 proposes leveraging AI tools to review the curriculum quality and skills coverage of accredited skilling programmes ([Ministry of Digital, 2026, p. 62](docs/week2_requirements.md#ref-mod-2026)). This project applies that idea at university level.
 
 ## Initial Related Work / Existing Approaches
 
-- **Manual curriculum alignment reviews:** Lecturers compare learning outcomes, teaching activities, and assessments. This approach is contextual and thorough, but slow and difficult to scale across granular documents. [Source: Eberly Center, course alignment guidance](https://www.cmu.edu/teaching/assessment/basics/alignment.html)
-- **Conventional single-pass RAG:** Retrieved passages can support knowledge-intensive answers, but mixed course files create context dilution and the workflow does not provide the source-routed, page/slide-level verification required here. [Source: Lewis et al., Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks](https://arxiv.org/abs/2005.11401)
-- **Keyword search:** Exact-term search is fast, but semantic mismatch between academic terminology and industry skill phrasing can reduce recall. [Source: Manning, Raghavan, and Schutze, Introduction to Information Retrieval, Chapter 9](https://nlp.stanford.edu/IR-book/html/htmledition/relevance-feedback-and-query-expansion-1.html)
+- **Manual and spreadsheet-based alignment review** ([Biggs and Tang, 2011](docs/week2_requirements.md#ref-biggs-tang-2011); [Jayalath et al., 2026](docs/week2_requirements.md#ref-jayalath-2026)): contextual and owned by academic staff, but labour-intensive, hard to repeat across hundreds of slide pages, and rarely recorded at page level.
+- **Keyword, skills-based and embedding-based curriculum analytics** ([Manning, Raghavan and Schütze, 2008](docs/week2_requirements.md#ref-manning-2008); [Kitto et al., 2020](docs/week2_requirements.md#ref-kitto-2020); [Xu et al., 2025](docs/week2_requirements.md#ref-xu-2025)): automates text matching, but keywords miss paraphrased evidence ([Karpukhin et al., 2020](docs/week2_requirements.md#ref-karpukhin-2020)), a course is treated as one block of text, and the output is a score rather than a page-level citation.
+- **Single-pass RAG and LLM-based mapping** ([Lewis et al., 2020](docs/week2_requirements.md#ref-lewis-2020); [Xu et al., 2025](docs/week2_requirements.md#ref-xu-2025)): grounds the model in passages from one pooled index, but evidence may be ranked too low or lost in a long context ([Barnett et al., 2024](docs/week2_requirements.md#ref-barnett-2024); [Liu et al., 2024](docs/week2_requirements.md#ref-liu-2024)), citations are not independently verified ([Liu, Zhang and Liang, 2023](docs/week2_requirements.md#ref-liu-zhang-liang-2023)), and missing files are not separated from absent skills.
 
 ## Project Objectives
 
 - O1: To construct a standardized curriculum evidence schema and ground-truth dataset from the three V1 SAIAH courses using PDF, PPTX, and DOCX course materials and 12 HRD Corp IndSF-derived skill tasks while preserving page and slide provenance.
-- O2: To develop a source-routed RAG pipeline for CLO, Taught, and Assessed evidence, paired with deterministic span matching and NLI-based citation verification, to classify skill coverage as Supported or Not Found / Insufficient Evidence.
+- O2: To develop a source-routed RAG pipeline for CLO, Taught, and Assessed evidence, paired with deterministic span matching and NLI-based citation verification, to classify skill coverage as Supported, Not Found or Insufficient Evidence.
 - O3: To evaluate the system against a single-pass RAG baseline using per-level Precision, Recall, and F1; citation faithfulness; unsupported-claim rate; runtime; and token usage.
 
 ## Target Users
