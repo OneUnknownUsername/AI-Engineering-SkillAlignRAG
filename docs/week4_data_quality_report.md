@@ -77,7 +77,7 @@ Limits: the language label is a heuristic (31 records undetermined). Skill-level
 | 1. Rebuild the Pipeline A artefacts in `outputs/` (chunks, lookup, indexes, results, dashboard); they still hold the 5 numbers. Review office-location fragments at the same time. | Author, before the next evaluation run (rebuild done 2026-11-21, Appendix C) | RAI3, RAI1 | Names stay unredacted; the files stay local |
 | 2. Obtain the SAIA2113 CI and confirm which SAIA1013 CI applies to 2025/26. | Author with course coordinators, before ground-truth evaluation (SAIA2113 CI supplied 2026-11-21, Appendix C) | FR3, RAI2, FR2, NFR2 | The SAIA2113 CI states 2026/27, so which CI applies to 2025/26 is still N.V. for SAIA2113 and SAIA1013 |
 
-Also during evaluation: the Malay coverage check (Section 5), and collapsing repeated outlines if they crowd top-k.
+Also during evaluation: the Malay coverage check (Section 5), collapsing repeated outlines if they crowd top-k, and mapping the `doc_id` of converted PPTX/DOCX files back to the uploaded file name in citations (Consistency, Section 2).
 
 ## 8. Quality-Gate Decision
 

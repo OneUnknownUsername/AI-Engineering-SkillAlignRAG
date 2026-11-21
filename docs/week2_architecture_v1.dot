@@ -1,0 +1,51 @@
+digraph V1 {
+  graph [rankdir=TB, fontname="Liberation Serif", fontsize=13, nodesep=0.25, ranksep=0.38, pad=0.1, newrank=true, splines=spline];
+  node  [shape=box, style="rounded,filled", fontname="Liberation Serif", fontsize=13, penwidth=1.2, margin="0.1,0.05"];
+  edge  [fontname="Liberation Serif", fontsize=12, color="#333333", arrowsize=0.7];
+
+  user [label=<<b>Academic staff / reviewer</b> (laptop browser)>, fillcolor="#EDEDED", color="#7F7F7F"];
+
+  subgraph cluster_node {
+    label=<<b>University B200 GPU node</b> (course data stay on campus)>;
+    labeljust="l"; labelloc="b"; style="dashed,rounded"; color="#555555"; fontsize=13;
+
+    dash [label=<<b>Interactive Skill-Coverage<br/>Dashboard</b><br/>sign-in, uploads, 36 × 3 matrix,<br/>filters, evidence drawer<br/>FR1, FR2, FR5–FR7>, fillcolor="#EDEDED", color="#7F7F7F"];
+    pb [label=<<b>Pipeline B</b><br/>HRD Corp IndSF<br/>→ S01–S12 · FR7>, fillcolor="#E2F0D9", color="#548235"];
+
+    app  [label=<<b>Application Interface &amp;<br/>Source-Routing Logic</b><br/>role check, processing jobs,<br/>routing · FR1, FR2, FR6>, fillcolor="#EDEDED", color="#7F7F7F"];
+    scope [label=<<b>Scope, Abstention &amp;<br/>Privacy Control</b><br/>allowlists, Insufficient Evidence,<br/>local-only model endpoints<br/>FR2, FR4, RAI2, RAI3>, fillcolor="#FCE4CC", color="#C55A11", style="rounded,filled,dashed"];
+
+    pa [label=<<b>Pipeline A</b><br/>course files →<br/>page records with<br/>provenance (Section 5)>, fillcolor="#E2F0D9", color="#548235"];
+    kb [shape=plaintext, style="", margin=0, label=<
+      <table border="0" cellborder="1" cellspacing="0" cellpadding="4" color="#548235" bgcolor="#E2F0D9">
+        <tr><td colspan="3" port="h"><b>Multi-Level Course Knowledge Sources</b><br/>per course · FR3, NFR2, NFR4</td></tr>
+        <tr><td>CLO<br/>(CI only)</td><td>Taught<br/>(slides)</td><td>Assessed<br/>(tasks)</td></tr>
+        <tr><td colspan="3">hybrid lexical + dense retrieval,<br/>top 3 pages per level</td></tr>
+      </table>>];
+
+    llm [label=<<b>Language Model Service</b><br/>local open-weight LLM judges<br/>each level, quotes evidence<br/>NFR1, NFR3>, fillcolor="#DDEBF7", color="#2F5597"];
+    evalp [label=<<b>Evaluation Point</b><br/>latency, tokens, scores;<br/>ground truth vs pooled<br/>baseline · O3>, fillcolor="#E4DFEC", color="#7030A0", style="rounded,filled,dashed"];
+
+    ver [label=<<b>Citation &amp; Span Verification</b><br/><b>+ CI Authority</b><br/>exact span → NLI entailment;<br/>CI vs slide · FR3, RAI1>, fillcolor="#FCE4CC", color="#C55A11", style="rounded,filled,dashed"];
+    res [label=<<b>Saved audit results</b><br/>108 cells: verified<br/>citations or abstentions>, fillcolor="#E2F0D9", color="#548235"];
+
+    {rank=same; dash; pb;}
+    {rank=same; app; scope;}
+    {rank=same; pa; kb;}
+    {rank=same; llm; evalp;}
+    {rank=same; ver; res;}
+  }
+
+  user -> dash [label=" encrypted tunnel ", dir=both];
+  pb -> dash [label=" skills "];
+  dash -> app [label=" 1 upload / filter ", dir=both];
+  app -> pa [label=" 2 approved\n files "];
+  pa -> kb [label=" 3 records;\n store\n rebuilt "];
+  app -> scope [label=" 4 check; missing →\n Insufficient Evidence\n (no model call) ", dir=both];
+  app -> kb:h [label=" 5 routed\n query "];
+  kb -> llm [label=" 6 level evidence "];
+  llm -> ver [label=" 7 judgement\n + quote "];
+  ver -> res [label=" 8 verified "];
+  res -> app [label=" 9 saved\n results ", constraint=false, tailport=e, headport=e];
+  llm -> evalp [style=dotted, label=" telemetry ", arrowhead=none];
+}
