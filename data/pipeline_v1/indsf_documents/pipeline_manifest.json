@@ -1,7 +1,7 @@
 {
   "pipeline_version": "week3-v1",
-  "generated_at_utc": "2026-11-20T15:39:26.367712+00:00",
-  "git_commit": "ad9b154cd9723cc6d0f35e8aa08ec0394ad17d26",
+  "generated_at_utc": "2026-11-21T10:49:45.583359+00:00",
+  "git_commit": "8faf0bc1cd90bc7074beb2bb9ea2fde7400c1a4f",
   "data_type": "indsf_documents",
   "stages": [
     "source",
@@ -101,7 +101,7 @@
   "source_version": "Not verified",
   "access_rights": "HRD Corp publication; licence terms not verified",
   "runtime": {
-    "seconds": 35.3,
+    "seconds": 35.8,
     "python": "3.12.3",
     "platform": "Linux",
     "packages": {

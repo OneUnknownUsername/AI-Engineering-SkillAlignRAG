@@ -44,15 +44,20 @@ University course lecturers and programme coordinators teaching or overseeing co
 ### Week 4 quality gate: GO WITH CONDITIONS
 
 The [Week 4 report](docs/week4_data_quality_report.md) audits the Week 3 course-document
-output (Pathway A, 1,407 page records) against FR3/RAI1 and RAI2. Both validation rules
-pass. The one undocumented defect it found, 5 staff phone numbers missed by redaction,
-is fixed and revalidated. Rerun the checks with `python -m src.week4_audit_checks`.
+output (Pathway A, 39 files, 1,411 page records) against FR3/RAI1 and RAI2. Both
+validation rules pass, and all 9 course × level cells now hold evidence. The one
+undocumented defect it found, 5 staff phone numbers missed by redaction, is fixed and
+revalidated. Rerun the checks with `python -m src.week4_audit_checks`.
+
+The SAIA2113 Course Information document was supplied on 2026-11-21 (SRC12; later
+source IDs shifted by one). The Week 3 records were re-run, the output was re-audited,
+and `outputs/` was rebuilt; the reference run is now
+`outputs/reference_run_2026-11-21_8faf0bc`. See the report's Appendix C.
 
 Unresolved actions:
 
-- Review the office-location fragments left in two Course Information staff tables. (`outputs/` was rebuilt on 2026-11-21; the new reference run `outputs/reference_run_2026-11-21_e0786ac` gives the same results as the 2026-11-19 run.)
-- Obtain the SAIA2113 Course Information document; until then its 12 CLO cells stay Insufficient Evidence.
-- Confirm which SAIA1013 Course Information document applies to the 2025/26 offering.
+- Review the office-location fragments left in the Course Information staff tables (now three, including SAIA2113).
+- Confirm which SAIA1013 and SAIA2113 Course Information documents apply to the 2025/26 offering (the supplied ones state 2024/25 and 2026/27).
 - During evaluation, report Taught recall separately for the Malay module (SRC07).
 
 ## Current implementation and planned V1

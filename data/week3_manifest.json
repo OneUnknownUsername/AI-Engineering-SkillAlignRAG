@@ -1,7 +1,7 @@
 {
   "pipeline_version": "week3-v1",
-  "generated_at_utc": "2026-11-20T15:24:52.547004+00:00",
-  "git_commit": "ad9b154cd9723cc6d0f35e8aa08ec0394ad17d26",
+  "generated_at_utc": "2026-11-21T10:35:00.085178+00:00",
+  "git_commit": "8faf0bc1cd90bc7074beb2bb9ea2fde7400c1a4f",
   "records": [
     {
       "source_id": "SRC01",
@@ -14,7 +14,7 @@
       "pages": 3,
       "records": 3,
       "prepared_output": "data/processed/prepared_text.jsonl",
-      "prepared_sha256": "9518eea9313ac759f9588b562d4a28b3a2f3aee35d39a77efbfb4c2293d0f278",
+      "prepared_sha256": "f5ea2a6520aa6388bc7bb8cdfe72cce6b122223009ccae382eca667d139d9ea0",
       "processing_note": "page-level records; native text + RapidOCR union; PII regex redaction; vision disabled",
       "source_version": "Not verified",
       "owner": "UTM Faculty of Artificial Intelligence (course teaching team)",
@@ -32,7 +32,7 @@
       "pages": 46,
       "records": 46,
       "prepared_output": "data/processed/prepared_text.jsonl",
-      "prepared_sha256": "9518eea9313ac759f9588b562d4a28b3a2f3aee35d39a77efbfb4c2293d0f278",
+      "prepared_sha256": "f5ea2a6520aa6388bc7bb8cdfe72cce6b122223009ccae382eca667d139d9ea0",
       "processing_note": "page-level records; native text + RapidOCR union; PII regex redaction; vision disabled",
       "source_version": "Not verified",
       "owner": "UTM Faculty of Artificial Intelligence (course teaching team)",
@@ -50,7 +50,7 @@
       "pages": 54,
       "records": 54,
       "prepared_output": "data/processed/prepared_text.jsonl",
-      "prepared_sha256": "9518eea9313ac759f9588b562d4a28b3a2f3aee35d39a77efbfb4c2293d0f278",
+      "prepared_sha256": "f5ea2a6520aa6388bc7bb8cdfe72cce6b122223009ccae382eca667d139d9ea0",
       "processing_note": "page-level records; native text + RapidOCR union; PII regex redaction; vision disabled",
       "source_version": "Not verified",
       "owner": "UTM Faculty of Artificial Intelligence (course teaching team)",
@@ -68,7 +68,7 @@
       "pages": 56,
       "records": 56,
       "prepared_output": "data/processed/prepared_text.jsonl",
-      "prepared_sha256": "9518eea9313ac759f9588b562d4a28b3a2f3aee35d39a77efbfb4c2293d0f278",
+      "prepared_sha256": "f5ea2a6520aa6388bc7bb8cdfe72cce6b122223009ccae382eca667d139d9ea0",
       "processing_note": "page-level records; native text + RapidOCR union; PII regex redaction; vision disabled",
       "source_version": "Not verified",
       "owner": "UTM Faculty of Artificial Intelligence (course teaching team)",
@@ -86,7 +86,7 @@
       "pages": 37,
       "records": 37,
       "prepared_output": "data/processed/prepared_text.jsonl",
-      "prepared_sha256": "9518eea9313ac759f9588b562d4a28b3a2f3aee35d39a77efbfb4c2293d0f278",
+      "prepared_sha256": "f5ea2a6520aa6388bc7bb8cdfe72cce6b122223009ccae382eca667d139d9ea0",
       "processing_note": "page-level records; native text + RapidOCR union; PII regex redaction; vision disabled",
       "source_version": "Not verified",
       "owner": "UTM Faculty of Artificial Intelligence (course teaching team)",
@@ -104,7 +104,7 @@
       "pages": 21,
       "records": 21,
       "prepared_output": "data/processed/prepared_text.jsonl",
-      "prepared_sha256": "9518eea9313ac759f9588b562d4a28b3a2f3aee35d39a77efbfb4c2293d0f278",
+      "prepared_sha256": "f5ea2a6520aa6388bc7bb8cdfe72cce6b122223009ccae382eca667d139d9ea0",
       "processing_note": "page-level records; native text + RapidOCR union; PII regex redaction; vision disabled",
       "source_version": "Not verified",
       "owner": "UTM Faculty of Artificial Intelligence (course teaching team)",
@@ -122,7 +122,7 @@
       "pages": 59,
       "records": 59,
       "prepared_output": "data/processed/prepared_text.jsonl",
-      "prepared_sha256": "9518eea9313ac759f9588b562d4a28b3a2f3aee35d39a77efbfb4c2293d0f278",
+      "prepared_sha256": "f5ea2a6520aa6388bc7bb8cdfe72cce6b122223009ccae382eca667d139d9ea0",
       "processing_note": "page-level records; native text + RapidOCR union; PII regex redaction; vision disabled",
       "source_version": "Not verified",
       "owner": "UTM Faculty of Artificial Intelligence (course teaching team)",
@@ -140,7 +140,7 @@
       "pages": 53,
       "records": 53,
       "prepared_output": "data/processed/prepared_text.jsonl",
-      "prepared_sha256": "9518eea9313ac759f9588b562d4a28b3a2f3aee35d39a77efbfb4c2293d0f278",
+      "prepared_sha256": "f5ea2a6520aa6388bc7bb8cdfe72cce6b122223009ccae382eca667d139d9ea0",
       "processing_note": "page-level records; native text + RapidOCR union; PII regex redaction; vision disabled",
       "source_version": "Not verified",
       "owner": "UTM Faculty of Artificial Intelligence (course teaching team)",
@@ -158,7 +158,7 @@
       "pages": 4,
       "records": 4,
       "prepared_output": "data/processed/prepared_text.jsonl",
-      "prepared_sha256": "9518eea9313ac759f9588b562d4a28b3a2f3aee35d39a77efbfb4c2293d0f278",
+      "prepared_sha256": "f5ea2a6520aa6388bc7bb8cdfe72cce6b122223009ccae382eca667d139d9ea0",
       "processing_note": "page-level records; native text + RapidOCR union; PII regex redaction; vision disabled",
       "source_version": "Not verified",
       "owner": "UTM Faculty of Artificial Intelligence (course teaching team)",
@@ -176,7 +176,7 @@
       "pages": 1,
       "records": 1,
       "prepared_output": "data/processed/prepared_text.jsonl",
-      "prepared_sha256": "9518eea9313ac759f9588b562d4a28b3a2f3aee35d39a77efbfb4c2293d0f278",
+      "prepared_sha256": "f5ea2a6520aa6388bc7bb8cdfe72cce6b122223009ccae382eca667d139d9ea0",
       "processing_note": "page-level records; native text + RapidOCR union; PII regex redaction; vision disabled",
       "source_version": "Not verified",
       "owner": "UTM Faculty of Artificial Intelligence (course teaching team)",
@@ -194,7 +194,7 @@
       "pages": 1,
       "records": 1,
       "prepared_output": "data/processed/prepared_text.jsonl",
-      "prepared_sha256": "9518eea9313ac759f9588b562d4a28b3a2f3aee35d39a77efbfb4c2293d0f278",
+      "prepared_sha256": "f5ea2a6520aa6388bc7bb8cdfe72cce6b122223009ccae382eca667d139d9ea0",
       "processing_note": "page-level records; native text + RapidOCR union; PII regex redaction; vision disabled",
       "source_version": "Not verified",
       "owner": "UTM Faculty of Artificial Intelligence (course teaching team)",
@@ -203,6 +203,24 @@
     },
     {
       "source_id": "SRC12",
+      "source_filename": "data/courses/SAIA2113_Machine_Learning/01_CI_CLO/CI_SAIA_2113_Machine_Learning.pdf",
+      "source_sha256": "e246ec12174a20e03af97f24dc14ad2334a06955580a8df1fc5dc629cad5dd27",
+      "normalized_pdf_sha256": null,
+      "original_format": "pdf",
+      "course_code": "SAIA2113",
+      "evidence_level": "CLO",
+      "pages": 4,
+      "records": 4,
+      "prepared_output": "data/processed/prepared_text.jsonl",
+      "prepared_sha256": "f5ea2a6520aa6388bc7bb8cdfe72cce6b122223009ccae382eca667d139d9ea0",
+      "processing_note": "page-level records; native text + RapidOCR union; PII regex redaction; vision disabled",
+      "source_version": "Not verified",
+      "owner": "UTM Faculty of Artificial Intelligence (course teaching team)",
+      "access_rights": "Internal UTM course material; redistribution permission not verified; do not publish",
+      "status": "Prepared; quality review pending"
+    },
+    {
+      "source_id": "SRC13",
       "source_filename": "data/courses/SAIA2113_Machine_Learning/02_Lecture_Slides_Taught/WEEK 2 & 3 - UNDERSTANDING DATA TYPES AND PRE-PROCESSING.pdf",
       "source_sha256": "184a865f700519c70faa0d03d09148cf80509964aef3e0fb0cf75b089cd9c68f",
       "normalized_pdf_sha256": null,
@@ -212,7 +230,7 @@
       "pages": 38,
       "records": 38,
       "prepared_output": "data/processed/prepared_text.jsonl",
-      "prepared_sha256": "9518eea9313ac759f9588b562d4a28b3a2f3aee35d39a77efbfb4c2293d0f278",
+      "prepared_sha256": "f5ea2a6520aa6388bc7bb8cdfe72cce6b122223009ccae382eca667d139d9ea0",
       "processing_note": "page-level records; native text + RapidOCR union; PII regex redaction; vision disabled",
       "source_version": "Not verified",
       "owner": "UTM Faculty of Artificial Intelligence (course teaching team)",
@@ -220,7 +238,7 @@
       "status": "Prepared; quality review pending"
     },
     {
-      "source_id": "SRC13",
+      "source_id": "SRC14",
       "source_filename": "data/courses/SAIA2113_Machine_Learning/02_Lecture_Slides_Taught/Week 1 - INTRODUCTION TO ML.pdf",
       "source_sha256": "9c9c3090a23e54ea4bcf908a78f49cfebfeed3ebe87ce729c73823c6739a728a",
       "normalized_pdf_sha256": null,
@@ -230,7 +248,7 @@
       "pages": 46,
       "records": 46,
       "prepared_output": "data/processed/prepared_text.jsonl",
-      "prepared_sha256": "9518eea9313ac759f9588b562d4a28b3a2f3aee35d39a77efbfb4c2293d0f278",
+      "prepared_sha256": "f5ea2a6520aa6388bc7bb8cdfe72cce6b122223009ccae382eca667d139d9ea0",
       "processing_note": "page-level records; native text + RapidOCR union; PII regex redaction; vision disabled",
       "source_version": "Not verified",
       "owner": "UTM Faculty of Artificial Intelligence (course teaching team)",
@@ -238,7 +256,7 @@
       "status": "Prepared; quality review pending"
     },
     {
-      "source_id": "SRC14",
+      "source_id": "SRC15",
       "source_filename": "data/courses/SAIA2113_Machine_Learning/02_Lecture_Slides_Taught/Week 10 Classification using Support Vector Machine.pdf",
       "source_sha256": "24ed8fc11ca3c784e23ff752158224fff32dc42ddcdecd54a2eef60821c3d7a5",
       "normalized_pdf_sha256": null,
@@ -248,7 +266,7 @@
       "pages": 43,
       "records": 43,
       "prepared_output": "data/processed/prepared_text.jsonl",
-      "prepared_sha256": "9518eea9313ac759f9588b562d4a28b3a2f3aee35d39a77efbfb4c2293d0f278",
+      "prepared_sha256": "f5ea2a6520aa6388bc7bb8cdfe72cce6b122223009ccae382eca667d139d9ea0",
       "processing_note": "page-level records; native text + RapidOCR union; PII regex redaction; vision disabled",
       "source_version": "Not verified",
       "owner": "UTM Faculty of Artificial Intelligence (course teaching team)",
@@ -256,7 +274,7 @@
       "status": "Prepared; quality review pending"
     },
     {
-      "source_id": "SRC15",
+      "source_id": "SRC16",
       "source_filename": "data/courses/SAIA2113_Machine_Learning/02_Lecture_Slides_Taught/Week 11 Classification using Decision Tree and Random Forest (2).pdf",
       "source_sha256": "cc2727916ddbed7e57b67abb8b62a1a22710324c27808e3dab02050043daa549",
       "normalized_pdf_sha256": null,
@@ -266,7 +284,7 @@
       "pages": 39,
       "records": 39,
       "prepared_output": "data/processed/prepared_text.jsonl",
-      "prepared_sha256": "9518eea9313ac759f9588b562d4a28b3a2f3aee35d39a77efbfb4c2293d0f278",
+      "prepared_sha256": "f5ea2a6520aa6388bc7bb8cdfe72cce6b122223009ccae382eca667d139d9ea0",
       "processing_note": "page-level records; native text + RapidOCR union; PII regex redaction; vision disabled",
       "source_version": "Not verified",
       "owner": "UTM Faculty of Artificial Intelligence (course teaching team)",
@@ -274,7 +292,7 @@
       "status": "Prepared; quality review pending"
     },
     {
-      "source_id": "SRC16",
+      "source_id": "SRC17",
       "source_filename": "data/courses/SAIA2113_Machine_Learning/02_Lecture_Slides_Taught/Week 12 Classification using Artificial Neural Network (3).pdf",
       "source_sha256": "a6693bb8a5e98067b49f31d4210af9a97c45ada349fa126161784d0083eace91",
       "normalized_pdf_sha256": null,
@@ -284,7 +302,7 @@
       "pages": 72,
       "records": 72,
       "prepared_output": "data/processed/prepared_text.jsonl",
-      "prepared_sha256": "9518eea9313ac759f9588b562d4a28b3a2f3aee35d39a77efbfb4c2293d0f278",
+      "prepared_sha256": "f5ea2a6520aa6388bc7bb8cdfe72cce6b122223009ccae382eca667d139d9ea0",
       "processing_note": "page-level records; native text + RapidOCR union; PII regex redaction; vision disabled",
       "source_version": "Not verified",
       "owner": "UTM Faculty of Artificial Intelligence (course teaching team)",
@@ -292,7 +310,7 @@
       "status": "Prepared; quality review pending"
     },
     {
-      "source_id": "SRC17",
+      "source_id": "SRC18",
       "source_filename": "data/courses/SAIA2113_Machine_Learning/02_Lecture_Slides_Taught/Week 13 Clustering.pdf",
       "source_sha256": "de58300fd9d1e40ae1050ef8e1ce10289cf218d3598fb14e8acbff078b798544",
       "normalized_pdf_sha256": null,
@@ -302,7 +320,7 @@
       "pages": 66,
       "records": 66,
       "prepared_output": "data/processed/prepared_text.jsonl",
-      "prepared_sha256": "9518eea9313ac759f9588b562d4a28b3a2f3aee35d39a77efbfb4c2293d0f278",
+      "prepared_sha256": "f5ea2a6520aa6388bc7bb8cdfe72cce6b122223009ccae382eca667d139d9ea0",
       "processing_note": "page-level records; native text + RapidOCR union; PII regex redaction; vision disabled",
       "source_version": "Not verified",
       "owner": "UTM Faculty of Artificial Intelligence (course teaching team)",
@@ -310,7 +328,7 @@
       "status": "Prepared; quality review pending"
     },
     {
-      "source_id": "SRC18",
+      "source_id": "SRC19",
       "source_filename": "data/courses/SAIA2113_Machine_Learning/02_Lecture_Slides_Taught/Week 14 Ethical Consideration.pdf",
       "source_sha256": "40ea912a62e15177127eff1d0c398ff907be450a3966bb2c8ed2f611e515a6e7",
       "normalized_pdf_sha256": null,
@@ -320,7 +338,7 @@
       "pages": 69,
       "records": 69,
       "prepared_output": "data/processed/prepared_text.jsonl",
-      "prepared_sha256": "9518eea9313ac759f9588b562d4a28b3a2f3aee35d39a77efbfb4c2293d0f278",
+      "prepared_sha256": "f5ea2a6520aa6388bc7bb8cdfe72cce6b122223009ccae382eca667d139d9ea0",
       "processing_note": "page-level records; native text + RapidOCR union; PII regex redaction; vision disabled",
       "source_version": "Not verified",
       "owner": "UTM Faculty of Artificial Intelligence (course teaching team)",
@@ -328,7 +346,7 @@
       "status": "Prepared; quality review pending"
     },
     {
-      "source_id": "SRC19",
+      "source_id": "SRC20",
       "source_filename": "data/courses/SAIA2113_Machine_Learning/02_Lecture_Slides_Taught/Week 4 - Supervised Learning.pdf",
       "source_sha256": "4ba557440e340182788a58c75a533e3eaa92e774105e439b883170b8e01c82e9",
       "normalized_pdf_sha256": null,
@@ -338,7 +356,7 @@
       "pages": 40,
       "records": 40,
       "prepared_output": "data/processed/prepared_text.jsonl",
-      "prepared_sha256": "9518eea9313ac759f9588b562d4a28b3a2f3aee35d39a77efbfb4c2293d0f278",
+      "prepared_sha256": "f5ea2a6520aa6388bc7bb8cdfe72cce6b122223009ccae382eca667d139d9ea0",
       "processing_note": "page-level records; native text + RapidOCR union; PII regex redaction; vision disabled",
       "source_version": "Not verified",
       "owner": "UTM Faculty of Artificial Intelligence (course teaching team)",
@@ -346,7 +364,7 @@
       "status": "Prepared; quality review pending"
     },
     {
-      "source_id": "SRC20",
+      "source_id": "SRC21",
       "source_filename": "data/courses/SAIA2113_Machine_Learning/02_Lecture_Slides_Taught/Week 5 - Unsupervised Learning.pdf",
       "source_sha256": "7d5f34c7c8b9d27cd7cf2557e700022949bd4d928699ad5d378fbc07317e6689",
       "normalized_pdf_sha256": null,
@@ -356,7 +374,7 @@
       "pages": 33,
       "records": 33,
       "prepared_output": "data/processed/prepared_text.jsonl",
-      "prepared_sha256": "9518eea9313ac759f9588b562d4a28b3a2f3aee35d39a77efbfb4c2293d0f278",
+      "prepared_sha256": "f5ea2a6520aa6388bc7bb8cdfe72cce6b122223009ccae382eca667d139d9ea0",
       "processing_note": "page-level records; native text + RapidOCR union; PII regex redaction; vision disabled",
       "source_version": "Not verified",
       "owner": "UTM Faculty of Artificial Intelligence (course teaching team)",
@@ -364,7 +382,7 @@
       "status": "Prepared; quality review pending"
     },
     {
-      "source_id": "SRC21",
+      "source_id": "SRC22",
       "source_filename": "data/courses/SAIA2113_Machine_Learning/02_Lecture_Slides_Taught/Week 6 - Model Evaluation.pdf",
       "source_sha256": "4e6ddfa8466376475eedd86a8ade662b5f1599cf31824ca3c4ffe26244ac544b",
       "normalized_pdf_sha256": null,
@@ -374,7 +392,7 @@
       "pages": 37,
       "records": 37,
       "prepared_output": "data/processed/prepared_text.jsonl",
-      "prepared_sha256": "9518eea9313ac759f9588b562d4a28b3a2f3aee35d39a77efbfb4c2293d0f278",
+      "prepared_sha256": "f5ea2a6520aa6388bc7bb8cdfe72cce6b122223009ccae382eca667d139d9ea0",
       "processing_note": "page-level records; native text + RapidOCR union; PII regex redaction; vision disabled",
       "source_version": "Not verified",
       "owner": "UTM Faculty of Artificial Intelligence (course teaching team)",
@@ -382,7 +400,7 @@
       "status": "Prepared; quality review pending"
     },
     {
-      "source_id": "SRC22",
+      "source_id": "SRC23",
       "source_filename": "data/courses/SAIA2113_Machine_Learning/02_Lecture_Slides_Taught/Week 7 - Linear Regression.pdf",
       "source_sha256": "3cad947e677b936121403de17a64e9003af56195ed631bc303444ce4216463fb",
       "normalized_pdf_sha256": null,
@@ -392,7 +410,7 @@
       "pages": 48,
       "records": 48,
       "prepared_output": "data/processed/prepared_text.jsonl",
-      "prepared_sha256": "9518eea9313ac759f9588b562d4a28b3a2f3aee35d39a77efbfb4c2293d0f278",
+      "prepared_sha256": "f5ea2a6520aa6388bc7bb8cdfe72cce6b122223009ccae382eca667d139d9ea0",
       "processing_note": "page-level records; native text + RapidOCR union; PII regex redaction; vision disabled",
       "source_version": "Not verified",
       "owner": "UTM Faculty of Artificial Intelligence (course teaching team)",
@@ -400,7 +418,7 @@
       "status": "Prepared; quality review pending"
     },
     {
-      "source_id": "SRC23",
+      "source_id": "SRC24",
       "source_filename": "data/courses/SAIA2113_Machine_Learning/02_Lecture_Slides_Taught/Week 9 Classification using Naive Bayes.pdf",
       "source_sha256": "6b358b5669913cd0268b46ad41ba7654339b053c7fff6f9ef708b9745f1f9676",
       "normalized_pdf_sha256": null,
@@ -410,7 +428,7 @@
       "pages": 32,
       "records": 32,
       "prepared_output": "data/processed/prepared_text.jsonl",
-      "prepared_sha256": "9518eea9313ac759f9588b562d4a28b3a2f3aee35d39a77efbfb4c2293d0f278",
+      "prepared_sha256": "f5ea2a6520aa6388bc7bb8cdfe72cce6b122223009ccae382eca667d139d9ea0",
       "processing_note": "page-level records; native text + RapidOCR union; PII regex redaction; vision disabled",
       "source_version": "Not verified",
       "owner": "UTM Faculty of Artificial Intelligence (course teaching team)",
@@ -418,7 +436,7 @@
       "status": "Prepared; quality review pending"
     },
     {
-      "source_id": "SRC24",
+      "source_id": "SRC25",
       "source_filename": "data/courses/SAIA2113_Machine_Learning/03_Assessments_Assessed/Assignment 1 - ML (12 Nov 2025).pdf",
       "source_sha256": "acd32dbb8f608f08c8ad1071e0dd877850b20feff7aa57aca8fb9b2e74cda935",
       "normalized_pdf_sha256": null,
@@ -428,7 +446,7 @@
       "pages": 7,
       "records": 7,
       "prepared_output": "data/processed/prepared_text.jsonl",
-      "prepared_sha256": "9518eea9313ac759f9588b562d4a28b3a2f3aee35d39a77efbfb4c2293d0f278",
+      "prepared_sha256": "f5ea2a6520aa6388bc7bb8cdfe72cce6b122223009ccae382eca667d139d9ea0",
       "processing_note": "page-level records; native text + RapidOCR union; PII regex redaction; vision disabled",
       "source_version": "Not verified",
       "owner": "UTM Faculty of Artificial Intelligence (course teaching team)",
@@ -436,7 +454,7 @@
       "status": "Prepared; quality review pending"
     },
     {
-      "source_id": "SRC25",
+      "source_id": "SRC26",
       "source_filename": "data/courses/SAIA2113_Machine_Learning/03_Assessments_Assessed/SAIA 2113 - Machine Learning Project  Presentation SEM 1 20252026 (1).pdf",
       "source_sha256": "9c4410bc164f8b6ebbdf12504878d7f2b7098d4977f71f062de2dd793bc2786f",
       "normalized_pdf_sha256": null,
@@ -446,7 +464,7 @@
       "pages": 5,
       "records": 5,
       "prepared_output": "data/processed/prepared_text.jsonl",
-      "prepared_sha256": "9518eea9313ac759f9588b562d4a28b3a2f3aee35d39a77efbfb4c2293d0f278",
+      "prepared_sha256": "f5ea2a6520aa6388bc7bb8cdfe72cce6b122223009ccae382eca667d139d9ea0",
       "processing_note": "page-level records; native text + RapidOCR union; PII regex redaction; vision disabled",
       "source_version": "Not verified",
       "owner": "UTM Faculty of Artificial Intelligence (course teaching team)",
@@ -454,7 +472,7 @@
       "status": "Prepared; quality review pending"
     },
     {
-      "source_id": "SRC26",
+      "source_id": "SRC27",
       "source_filename": "data/courses/SAIA2143_Data_Wrangling_and_Visualization/01_CI_CLO/CI SAIA 2143 Data Wrangling and Visualization 202526 Sem 1.pdf",
       "source_sha256": "1c85947fcf0d07ab5e3f8c4f85451f002b357071479a317b255a399e976492cb",
       "normalized_pdf_sha256": null,
@@ -464,7 +482,7 @@
       "pages": 4,
       "records": 4,
       "prepared_output": "data/processed/prepared_text.jsonl",
-      "prepared_sha256": "9518eea9313ac759f9588b562d4a28b3a2f3aee35d39a77efbfb4c2293d0f278",
+      "prepared_sha256": "f5ea2a6520aa6388bc7bb8cdfe72cce6b122223009ccae382eca667d139d9ea0",
       "processing_note": "page-level records; native text + RapidOCR union; PII regex redaction; vision disabled",
       "source_version": "Not verified",
       "owner": "UTM Faculty of Artificial Intelligence (course teaching team)",
@@ -472,7 +490,7 @@
       "status": "Prepared; quality review pending"
     },
     {
-      "source_id": "SRC27",
+      "source_id": "SRC28",
       "source_filename": "data/courses/SAIA2143_Data_Wrangling_and_Visualization/02_Lecture_Slides_Taught/Topic 1- Introduction to Data and Data Wrangling and Visualization.pdf",
       "source_sha256": "48d99525fb8d7efe620562d89a997ad18217b7b4e01e37ca9d73f901340c21f0",
       "normalized_pdf_sha256": null,
@@ -482,7 +500,7 @@
       "pages": 19,
       "records": 19,
       "prepared_output": "data/processed/prepared_text.jsonl",
-      "prepared_sha256": "9518eea9313ac759f9588b562d4a28b3a2f3aee35d39a77efbfb4c2293d0f278",
+      "prepared_sha256": "f5ea2a6520aa6388bc7bb8cdfe72cce6b122223009ccae382eca667d139d9ea0",
       "processing_note": "page-level records; native text + RapidOCR union; PII regex redaction; vision disabled",
       "source_version": "Not verified",
       "owner": "UTM Faculty of Artificial Intelligence (course teaching team)",
@@ -490,7 +508,7 @@
       "status": "Prepared; quality review pending"
     },
     {
-      "source_id": "SRC28",
+      "source_id": "SRC29",
       "source_filename": "data/courses/SAIA2143_Data_Wrangling_and_Visualization/02_Lecture_Slides_Taught/Topic 10-Ethics in Data Visualization.pdf",
       "source_sha256": "fee75712835a5f6c1d34def9b38b4f297d6bc6fd77e472fe934d477167624a09",
       "normalized_pdf_sha256": null,
@@ -500,7 +518,7 @@
       "pages": 31,
       "records": 31,
       "prepared_output": "data/processed/prepared_text.jsonl",
-      "prepared_sha256": "9518eea9313ac759f9588b562d4a28b3a2f3aee35d39a77efbfb4c2293d0f278",
+      "prepared_sha256": "f5ea2a6520aa6388bc7bb8cdfe72cce6b122223009ccae382eca667d139d9ea0",
       "processing_note": "page-level records; native text + RapidOCR union; PII regex redaction; vision disabled",
       "source_version": "Not verified",
       "owner": "UTM Faculty of Artificial Intelligence (course teaching team)",
@@ -508,7 +526,7 @@
       "status": "Prepared; quality review pending"
     },
     {
-      "source_id": "SRC29",
+      "source_id": "SRC30",
       "source_filename": "data/courses/SAIA2143_Data_Wrangling_and_Visualization/02_Lecture_Slides_Taught/Topic 2-Identifying and Handling Missing Data with Spreadsheets-d.pdf",
       "source_sha256": "b447f8f1493e2d642405d5e9ac96164fb432b8d29edb2471b6c1e5a67c977aa8",
       "normalized_pdf_sha256": null,
@@ -518,7 +536,7 @@
       "pages": 71,
       "records": 71,
       "prepared_output": "data/processed/prepared_text.jsonl",
-      "prepared_sha256": "9518eea9313ac759f9588b562d4a28b3a2f3aee35d39a77efbfb4c2293d0f278",
+      "prepared_sha256": "f5ea2a6520aa6388bc7bb8cdfe72cce6b122223009ccae382eca667d139d9ea0",
       "processing_note": "page-level records; native text + RapidOCR union; PII regex redaction; vision disabled",
       "source_version": "Not verified",
       "owner": "UTM Faculty of Artificial Intelligence (course teaching team)",
@@ -526,7 +544,7 @@
       "status": "Prepared; quality review pending"
     },
     {
-      "source_id": "SRC30",
+      "source_id": "SRC31",
       "source_filename": "data/courses/SAIA2143_Data_Wrangling_and_Visualization/02_Lecture_Slides_Taught/Topic 3-Dealing with Duplicates and Outliers D.pdf",
       "source_sha256": "c05096695965be15779b51d5199359beadfc3a136c8692674abe5fa7435497f4",
       "normalized_pdf_sha256": null,
@@ -536,7 +554,7 @@
       "pages": 32,
       "records": 32,
       "prepared_output": "data/processed/prepared_text.jsonl",
-      "prepared_sha256": "9518eea9313ac759f9588b562d4a28b3a2f3aee35d39a77efbfb4c2293d0f278",
+      "prepared_sha256": "f5ea2a6520aa6388bc7bb8cdfe72cce6b122223009ccae382eca667d139d9ea0",
       "processing_note": "page-level records; native text + RapidOCR union; PII regex redaction; vision disabled",
       "source_version": "Not verified",
       "owner": "UTM Faculty of Artificial Intelligence (course teaching team)",
@@ -544,7 +562,7 @@
       "status": "Prepared; quality review pending"
     },
     {
-      "source_id": "SRC31",
+      "source_id": "SRC32",
       "source_filename": "data/courses/SAIA2143_Data_Wrangling_and_Visualization/02_Lecture_Slides_Taught/Topic 4- Part 3 (Complete) for student.pdf",
       "source_sha256": "145c7a647e66cc2f8f50b28aa12c344286709e71ed6c2336a6fae89a99a9c79f",
       "normalized_pdf_sha256": null,
@@ -554,7 +572,7 @@
       "pages": 102,
       "records": 102,
       "prepared_output": "data/processed/prepared_text.jsonl",
-      "prepared_sha256": "9518eea9313ac759f9588b562d4a28b3a2f3aee35d39a77efbfb4c2293d0f278",
+      "prepared_sha256": "f5ea2a6520aa6388bc7bb8cdfe72cce6b122223009ccae382eca667d139d9ea0",
       "processing_note": "page-level records; native text + RapidOCR union; PII regex redaction; vision disabled",
       "source_version": "Not verified",
       "owner": "UTM Faculty of Artificial Intelligence (course teaching team)",
@@ -562,7 +580,7 @@
       "status": "Prepared; quality review pending"
     },
     {
-      "source_id": "SRC32",
+      "source_id": "SRC33",
       "source_filename": "data/courses/SAIA2143_Data_Wrangling_and_Visualization/02_Lecture_Slides_Taught/Topic 5-Advanced Data Wrangling Techniques D.pdf",
       "source_sha256": "e6a1a016bfa7af0f3b5fc6ab01b93ba0ad43541c007e5f2b842f7be8d46bc36b",
       "normalized_pdf_sha256": null,
@@ -572,7 +590,7 @@
       "pages": 50,
       "records": 50,
       "prepared_output": "data/processed/prepared_text.jsonl",
-      "prepared_sha256": "9518eea9313ac759f9588b562d4a28b3a2f3aee35d39a77efbfb4c2293d0f278",
+      "prepared_sha256": "f5ea2a6520aa6388bc7bb8cdfe72cce6b122223009ccae382eca667d139d9ea0",
       "processing_note": "page-level records; native text + RapidOCR union; PII regex redaction; vision disabled",
       "source_version": "Not verified",
       "owner": "UTM Faculty of Artificial Intelligence (course teaching team)",
@@ -580,7 +598,7 @@
       "status": "Prepared; quality review pending"
     },
     {
-      "source_id": "SRC33",
+      "source_id": "SRC34",
       "source_filename": "data/courses/SAIA2143_Data_Wrangling_and_Visualization/02_Lecture_Slides_Taught/Topic 6-Introduction to Data Visualization D.pdf",
       "source_sha256": "1e9f9436c39a3b5f395f0afbb98f694d262c428e3319699c66d45533d35606dd",
       "normalized_pdf_sha256": null,
@@ -590,7 +608,7 @@
       "pages": 60,
       "records": 60,
       "prepared_output": "data/processed/prepared_text.jsonl",
-      "prepared_sha256": "9518eea9313ac759f9588b562d4a28b3a2f3aee35d39a77efbfb4c2293d0f278",
+      "prepared_sha256": "f5ea2a6520aa6388bc7bb8cdfe72cce6b122223009ccae382eca667d139d9ea0",
       "processing_note": "page-level records; native text + RapidOCR union; PII regex redaction; vision disabled",
       "source_version": "Not verified",
       "owner": "UTM Faculty of Artificial Intelligence (course teaching team)",
@@ -598,7 +616,7 @@
       "status": "Prepared; quality review pending"
     },
     {
-      "source_id": "SRC34",
+      "source_id": "SRC35",
       "source_filename": "data/courses/SAIA2143_Data_Wrangling_and_Visualization/02_Lecture_Slides_Taught/Topic 7-Data Visualization with Matplotlib and Seaborn D.pdf",
       "source_sha256": "d3ff988535f9366c56977a6003878d93a350393d22ed6f3b96b6206d7ab355e8",
       "normalized_pdf_sha256": null,
@@ -608,7 +626,7 @@
       "pages": 38,
       "records": 38,
       "prepared_output": "data/processed/prepared_text.jsonl",
-      "prepared_sha256": "9518eea9313ac759f9588b562d4a28b3a2f3aee35d39a77efbfb4c2293d0f278",
+      "prepared_sha256": "f5ea2a6520aa6388bc7bb8cdfe72cce6b122223009ccae382eca667d139d9ea0",
       "processing_note": "page-level records; native text + RapidOCR union; PII regex redaction; vision disabled",
       "source_version": "Not verified",
       "owner": "UTM Faculty of Artificial Intelligence (course teaching team)",
@@ -616,7 +634,7 @@
       "status": "Prepared; quality review pending"
     },
     {
-      "source_id": "SRC35",
+      "source_id": "SRC36",
       "source_filename": "data/courses/SAIA2143_Data_Wrangling_and_Visualization/02_Lecture_Slides_Taught/Topic 8-Interactive Data Visualization with Plotly D.pdf",
       "source_sha256": "d118095dc4f6f19adf50ac2717ef8b6bae3cb437e3631e388f177087f305798f",
       "normalized_pdf_sha256": null,
@@ -626,7 +644,7 @@
       "pages": 36,
       "records": 36,
       "prepared_output": "data/processed/prepared_text.jsonl",
-      "prepared_sha256": "9518eea9313ac759f9588b562d4a28b3a2f3aee35d39a77efbfb4c2293d0f278",
+      "prepared_sha256": "f5ea2a6520aa6388bc7bb8cdfe72cce6b122223009ccae382eca667d139d9ea0",
       "processing_note": "page-level records; native text + RapidOCR union; PII regex redaction; vision disabled",
       "source_version": "Not verified",
       "owner": "UTM Faculty of Artificial Intelligence (course teaching team)",
@@ -634,7 +652,7 @@
       "status": "Prepared; quality review pending"
     },
     {
-      "source_id": "SRC36",
+      "source_id": "SRC37",
       "source_filename": "data/courses/SAIA2143_Data_Wrangling_and_Visualization/02_Lecture_Slides_Taught/Topic 9-Introduction to Dashboards D.pdf",
       "source_sha256": "d879742d1e2a0326aa7d9eb25e04bd62fc1ee43e9b08fa2a44452ad935fc4bb2",
       "normalized_pdf_sha256": null,
@@ -644,7 +662,7 @@
       "pages": 38,
       "records": 38,
       "prepared_output": "data/processed/prepared_text.jsonl",
-      "prepared_sha256": "9518eea9313ac759f9588b562d4a28b3a2f3aee35d39a77efbfb4c2293d0f278",
+      "prepared_sha256": "f5ea2a6520aa6388bc7bb8cdfe72cce6b122223009ccae382eca667d139d9ea0",
       "processing_note": "page-level records; native text + RapidOCR union; PII regex redaction; vision disabled",
       "source_version": "Not verified",
       "owner": "UTM Faculty of Artificial Intelligence (course teaching team)",
@@ -652,7 +670,7 @@
       "status": "Prepared; quality review pending"
     },
     {
-      "source_id": "SRC37",
+      "source_id": "SRC38",
       "source_filename": "data/courses/SAIA2143_Data_Wrangling_and_Visualization/03_Assessments_Assessed/Group Assignment (30%) D UPDATED.pdf",
       "source_sha256": "4225b2debe061e954dd51a7918669f6a8d33938b5455109c986554a3b7c7fdb4",
       "normalized_pdf_sha256": null,
@@ -662,7 +680,7 @@
       "pages": 6,
       "records": 6,
       "prepared_output": "data/processed/prepared_text.jsonl",
-      "prepared_sha256": "9518eea9313ac759f9588b562d4a28b3a2f3aee35d39a77efbfb4c2293d0f278",
+      "prepared_sha256": "f5ea2a6520aa6388bc7bb8cdfe72cce6b122223009ccae382eca667d139d9ea0",
       "processing_note": "page-level records; native text + RapidOCR union; PII regex redaction; vision disabled",
       "source_version": "Not verified",
       "owner": "UTM Faculty of Artificial Intelligence (course teaching team)",
@@ -670,7 +688,7 @@
       "status": "Prepared; quality review pending"
     },
     {
-      "source_id": "SRC38",
+      "source_id": "SRC39",
       "source_filename": "data/courses/SAIA2143_Data_Wrangling_and_Visualization/03_Assessments_Assessed/SAIA 2143 PMA (Question Paper) 05JAN2026 .pdf",
       "source_sha256": "9413780861c47dbb283802d1e28f2dd13b101c54e435414e9ddf2a197a751501",
       "normalized_pdf_sha256": null,
@@ -680,7 +698,7 @@
       "pages": 10,
       "records": 10,
       "prepared_output": "data/processed/prepared_text.jsonl",
-      "prepared_sha256": "9518eea9313ac759f9588b562d4a28b3a2f3aee35d39a77efbfb4c2293d0f278",
+      "prepared_sha256": "f5ea2a6520aa6388bc7bb8cdfe72cce6b122223009ccae382eca667d139d9ea0",
       "processing_note": "page-level records; native text + RapidOCR union; PII regex redaction; vision disabled",
       "source_version": "Not verified",
       "owner": "UTM Faculty of Artificial Intelligence (course teaching team)",
@@ -688,7 +706,7 @@
       "status": "Prepared; quality review pending"
     },
     {
-      "source_id": "SRC39",
+      "source_id": "SRC40",
       "source_filename": "data/industry_benchmark/HRD-Corp_IndSF_Artificial_Intelligence.pdf",
       "source_sha256": "c1e65253310bcd36368f4779ed78e8d75f70eacd04a2cfdac52ca6bbb60e99e6",
       "normalized_pdf_sha256": null,
@@ -706,7 +724,7 @@
       "status": "Prepared; quality review pending"
     },
     {
-      "source_id": "SRC40",
+      "source_id": "SRC41",
       "source_filename": "data/industry_benchmark/HRDCorp_IndSF_DataScience_2ndEdition.pdf",
       "source_sha256": "03d9aca56d8be38564d4cba33f3fb15c5e78bcb08d49c25205ceee4f5a17dec6",
       "normalized_pdf_sha256": null,
@@ -724,7 +742,7 @@
       "status": "Prepared; quality review pending"
     },
     {
-      "source_id": "SRC39",
+      "source_id": "SRC40",
       "source_filename": "data/industry_benchmark/HRD-Corp_IndSF_Artificial_Intelligence.pdf",
       "source_sha256": "c1e65253310bcd36368f4779ed78e8d75f70eacd04a2cfdac52ca6bbb60e99e6",
       "normalized_pdf_sha256": null,
@@ -742,7 +760,7 @@
       "status": "Prepared; quality review pending"
     },
     {
-      "source_id": "SRC40",
+      "source_id": "SRC41",
       "source_filename": "data/industry_benchmark/HRDCorp_IndSF_DataScience_2ndEdition.pdf",
       "source_sha256": "03d9aca56d8be38564d4cba33f3fb15c5e78bcb08d49c25205ceee4f5a17dec6",
       "normalized_pdf_sha256": null,
@@ -760,11 +778,5 @@
       "status": "Prepared; quality review pending"
     }
   ],
-  "known_gaps": [
-    {
-      "course_code": "SAIA2113",
-      "evidence_level": "CLO",
-      "status": "folder_empty_or_missing"
-    }
-  ]
+  "known_gaps": []
 }

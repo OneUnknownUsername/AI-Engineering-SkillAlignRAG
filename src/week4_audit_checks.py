@@ -50,6 +50,16 @@ def raw_hashes(manifest):
         elif hashlib.sha256(path.read_bytes()).hexdigest() != source["sha256"]:
             mismatched += 1
     print("sources:", len(manifest["sources"]), "| missing:", missing, "| hash mismatch:", mismatched)
+    unlisted = unlisted_sources(manifest)
+    print("course files not in the manifest:", len(unlisted),
+          "-> re-run the Week 3 notebook and re-audit" if unlisted else "")
+
+
+def unlisted_sources(manifest, courses_dir=Path("data/courses")):
+    """Course files added after the audited run, which the checks above would silently skip."""
+    listed = {Path(s["path"]).as_posix() for s in manifest["sources"]}
+    return sorted(p.as_posix() for p in courses_dir.rglob("*")
+                  if p.is_file() and p.suffix.lower() in {".pdf", ".pptx", ".docx"} and p.as_posix() not in listed)
 
 
 def uniqueness(records):
@@ -101,6 +111,7 @@ SAMPLE_RULES = [
     ("Skipped: divider", lambda r: r["skip_reason"] == "divider"),
     ("Taught: slide tagged auxiliary CLO", lambda r: r["auxiliary_evidence_levels"] == ["CLO"]),
     ("Taught: SAIA2143 page with redaction", lambda r: r["course_code"] == "SAIA2143" and r["evidence_level"] == "Taught" and r["redaction_count"] > 0),
+    ("CLO: SAIA2113 CI with redaction", lambda r: r["course_code"] == "SAIA2113" and r["evidence_level"] == "CLO" and r["redaction_count"] > 0),
 ]
 
 

@@ -1,7 +1,7 @@
 {
   "pipeline_version": "week3-v1",
-  "generated_at_utc": "2026-11-20T15:38:50.989441+00:00",
-  "git_commit": "ad9b154cd9723cc6d0f35e8aa08ec0394ad17d26",
+  "generated_at_utc": "2026-11-21T10:49:09.714953+00:00",
+  "git_commit": "8faf0bc1cd90bc7074beb2bb9ea2fde7400c1a4f",
   "data_type": "course_documents",
   "stages": [
     "source",
@@ -71,6 +71,11 @@
     {
       "path": "data/courses/SAIA1013_Responsible_AI_and_Ethics/03_Assessments_Assessed/SAIA 1013 Rubrics Assignment (5+5%).pdf",
       "sha256": "7bb369e747d93513357eb1fb0c2afe6e7edf7014573c36391c34d661c2eb3458",
+      "normalized_pdf_sha256": null
+    },
+    {
+      "path": "data/courses/SAIA2113_Machine_Learning/01_CI_CLO/CI_SAIA_2113_Machine_Learning.pdf",
+      "sha256": "e246ec12174a20e03af97f24dc14ad2334a06955580a8df1fc5dc629cad5dd27",
       "normalized_pdf_sha256": null
     },
     {
@@ -269,6 +274,11 @@
       "records": 1
     },
     {
+      "source": "data/courses/SAIA2113_Machine_Learning/01_CI_CLO/CI_SAIA_2113_Machine_Learning.pdf",
+      "output": "data/pipeline_v1/course_documents/prepared_text.jsonl",
+      "records": 4
+    },
+    {
       "source": "data/courses/SAIA2113_Machine_Learning/02_Lecture_Slides_Taught/WEEK 2 & 3 - UNDERSTANDING DATA TYPES AND PRE-PROCESSING.pdf",
       "output": "data/pipeline_v1/course_documents/prepared_text.jsonl",
       "records": 38
@@ -405,16 +415,16 @@
     }
   ],
   "inspection": {
-    "documents": 38,
-    "pages": 1407,
+    "documents": 39,
+    "pages": 1411,
     "documents_by_format": {
       "docx": 1,
-      "pdf": 36,
+      "pdf": 37,
       "pptx": 1
     },
     "pages_by_level": {
       "Assessed": 34,
-      "CLO": 7,
+      "CLO": 11,
       "Taught": 1366
     },
     "level_status": {
@@ -424,7 +434,7 @@
         "Assessed": "available"
       },
       "SAIA2113": {
-        "CLO": "folder_empty_or_missing",
+        "CLO": "available",
         "Taught": "available",
         "Assessed": "available"
       },
@@ -434,17 +444,17 @@
         "Assessed": "available"
       }
     },
-    "ocr_pages": 1205,
+    "ocr_pages": 1209,
     "empty_text_pages": 0,
-    "indexable_pages": 1376,
+    "indexable_pages": 1380,
     "skip_reasons": {
       "activity_without_explanation": 28,
       "divider": 3
     },
     "redaction_events": {
-      "email": 129,
-      "office_room": 13,
-      "phone": 23
+      "email": 138,
+      "office_room": 20,
+      "phone": 32
     }
   },
   "validation": {
@@ -453,13 +463,13 @@
       "data/pipeline_v1/course_documents/prepared_text.jsonl"
     ],
     "output_sha256": [
-      "9518eea9313ac759f9588b562d4a28b3a2f3aee35d39a77efbfb4c2293d0f278"
+      "f5ea2a6520aa6388bc7bb8cdfe72cce6b122223009ccae382eca667d139d9ea0"
     ],
     "output_bytes": [
-      2108351
+      2138738
     ],
     "output_records": [
-      1407
+      1411
     ],
     "residual_pii_pattern_matches": {
       "email": 0,
@@ -467,17 +477,11 @@
       "office_room": 0
     }
   },
-  "known_gaps": [
-    {
-      "course_code": "SAIA2113",
-      "evidence_level": "CLO",
-      "status": "folder_empty_or_missing"
-    }
-  ],
+  "known_gaps": [],
   "source_version": "Not verified",
   "access_rights": "Internal UTM course material; redistribution permission not verified; do not publish",
   "runtime": {
-    "seconds": 398.3,
+    "seconds": 403.4,
     "python": "3.12.3",
     "platform": "Linux",
     "packages": {
